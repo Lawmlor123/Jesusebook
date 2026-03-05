@@ -36,6 +36,6 @@ No build tools, dependencies, or installation required. Every level is a standal
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Lawmlor123/life-of-jesus-ebook.git
+   git clone https://github.com/Lawmlor123/Jesusebook.git
    cd life-of-jesus-ebook# Jesusebook
 electronic book of Jesus' story
