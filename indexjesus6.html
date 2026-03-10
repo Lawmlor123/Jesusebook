@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 6 – Back to Jerusalem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Nunito',system-ui,sans-serif;
+      min-height:100vh;display:flex;justify-content:center;align-items:center;
+      padding:16px;
+      background:linear-gradient(180deg,#0a0e1a 0%,#141f38 50%,#1e2d4a 100%);
+      color:#fdf7e8;overflow-x:hidden;
+    }
+    main{
+      width:min(96vw,700px);background:rgba(10,14,26,.94);
+      border-radius:22px;padding:clamp(14px,3vw,28px);
+      box-shadow:0 40px 80px rgba(0,0,0,.6);
+      display:flex;flex-direction:column;gap:14px;
+      max-height:96vh;overflow-y:auto;
+    }
+    header{text-align:center}
+    .badge{
+      display:inline-block;
+      background:linear-gradient(135deg,#ffe9a9,#f0b966);
+      color:#3a2800;font-size:.7rem;font-weight:800;
+      letter-spacing:.15em;text-transform:uppercase;
+      padding:4px 14px;border-radius:999px;margin-bottom:6px;
+    }
+    header h1{
+      font-size:clamp(1.3rem,3.5vw,1.8rem);font-weight:800;
+      background:linear-gradient(135deg,#ffe9a9,#ffd06a);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;line-height:1.2;
+    }
+    header p{margin-top:6px;color:#b8c8e8;max-width:34rem;margin-inline:auto;line-height:1.45;font-size:clamp(.78rem,2vw,.92rem)}
+
+    /* ── Scene ── */
+    .scene{
+      position:relative;width:100%;
+      aspect-ratio:16/9;
+      min-height:220px;
+      max-height:380px;
+      border-radius:18px;overflow:hidden;
+      background:linear-gradient(180deg,
+        #4da6ff 0%,#87c5ff 15%,#b8dcff 25%,
+        #f2d9a0 28%,#e8c47a 50%,#c9944a 75%,#a06d2e 100%);
+      box-shadow:inset 0 0 60px rgba(0,0,0,.3),0 8px 32px rgba(0,0,0,.3);
+    }
+    .scene canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:20}
+
+    /* sun */
+    .sun{
+      position:absolute;top:5%;right:14%;width:70px;height:70px;border-radius:50%;
+      background:radial-gradient(circle,#fffce6 0%,#ffd96a 50%,transparent 70%);
+      box-shadow:0 0 60px rgba(255,220,100,.7),0 0 120px rgba(255,200,60,.3);
+      animation:sunPulse 4s ease-in-out infinite;z-index:2;
+    }
+    @keyframes sunPulse{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.06)}
+    }
+
+    /* clouds */
+    .cloud{position:absolute;border-radius:40px;background:rgba(255,255,255,.82);z-index:3}
+    .cloud::before,.cloud::after{content:'';position:absolute;border-radius:50%;background:inherit}
+    .c1{top:10%;left:-12%;width:90px;height:28px;animation:cDrift 36s linear infinite}
+    .c1::before{width:38px;height:30px;top:-14px;left:16px}
+    .c1::after{width:44px;height:28px;top:-10px;left:42px}
+    .c2{top:5%;left:30%;width:70px;height:22px;opacity:.65;animation:cDrift 48s linear infinite 6s}
+    .c2::before{width:30px;height:24px;top:-10px;left:12px}
+    .c2::after{width:34px;height:22px;top:-8px;left:32px}
+    .c3{top:13%;left:62%;width:76px;height:24px;opacity:.55;animation:cDrift 42s linear infinite 14s}
+    .c3::before{width:34px;height:26px;top:-12px;left:14px}
+    .c3::after{width:38px;height:24px;top:-10px;left:36px}
+    @keyframes cDrift{0%{transform:translateX(0)}100%{transform:translateX(700px)}}
+
+    /* labels */
+    .lbl{
+      position:absolute;top:22%;z-index:10;
+      padding:4px 10px;font-size:clamp(.6rem,1.5vw,.78rem);
+      font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      border-radius:999px;background:rgba(10,15,30,.7);
+      backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);color:#fff;
+    }
+    .lbl-l{left:3%}.lbl-r{right:3%}
+
+    /* dunes */
+    .dune{position:absolute;border-radius:50%;z-index:4}
+    .d1{bottom:30%;left:-5%;width:45%;height:90px;background:rgba(200,160,80,.45)}
+    .d2{bottom:24%;right:-8%;width:50%;height:100px;background:rgba(180,140,60,.35)}
+    .d3{bottom:16%;left:20%;width:70%;height:70px;background:rgba(170,130,55,.3)}
+
+    /* road + shimmer */
+    .road{
+      position:absolute;bottom:10%;left:0;right:0;height:55%;
+      background:linear-gradient(180deg,rgba(210,165,80,.7),rgba(180,130,50,.85),rgba(140,95,35,.9));
+      z-index:5;
+    }
+    .heat-shimmer{
+      position:absolute;bottom:28%;left:0;right:0;height:60px;
+      background:repeating-linear-gradient(0deg,transparent,rgba(255,255,255,.03) 2px,transparent 4px);
+      animation:shimmer 3s ease-in-out infinite;z-index:6;pointer-events:none;
+    }
+    @keyframes shimmer{0%,100%{transform:scaleY(1) translateY(0);opacity:.4}50%{transform:scaleY(1.12) translateY(-3px);opacity:.75}}
+
+    /* small cacti */
+    .cactus{position:absolute;z-index:7;transform:scale(0.8);transform-origin:bottom center}
+    .cactus .stem{width:10px;border-radius:5px;background:#5a8a3a}
+    .cactus .arm{position:absolute;width:7px;border-radius:4px;background:#5a8a3a}
+    .cact1{bottom:26%;left:32%}
+    .cact1 .stem{height:36px}
+    .cact1 .arm{height:16px;top:6px;left:10px}
+    .cact2{bottom:22%;left:50%}
+    .cact2 .stem{height:28px}
+    .cact2 .arm{height:12px;top:4px;right:10px;left:auto}
+
+    /* ── Temple ── */
+    .temple{
+      position:absolute;right:5%;bottom:12%;z-index:8;
+      width:clamp(110px,18vw,170px);
+      transition:all .8s cubic-bezier(.25,.46,.45,.94);
+    }
+    .temple-glow{
+      position:absolute;inset:-20px;border-radius:22px;
+      background:radial-gradient(ellipse,rgba(255,240,160,.45),transparent 70%);
+      opacity:0;transition:opacity .8s ease;pointer-events:none;z-index:-1;
+    }
+    .temple.arrived .temple-glow{opacity:1}
+    .temple.arrived{transform:translateY(-6px);filter:brightness(1.1)}
+    .temple-beams{
+      position:absolute;top:-65px;left:50%;transform:translateX(-50%);
+      width:130px;height:65px;opacity:0;transition:opacity .8s ease .3s;pointer-events:none;
+    }
+    .temple.arrived .temple-beams{opacity:1}
+    .temple-beams .bm{
+      position:absolute;bottom:0;width:3px;height:100%;
+      background:linear-gradient(to bottom,transparent,rgba(255,230,140,.8));
+      border-radius:999px;transform-origin:bottom center;
+    }
+    .bm:nth-child(1){left:22%;transform:rotate(-14deg);animation:bmP 1.5s ease-in-out infinite}
+    .bm:nth-child(2){left:38%;transform:rotate(-4deg);animation:bmP 1.5s ease-in-out .2s infinite}
+    .bm:nth-child(3){left:54%;transform:rotate(4deg);animation:bmP 1.5s ease-in-out .4s infinite}
+    .bm:nth-child(4){left:70%;transform:rotate(14deg);animation:bmP 1.5s ease-in-out .6s infinite}
+    @keyframes bmP{0%,100%{opacity:.45}50%{opacity:1}}
+
+    .t-roof{
+      width:112%;margin-left:-6%;height:20px;
+      background:linear-gradient(180deg,#f5f0e0,#d4cbb5);
+      border-radius:5px 5px 0 0;box-shadow:0 -4px 16px rgba(0,0,0,.1);
+      position:relative;
+    }
+    .t-roof::before{
+      content:'';position:absolute;top:-10px;left:30%;width:40%;height:14px;
+      background:linear-gradient(180deg,#f8f4e6,#e8dfc8);border-radius:50% 50% 0 0;
+    }
+    .t-body{
+      background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(210,215,235,.9));
+      border-radius:0 0 6px 6px;padding:8px 6px 10px;
+      box-shadow:0 8px 24px rgba(0,0,0,.2);
+    }
+    .cols{display:flex;justify-content:space-between;gap:4px;height:clamp(60px,12vw,100px)}
+    .cl{
+      flex:1;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(190,200,225,.9));
+      border-radius:4px;box-shadow:inset 0 0 6px rgba(0,0,0,.08);position:relative;
+    }
+    .cl::before,.cl::after{
+      content:'';position:absolute;left:-2px;right:-2px;height:5px;
+      background:#e8e0d0;border-radius:3px;
+    }
+    .cl::before{top:-2px}.cl::after{bottom:-2px}
+
+    /* ── Jesus Group ── */
+    .jesus-group{
+      position:absolute;bottom:20%;right:8%;z-index:9;
+      display:flex;align-items:flex-end;gap:5px;
+      opacity:0;transform:translateY(20px) scale(.9);
+      transition:all .65s cubic-bezier(.25,.46,.45,.94) .4s;
+    }
+    .jesus-group.reveal{opacity:1;transform:translateY(0) scale(1)}
+    .fig{display:flex;flex-direction:column;align-items:center}
+    .fig .fh{
+      width:18px;height:18px;border-radius:50%;background:#f5cba5;
+      border:2px solid rgba(0,0,0,.06);position:relative;
+    }
+    .fig .fh .fe{position:absolute;top:7px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+    .fig .fh .fe span{width:2px;height:2px;border-radius:50%;background:#2a1a0a}
+    .fig .fb{width:26px;height:48px;border-radius:10px 10px 8px 8px;margin-top:2px}
+    .fig.jesus .fb{background:linear-gradient(180deg,#fff2c7,#f0b966)}
+    .fig.jesus .fh::after{
+      content:'';position:absolute;inset:-5px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,230,130,.45),transparent 70%);
+    }
+
+    /* ── Caravan ── */
+    .caravan{
+      position:absolute;bottom:5%;z-index:12;
+      display:flex;align-items:flex-end;gap:8px;
+      left:5%;
+      transition:left 1.2s cubic-bezier(.34,.01,.24,1);
+      transform:scale(0.75);
+      transform-origin:bottom left;
+    }
+    /* dust trail */
+    .caravan::after{
+      content:'';position:absolute;bottom:-4px;left:-18px;
+      width:70px;height:28px;border-radius:50%;
+      background:radial-gradient(ellipse,rgba(200,170,120,.35),transparent 70%);
+      opacity:0;transition:opacity .3s;pointer-events:none;
+    }
+    .caravan.walking::after{opacity:1}
+    .caravan.walking .trav .lg{animation-play-state:running}
+    .caravan:not(.walking) .trav .lg{animation-play-state:paused}
+    .caravan.walking .dk-leg{animation-play-state:running}
+    .caravan:not(.walking) .dk-leg{animation-play-state:paused}
+
+    /* traveler */
+    .trav{width:62px;height:126px;position:relative}
+    .trav .th{
+      width:30px;height:30px;border-radius:50%;background:#f7d1b1;
+      position:absolute;top:4px;left:16px;border:2px solid rgba(0,0,0,.06);z-index:2;
+    }
+    .trav .th .eyes{position:absolute;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+    .trav .th .eyes span{width:4px;height:4px;border-radius:50%;background:#2a1a0a}
+    .trav .th .mouth{
+      position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
+      width:8px;height:3px;border-radius:0 0 6px 6px;border-bottom:2px solid rgba(0,0,0,.15);
+      transition:all .4s ease;
+    }
+    .trav.found .th .mouth{
+      width:10px;height:5px;border-bottom:none;
+      background:rgba(0,0,0,.12);border-radius:0 0 10px 10px;
+    }
+    /* head cover for Mary */
+    .trav.mary .th::before{
+      content:'';position:absolute;top:-4px;left:-4px;right:-4px;height:20px;
+      border-radius:50% 50% 0 0;background:rgba(255,180,210,.6);z-index:-1;
+    }
+    /* head cover for Joseph */
+    .trav.joseph .th::before{
+      content:'';position:absolute;top:-3px;left:-3px;right:-3px;height:18px;
+      border-radius:50% 50% 0 0;background:rgba(140,175,230,.5);z-index:-1;
+    }
+    .trav .tb{
+      width:42px;height:76px;border-radius:18px 22px 12px 12px;
+      position:absolute;top:30px;left:10px;z-index:1;
+    }
+    .trav .lg{
+      position:absolute;bottom:4px;width:12px;height:42px;border-radius:6px;
+      transform-origin:top center;
+      animation:walk .7s ease-in-out infinite;animation-play-state:paused;
+    }
+    .trav .lg.bk{left:14px}
+    .trav .lg.fr{right:16px;animation-delay:.35s}
+    .trav .ft{
+      position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);
+      width:20px;height:7px;border-radius:10px;background:#4b3b2a;
+    }
+    @keyframes walk{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-8deg)}}
+
+    /* joy beams */
+    .trav .jbeams{
+      position:absolute;top:-48px;left:50%;transform:translateX(-50%);
+      width:76px;height:48px;opacity:0;transition:opacity .5s;pointer-events:none;
+    }
+    .trav.found .jbeams{opacity:1}
+    .jbeams .jb{
+      position:absolute;bottom:0;width:3px;height:100%;border-radius:999px;
+      background:linear-gradient(to bottom,transparent,rgba(255,220,100,.9));
+      transform-origin:bottom center;
+    }
+    .jb:nth-child(1){left:18%;transform:rotate(-12deg);animation:jbP .8s ease-in-out infinite}
+    .jb:nth-child(2){left:46%;animation:jbP .8s ease-in-out .15s infinite}
+    .jb:nth-child(3){left:74%;transform:rotate(12deg);animation:jbP .8s ease-in-out .3s infinite}
+    @keyframes jbP{0%,100%{opacity:.35}50%{opacity:1}}
+
+    /* ── Donkey ── */
+    .donkey{width:108px;height:118px;position:relative}
+    .dk-body{
+      width:96px;height:62px;border-radius:40px;
+      background:linear-gradient(180deg,#b5ada8,#9a938e);
+      position:absolute;bottom:28px;left:6px;
+    }
+    .dk-neck{
+      width:20px;height:46px;border-radius:10px;background:#b0a8a3;
+      position:absolute;bottom:68px;left:14px;transform:rotate(-5deg);
+    }
+    .dk-head{
+      width:46px;height:40px;border-radius:28px;
+      background:linear-gradient(135deg,#c0b8b3,#a8a09b);
+      position:absolute;bottom:96px;left:-2px;
+    }
+    .dk-ear{
+      width:12px;height:28px;border-radius:50% 50% 8px 8px;
+      background:linear-gradient(180deg,#d8d0cc,#b8b0ab);
+      position:absolute;top:-18px;
+    }
+    .dk-ear.el{left:6px;transform:rotate(-6deg)}
+    .dk-ear.er{right:6px;transform:rotate(6deg)}
+    .dk-eye{
+      width:8px;height:8px;border-radius:50%;background:#2b1c12;
+      position:absolute;top:14px;left:20px;
+    }
+    .dk-eye::after{
+      content:'';position:absolute;top:1px;left:2px;width:3px;height:3px;
+      border-radius:50%;background:rgba(255,255,255,.5);
+    }
+    .dk-muzzle{
+      position:absolute;bottom:4px;left:2px;width:20px;height:12px;
+      border-radius:10px;background:#ccc5c0;
+    }
+    .dk-leg{
+      width:13px;height:40px;border-radius:5px;
+      background:linear-gradient(180deg,#a09894,#8a837e);
+      position:absolute;bottom:0;transform-origin:top center;
+      animation:dkWalk .65s ease-in-out infinite;animation-play-state:paused;
+    }
+    .dk-leg::after{
+      content:'';position:absolute;bottom:-5px;left:0;
+      width:13px;height:7px;border-radius:5px;background:#4b3c2a;
+    }
+    .dk-leg.l1{left:12px}
+    .dk-leg.l2{left:30px;animation-delay:.33s}
+    .dk-leg.l3{right:30px;animation-delay:.16s}
+    .dk-leg.l4{right:12px;animation-delay:.49s}
+    .dk-tail{
+      position:absolute;bottom:58px;right:-6px;width:4px;height:26px;
+      background:#8a837e;border-radius:4px;transform-origin:top center;
+      animation:tailSw 2s ease-in-out infinite;
+    }
+    @keyframes dkWalk{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-6deg)}}
+    @keyframes tailSw{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-5deg)}}
+
+    /* ── Confetti ── */
+    .conf-wrap{position:absolute;inset:0;pointer-events:none;z-index:25;overflow:hidden}
+    .conf{position:absolute;width:8px;height:8px;border-radius:2px;opacity:0}
+    .conf.go{animation:confFall 2.6s ease-out forwards}
+    @keyframes confFall{
+      0%{opacity:1;transform:translateY(-20px) rotate(0deg)}
+      100%{opacity:0;transform:translateY(520px) rotate(720deg)}
+    }
+
+    /* ── Progress Track ── */
+    .prog{display:flex;align-items:center;justify-content:center;padding:0 8px}
+    .prog-seg{
+      flex:1;max-width:90px;height:5px;
+      background:rgba(255,233,169,.12);border-radius:3px;
+      position:relative;overflow:hidden;
+    }
+    .prog-seg .fill{
+      position:absolute;inset:0;
+      background:linear-gradient(90deg,#ffe9a9,#ffd06a);
+      border-radius:3px;transform:scaleX(0);transform-origin:left;
+      transition:transform .6s ease;
+    }
+    .prog-seg.on .fill{transform:scaleX(1)}
+    .prog-nd{
+      width:22px;height:22px;border-radius:50%;flex-shrink:0;
+      border:2.5px solid rgba(255,233,169,.25);background:rgba(10,14,26,.8);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.55rem;font-weight:700;color:rgba(255,233,169,.35);
+      transition:all .4s ease;
+    }
+    .prog-nd.on{
+      border-color:#ffe9a9;background:#ffe9a9;color:#3a2800;
+      box-shadow:0 0 12px rgba(255,233,169,.4);
+    }
+
+    /* ── Controls ── */
+    .controls{
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+      border-radius:14px;padding:14px;text-align:center;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .status{
+      color:#e8d8b8;font-size:clamp(.78rem,2vw,.92rem);line-height:1.45;
+      min-height:2.5em;display:flex;align-items:center;justify-content:center;
+      transition:opacity .3s;
+    }
+    .btn-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+    button{
+      border:none;border-radius:999px;padding:10px 28px;
+      font-size:.9rem;font-weight:700;font-family:inherit;cursor:pointer;
+      transition:all .25s cubic-bezier(.25,.46,.45,.94);
+    }
+    .bp{
+      background:linear-gradient(135deg,#ffe9a9,#ffd06a);color:#3a2800;
+      box-shadow:0 4px 16px rgba(255,220,100,.3);
+    }
+    .bp:not(:disabled):hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(255,220,100,.45)}
+    .bp:disabled{opacity:.35;cursor:not-allowed}
+    .bs{background:rgba(255,255,255,.08);color:#d0c8b8;border:1px solid rgba(255,255,255,.12)}
+    .bs:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+
+    /* ── Verse ── */
+    .verse{
+      text-align:center;background:rgba(255,233,169,.06);border-radius:12px;
+      border:1px solid rgba(255,233,169,.1);
+      opacity:0;transform:translateY(10px);transition:all .6s ease;
+      max-height:0;overflow:hidden;padding:0 10px;
+    }
+    .verse.show{opacity:1;transform:translateY(0);max-height:120px;padding:12px 10px}
+    .verse p{margin:0;font-style:italic;color:#ffe9a9;line-height:1.45;font-size:clamp(.78rem,2vw,.9rem)}
+    .verse cite{display:block;margin-top:4px;font-style:normal;font-size:.8rem;color:#b8a888}
+
+    /* ── Mobile ── */
+    @media(max-width:640px){
+      body{padding:8px}
+      main{width:100%;padding:12px;gap:10px;border-radius:16px}
+      .scene{min-height:170px;max-height:240px;border-radius:14px}
+      .sun{width:45px;height:45px}
+      .caravan{gap:4px;transform:scale(0.5);transform-origin:bottom left}
+      .jesus-group{transform-origin:bottom right}
+      .jesus-group.reveal{transform:translateY(0) scale(0.7)}
+      .temple{width:clamp(80px,20vw,110px)}
+      .dune.d1{height:60px}.dune.d2{height:70px}.dune.d3{height:50px}
+      .cloud.c1{width:60px;height:18px}
+      .cloud.c2{width:48px;height:16px}
+      .cloud.c3{width:52px;height:16px}
+      .cactus{transform:scale(0.55)}
+      button{width:100%;padding:12px 20px}
+    }
+
+    /* ── Tall screens ── */
+    @media(min-height:800px){
+      .scene{max-height:420px}
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="badge">Chapter 6</div>
+    <h1>Back to Jerusalem</h1>
+    <p>Mary and Joseph race back toward Jerusalem with their donkey. Take three steps to guide them — on the third they reach the temple and find Jesus among the teachers!</p>
+  </header>
+
+  <section class="scene" id="scene">
+    <canvas id="pCanvas"></canvas>
+
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+
+    <span class="lbl lbl-l">Nazareth</span>
+    <span class="lbl lbl-r">Jerusalem</span>
+
+    <div class="dune d1"></div>
+    <div class="dune d2"></div>
+    <div class="dune d3"></div>
+
+    <div class="road"></div>
+    <div class="heat-shimmer"></div>
+
+    <!-- cacti -->
+    <div class="cactus cact1"><div class="stem"></div><div class="arm"></div></div>
+    <div class="cactus cact2"><div class="stem"></div><div class="arm"></div></div>
+
+    <!-- Temple -->
+    <div class="temple" id="temple">
+      <div class="temple-glow"></div>
+      <div class="temple-beams">
+        <div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div>
+      </div>
+      <div class="t-roof"></div>
+      <div class="t-body">
+        <div class="cols">
+          <div class="cl"></div><div class="cl"></div><div class="cl"></div><div class="cl"></div><div class="cl"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jesus Group -->
+    <div class="jesus-group" id="jesusGroup">
+      <div class="fig">
+        <div class="fh"><div class="fe"><span></span><span></span></div></div>
+        <div class="fb" style="background:linear-gradient(180deg,#d9e5ff,#93a9d9)"></div>
+      </div>
+      <div class="fig jesus">
+        <div class="fh"><div class="fe"><span></span><span></span></div></div>
+        <div class="fb"></div>
+      </div>
+      <div class="fig">
+        <div class="fh"><div class="fe"><span></span><span></span></div></div>
+        <div class="fb" style="background:linear-gradient(180deg,#e6d6ff,#b18be5)"></div>
+      </div>
+    </div>
+
+    <!-- Confetti -->
+    <div class="conf-wrap" id="confWrap"></div>
+
+    <!-- Caravan -->
+    <div class="caravan" id="caravan">
+      <!-- Joseph -->
+      <div class="trav joseph" id="josephEl">
+        <div class="jbeams"><div class="jb"></div><div class="jb"></div><div class="jb"></div></div>
+        <div class="th">
+          <div class="eyes"><span></span><span></span></div>
+          <div class="mouth"></div>
+        </div>
+        <div class="tb" style="background:linear-gradient(180deg,#b8d8ff,#5d82c7)"></div>
+        <div class="lg bk" style="background:linear-gradient(180deg,#4e6899,#29365c)"><div class="ft"></div></div>
+        <div class="lg fr" style="background:linear-gradient(180deg,#4e6899,#29365c)"><div class="ft"></div></div>
+      </div>
+      <!-- Mary -->
+      <div class="trav mary" id="maryEl">
+        <div class="jbeams"><div class="jb"></div><div class="jb"></div><div class="jb"></div></div>
+        <div class="th">
+          <div class="eyes"><span></span><span></span></div>
+          <div class="mouth"></div>
+        </div>
+        <div class="tb" style="background:linear-gradient(180deg,#ffd9e8,#ff8cb8)"></div>
+        <div class="lg bk" style="background:linear-gradient(180deg,#d46a94,#8a3555)"><div class="ft"></div></div>
+        <div class="lg fr" style="background:linear-gradient(180deg,#d46a94,#8a3555)"><div class="ft"></div></div>
+      </div>
+      <!-- Donkey -->
+      <div class="donkey">
+        <div class="dk-body"></div>
+        <div class="dk-neck"></div>
+        <div class="dk-head">
+          <div class="dk-ear el"></div>
+          <div class="dk-ear er"></div>
+          <div class="dk-eye"></div>
+          <div class="dk-muzzle"></div>
+        </div>
+        <div class="dk-leg l1"></div>
+        <div class="dk-leg l2"></div>
+        <div class="dk-leg l3"></div>
+        <div class="dk-leg l4"></div>
+        <div class="dk-tail"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress -->
+  <div class="prog">
+    <div class="prog-nd" data-n="0">🏠</div>
+    <div class="prog-seg" data-s="1"><div class="fill"></div></div>
+    <div class="prog-nd" data-n="1">1</div>
+    <div class="prog-seg" data-s="2"><div class="fill"></div></div>
+    <div class="prog-nd" data-n="2">2</div>
+    <div class="prog-seg" data-s="3"><div class="fill"></div></div>
+    <div class="prog-nd" data-n="3">⛪</div>
+  </div>
+
+  <!-- Controls -->
+  <section class="controls">
+    <div class="status" id="statusText">Step 0 of 3 — Mary and Joseph realize Jesus is missing and turn toward Jerusalem.</div>
+    <div class="btn-row">
+      <button class="bp" id="stepBtn">🐾 Take a Step</button>
+      <button class="bs" id="resetBtn">↩ Reset Journey</button>
+    </div>
+  </section>
+
+  <!-- Verse -->
+  <div class="verse" id="verseBox">
+    <p>"After three days they found him in the temple courts, sitting among the teachers, listening to them and asking them questions."</p>
+    <cite>— Luke 2:46</cite>
+  </div>
+</main>
+
+<script>
+  const scene    = document.getElementById('scene');
+  const caravan  = document.getElementById('caravan');
+  const stepBtn  = document.getElementById('stepBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const statusEl = document.getElementById('statusText');
+  const temple   = document.getElementById('temple');
+  const jesusGrp = document.getElementById('jesusGroup');
+  const josephEl = document.getElementById('josephEl');
+  const maryEl   = document.getElementById('maryEl');
+  const verseBox = document.getElementById('verseBox');
+  const confWrap = document.getElementById('confWrap');
+  const canvas   = document.getElementById('pCanvas');
+  const ctx      = canvas.getContext('2d');
+
+  let step = 0;
+  const MAX = 3;
+  const STOPS = ['5%', '24%', '42%', '56%'];
+
+  const msgs = [
+    'Step 0 of 3 — Mary and Joseph realize Jesus is missing and turn toward Jerusalem.',
+    'Step 1 of 3 — They take their first determined stride through the desert with their donkey. 🌅',
+    'Step 2 of 3 — Another long step through the hot sand… hearts racing, hope building. ❤️',
+    'Step 3 of 3 — They have reached the temple! Jesus is safe among the teachers! 🎉'
+  ];
+
+  /* ── canvas sand particles ── */
+  let cW, cH;
+  function resizeCanvas(){
+    cW = canvas.width  = scene.offsetWidth  || 600;
+    cH = canvas.height = scene.offsetHeight || 400;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Sand {
+    constructor(){ this.reset(true); }
+    reset(init){
+      this.x = init ? Math.random()*cW : -4;
+      this.y = cH*.38 + Math.random()*cH*.58;
+      this.r = Math.random()*2.2+.5;
+      this.vx = Math.random()*.7+.2;
+      this.vy = -Math.random()*.25;
+      this.a  = Math.random()*.22+.04;
+      this.life = Math.random()*220+80;
+      this.max  = this.life;
+    }
+    tick(){
+      this.x += this.vx; this.y += this.vy; this.life--;
+      if(this.life<=0||this.x>cW+10) this.reset(false);
+    }
+    draw(){
+      const f = this.life/this.max;
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(218,188,138,${this.a*f})`;
+      ctx.fill();
+    }
+  }
+  const grains = Array.from({length:35},()=>new Sand());
+  (function loop(){
+    ctx.clearRect(0,0,cW,cH);
+    grains.forEach(g=>{g.tick();g.draw()});
+    requestAnimationFrame(loop);
+  })();
+
+  /* ── confetti burst ── */
+  function burst(){
+    const cols=['#ffe9a9','#ffd06a','#ff8cb8','#b8d8ff','#e6d6ff','#fff'];
+    for(let i=0;i<30;i++){
+      const c = document.createElement('div');
+      c.className='conf';
+      c.style.left  = (25+Math.random()*55)+'%';
+      c.style.top   = '8%';
+      c.style.width  = (4+Math.random()*7)+'px';
+      c.style.height = (4+Math.random()*7)+'px';
+      c.style.background = cols[Math.floor(Math.random()*cols.length)];
+      c.style.animationDelay = (Math.random()*.5)+'s';
+      c.style.animationDuration = (2+Math.random()*1.5)+'s';
+      confWrap.appendChild(c);
+      requestAnimationFrame(()=>c.classList.add('go'));
+      setTimeout(()=>c.remove(),4200);
+    }
+  }
+
+  /* ── walk timer handle ── */
+  let walkTimer = null;
+
+  /* ── main update ── */
+  function update(){
+    caravan.style.left = STOPS[step];
+
+    if(walkTimer) clearTimeout(walkTimer);
+    if(step > 0){
+      caravan.classList.add('walking');
+      walkTimer = setTimeout(()=> caravan.classList.remove('walking'), 1400);
+    } else {
+      caravan.classList.remove('walking');
+    }
+
+    document.querySelectorAll('.prog-nd').forEach(n=>{
+      n.classList.toggle('on', parseInt(n.dataset.n) <= step);
+    });
+    document.querySelectorAll('.prog-seg').forEach(s=>{
+      s.classList.toggle('on', parseInt(s.dataset.s) <= step);
+    });
+
+    statusEl.style.opacity = 0;
+    setTimeout(()=>{ statusEl.textContent = msgs[step]; statusEl.style.opacity = 1; }, 220);
+
+    const arrived = step === MAX;
+
+    temple.classList.toggle('arrived', arrived);
+    jesusGrp.classList.toggle('reveal', arrived);
+    josephEl.classList.toggle('found', arrived);
+    maryEl.classList.toggle('found', arrived);
+    verseBox.classList.toggle('show', arrived);
+
+    if(arrived) setTimeout(burst, 650);
+
+    stepBtn.disabled = arrived;
+    stepBtn.textContent = arrived ? '✨ They found Jesus!' : '🐾 Take a Step';
+
+    /* ── Chapter transition trigger ── */
+    if (arrived) {
+      chapterComplete();
+    }
+  }
+
+  /* ── buttons ── */
+  stepBtn.addEventListener('click',()=>{
+    if(step<MAX){ step++; update(); }
+  });
+  resetBtn.addEventListener('click',()=>{
+    step=0; confWrap.innerHTML=''; update(); stepBtn.focus();
+  });
+
+  update();
+</script>
+
+<!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+<div id="chapterOverlay" style="
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(35,20,5,.6);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity .5s ease;
+  font-family:'Nunito',sans-serif;
+">
+  <div id="chapterCard" style="
+    background:#fff8ee; border-radius:24px;
+    padding:clamp(24px,5vw,40px); text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    max-width:88vw; width:360px;
+    transform:scale(.8);
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+  ">
+    <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+    <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+    <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+    <button id="ovBtn" style="
+      border:none; border-radius:999px;
+      background:linear-gradient(90deg,#a8e6cf,#55c89b);
+      color:#1b5e3a; font-family:'Nunito',sans-serif;
+      font-size:1rem; font-weight:700;
+      padding:12px 28px; cursor:pointer;
+      box-shadow:0 4px 14px rgba(85,200,155,.3);
+      transition:transform .15s,box-shadow .2s;
+    " onmouseover="this.style.transform='translateY(-2px)'"
+       onmouseout="this.style.transform='none'"
+    >Continue →</button>
+  </div>
+</div>
+
+<script>
+  // ════════════════════════════════════════════
+  // ★ LEVEL 6 SETTINGS
+  // ════════════════════════════════════════════
+  const THIS_CHAPTER   = 6;
+  const CHAPTER_DONE   = "Mary and Joseph raced back to Jerusalem and found Jesus safe among the teachers in the temple!";
+  const NEXT_FILE      = "indexjesus7.html";
+  // ════════════════════════════════════════════
+
+  const CHAPTER_TITLES = [
+    "",
+    "Gabriel Visits Mary",
+    "Journey to Bethlehem",
+    "No Room at the Inn",
+    "Jesus Is Born",
+    "Angels Tell the Shepherds",
+    "Shepherds Visit Jesus",
+    "Baptism in the Jordan",
+    "Temptation in the Desert",
+    "Jesus Begins His Ministry",
+    "First Miracle at Cana"
+  ];
+
+  let chapterTriggered = false;
+
+  function chapterComplete() {
+    if (chapterTriggered) return;
+    chapterTriggered = true;
+
+    const ov   = document.getElementById('chapterOverlay');
+    const card = document.getElementById('chapterCard');
+    const nextChapter = THIS_CHAPTER + 1;
+    const isLast = !NEXT_FILE;
+
+    document.getElementById('ovTitle').textContent = isLast
+      ? '🌟 The Christmas Story Complete!'
+      : `✨ Chapter ${THIS_CHAPTER} Complete!`;
+
+    document.getElementById('ovDone').textContent = CHAPTER_DONE;
+
+    document.getElementById('ovNext').textContent = isLast
+      ? 'You journeyed through the whole Christmas Story! 🎄'
+      : `Next: Chapter ${nextChapter} — ${CHAPTER_TITLES[nextChapter] || ''}`;
+
+    const btn = document.getElementById('ovBtn');
+    btn.textContent = isLast ? '🔄 Play Again' : 'Continue →';
+    btn.onclick = () => {
+      window.location.href = isLast ? 'indexjesus1.html' : NEXT_FILE;
+    };
+
+    setTimeout(() => {
+      ov.style.opacity = '1';
+      ov.style.pointerEvents = 'auto';
+      card.style.transform = 'scale(1)';
+    }, 1500);
+  }
+</script>
+</body>
+</html>
