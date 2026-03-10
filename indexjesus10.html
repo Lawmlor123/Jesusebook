@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 10 – First Miracle at Cana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #a0451b;
+      --accent-light: #c45a28;
+      --accent-glow: rgba(160, 69, 27, 0.3);
+      --wine: #8d1411;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --text-dark: #402b19;
+      --text-mid: #5f4329;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --s: 1;
+      font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+      color-scheme: only light;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE LAYOUT — DESKTOP VIEWPORT FIT
+       ═══════════════════════════════════════ */
+
+    body {
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(8px, 1.5vh, 20px);
+      background: linear-gradient(180deg, #fdf9f3 0%, #f0d8b5 55%, #d5a16b 100%);
+      color: var(--text-dark);
+    }
+
+    main {
+      width: min(96vw, 960px);
+      height: 100%;
+      max-height: 100%;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: clamp(10px, 2vh, 32px) clamp(14px, 3vw, 36px);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 1.2vh, 16px);
+      overflow: hidden;
+    }
+
+    /* ───── Header (shrink‑proof) ───── */
+    header {
+      text-align: center;
+      flex-shrink: 0;
+    }
+    header h1 {
+      font-size: clamp(1.2rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    header p {
+      margin: clamp(2px, 0.6vh, 10px) auto 0;
+      max-width: 36rem;
+      color: var(--text-mid);
+      line-height: 1.45;
+      font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    }
+
+    /* ───── Scene — FLEX FILLS REMAINING SPACE ───── */
+    .scene {
+      position: relative;
+      width: 100%;
+      flex: 1 1 0;
+      min-height: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: linear-gradient(180deg, #f5dfc0 0%, #f2ca8e 40%, #d9a05a 70%, #c0843a 100%);
+      box-shadow: inset 0 -25px 55px rgba(0, 0, 0, 0.22);
+    }
+
+    /* ── Canopy ── */
+    .canopy {
+      position: absolute;
+      top: 0;
+      left: -4%;
+      width: 108%;
+      height: 28%;
+      background: radial-gradient(ellipse at 50% 130%, rgba(255, 255, 255, 0.8), transparent 70%);
+      z-index: 3;
+    }
+    .canopy-trim {
+      position: absolute;
+      top: 26%;
+      left: 4%;
+      right: 4%;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #d4944c, #f7c47c, #e8a856, #f7c47c, #d4944c);
+      z-index: 3;
+    }
+    .canopy-drape {
+      position: absolute;
+      top: 0;
+      height: 28%;
+      width: 10%;
+      z-index: 3;
+    }
+    .canopy-drape.left {
+      left: 4%;
+      background: linear-gradient(180deg, rgba(218, 165, 90, 0.4), transparent);
+      border-radius: 0 0 0 60%;
+    }
+    .canopy-drape.right {
+      right: 4%;
+      background: linear-gradient(180deg, rgba(218, 165, 90, 0.4), transparent);
+      border-radius: 0 0 60% 0;
+    }
+
+    /* ── Lanterns ── */
+    .lanterns {
+      position: absolute;
+      top: 6%;
+      left: 10%;
+      right: 10%;
+      display: flex;
+      justify-content: space-around;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .lantern {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .lantern .string {
+      width: 1px;
+      height: 16px;
+      background: rgba(120, 80, 40, 0.4);
+    }
+    .lantern .bulb {
+      width: 14px;
+      height: 18px;
+      border-radius: 50% 50% 40% 40%;
+      background: radial-gradient(circle at 50% 40%, #fff5d0, #ffc84d);
+      box-shadow: 0 0 14px rgba(255, 200, 77, 0.5);
+      animation: lantern-glow 3s ease-in-out infinite alternate;
+    }
+    .lantern:nth-child(2) .bulb { animation-delay: 1s; }
+    .lantern:nth-child(3) .bulb { animation-delay: 2s; }
+    .lantern:nth-child(4) .bulb { animation-delay: 0.5s; }
+    .lantern:nth-child(5) .bulb { animation-delay: 1.5s; }
+    @keyframes lantern-glow {
+      0%   { box-shadow: 0 0 14px rgba(255, 200, 77, 0.4); }
+      100% { box-shadow: 0 0 22px rgba(255, 200, 77, 0.7); }
+    }
+
+    /* ── Sun ── */
+    .sun {
+      position: absolute;
+      top: 6%;
+      right: 8%;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fffadd 0%, #ffd680 55%, transparent 72%);
+      box-shadow: 0 0 70px rgba(255, 214, 128, 0.5);
+      animation: sun-pulse 5s ease-in-out infinite alternate;
+    }
+    @keyframes sun-pulse {
+      0%   { box-shadow: 0 0 70px rgba(255, 214, 128, 0.5); }
+      100% { box-shadow: 0 0 100px rgba(255, 214, 128, 0.7); }
+    }
+
+    /* ── Floor ── */
+    .floor {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30%;
+      background: linear-gradient(180deg, #c08040, #8a5a28);
+    }
+    .floor::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.12), transparent);
+    }
+    .floor-tiles {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30%;
+      background-image:
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 60px),
+        repeating-linear-gradient(180deg, rgba(0,0,0,0.03) 0 1px, transparent 1px 40px);
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════
+       SCALED FOREGROUND — sizes adapt to scene
+       ═══════════════════════════════════════ */
+
+    /* ── Table ── */
+    .table {
+      position: absolute;
+      bottom: 24%;
+      left: 15%;
+      right: 15%;
+      height: 8%;
+      background: linear-gradient(180deg, #b8864e, #96693a);
+      border-radius: 8px 8px 4px 4px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+      transform: scale(var(--s, 1));
+      transform-origin: bottom center;
+    }
+    .table::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: 2%;
+      right: 2%;
+      height: 4px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.3), rgba(255,255,255,0.15));
+      border-radius: 999px;
+    }
+    .table-leg {
+      position: absolute;
+      bottom: -18px;
+      width: 10px;
+      height: 20px;
+      background: #7a5430;
+      border-radius: 0 0 3px 3px;
+    }
+    .table-leg.l { left: 8%; }
+    .table-leg.r { right: 8%; }
+
+    /* ── Figures ── */
+    .figure-group {
+      position: absolute;
+      bottom: 30%;
+      left: 6%;
+      right: 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      z-index: 2;
+      transform: scale(var(--s, 1));
+      transform-origin: bottom center;
+    }
+
+    .jesus {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .jesus .halo {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 237, 178, 0.8);
+      background: radial-gradient(circle, rgba(255, 245, 200, 0.15), transparent 70%);
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 0 12px rgba(255, 237, 178, 0.6));
+      animation: halo-glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes halo-glow {
+      0%   { filter: drop-shadow(0 0 12px rgba(255, 237, 178, 0.4)); }
+      100% { filter: drop-shadow(0 0 22px rgba(255, 237, 178, 0.8)); }
+    }
+    .jesus .head {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffe7ce, #f0cfa1);
+      border: 2px solid rgba(0, 0, 0, 0.06);
+      position: relative;
+      z-index: 1;
+    }
+    .jesus .body {
+      width: 98px;
+      height: 132px;
+      margin-top: 7px;
+      border-radius: 42px 24px 16px 16px;
+      background: linear-gradient(180deg, #fff2dd, #e6b46a);
+      position: relative;
+      overflow: hidden;
+    }
+    .jesus .body .sash {
+      position: absolute;
+      top: 18%;
+      left: 18%;
+      width: 64%;
+      height: 55%;
+      background: linear-gradient(180deg, rgba(190, 130, 55, 0.2), transparent);
+      border-radius: 16px;
+      transform: rotate(-6deg);
+    }
+
+    /* Miracle energy lines */
+    .miracle-lines {
+      position: absolute;
+      bottom: 45%;
+      left: 22%;
+      width: 0;
+      height: 0;
+      z-index: 5;
+      pointer-events: none;
+      transform: scale(var(--s, 1));
+      transform-origin: center center;
+    }
+    .miracle-lines span {
+      position: absolute;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255, 220, 140, 0.6), rgba(180, 80, 60, 0.3), transparent);
+      opacity: 0;
+      transform-origin: left center;
+    }
+    .miracle-lines span:nth-child(1) { width: 90px; transform: rotate(20deg); }
+    .miracle-lines span:nth-child(2) { width: 130px; transform: rotate(10deg); }
+    .miracle-lines span:nth-child(3) { width: 160px; transform: rotate(2deg); }
+    .miracle-lines span:nth-child(4) { width: 140px; transform: rotate(-8deg); }
+    .miracle-lines span:nth-child(5) { width: 110px; transform: rotate(-18deg); }
+    .miracle-lines.active span { animation: line-pulse 2s ease-in-out infinite; }
+    .miracle-lines.active span:nth-child(2) { animation-delay: 0.3s; }
+    .miracle-lines.active span:nth-child(3) { animation-delay: 0.6s; }
+    .miracle-lines.active span:nth-child(4) { animation-delay: 0.9s; }
+    .miracle-lines.active span:nth-child(5) { animation-delay: 1.2s; }
+    @keyframes line-pulse {
+      0%, 100% { opacity: 0; }
+      30%, 70% { opacity: 0.7; }
+    }
+
+    /* Mary */
+    .mary {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .mary .head {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffe0c4, #f0cfa1);
+      position: relative;
+      z-index: 1;
+    }
+    .mary .veil {
+      position: absolute;
+      top: -4px;
+      width: 58px;
+      height: 52px;
+      border-radius: 50% 50% 30% 30%;
+      background: linear-gradient(180deg, #7aa4cc, #5580a8);
+      z-index: 0;
+    }
+    .mary .body {
+      width: 78px;
+      height: 114px;
+      margin-top: 6px;
+      border-radius: 34px 34px 16px 16px;
+      background: linear-gradient(180deg, #8cb1d9, #5580a8);
+      position: relative;
+      overflow: hidden;
+    }
+    .mary .body::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: 30px 30px 14px 14px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Bride */
+    .bride {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .bride .veil-top {
+      position: absolute;
+      top: -14px;
+      width: 84px;
+      height: 56px;
+      border-radius: 50% 50% 20% 20%;
+      background: rgba(255, 255, 255, 0.35);
+      filter: blur(2px);
+      z-index: 0;
+    }
+    .bride .head {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffe7ce, #f2cba6);
+      position: relative;
+      z-index: 1;
+    }
+    .bride .body {
+      width: 82px;
+      height: 122px;
+      margin-top: 6px;
+      border-radius: 48px 48px 22px 22px;
+      background: linear-gradient(180deg, #fffaf5, #e7d6ce);
+      position: relative;
+      overflow: hidden;
+    }
+    .bride .body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    }
+
+    /* Groom */
+    .groom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .groom .head {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #f0d4aa, #dbb888);
+    }
+    .groom .body {
+      width: 74px;
+      height: 122px;
+      margin-top: 6px;
+      border-radius: 34px 34px 14px 14px;
+      background: linear-gradient(180deg, #5d4b3a, #392d22);
+      position: relative;
+    }
+    .groom .body .belt {
+      position: absolute;
+      top: 30%;
+      left: 8%;
+      right: 8%;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(200, 160, 100, 0.4);
+    }
+
+    /* ── Jugs ── */
+    .jugs {
+      position: absolute;
+      bottom: 5%;
+      left: 8%;
+      right: 8%;
+      display: flex;
+      justify-content: space-around;
+      gap: 6px;
+      z-index: 2;
+      transform: scale(var(--s, 1));
+      transform-origin: bottom center;
+    }
+    .jug {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.5s var(--ease);
+    }
+    .jug.transformed { transform: translateY(-3px); }
+    .jug-neck {
+      width: 24px;
+      height: 16px;
+      border-radius: 10px 10px 7px 7px;
+      background: linear-gradient(180deg, #c59a6b, #a87345);
+      box-shadow: inset 0 3px 5px rgba(255, 255, 255, 0.18);
+      position: relative;
+      z-index: 1;
+    }
+    .jug-neck::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d4a872, #b88550);
+    }
+    .jug-body {
+      position: relative;
+      width: 60px;
+      height: 86px;
+      border-radius: 24px 24px 18px 18px;
+      background: linear-gradient(180deg, #d5ad7e, #a87343);
+      overflow: hidden;
+      box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.2);
+      margin-top: -2px;
+    }
+    .jug-body::after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 5px;
+      width: 10px;
+      height: 36px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
+    }
+    .jug-handles {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 74px;
+      height: 26px;
+      pointer-events: none;
+    }
+    .jug-handles span {
+      position: absolute;
+      top: 0;
+      width: 12px;
+      height: 24px;
+      border: 3px solid #b08050;
+      border-radius: 50%;
+      background: transparent;
+    }
+    .jug-handles span:first-child { left: 0; }
+    .jug-handles span:last-child  { right: 0; }
+
+    /* Liquid */
+    .liquid {
+      position: absolute;
+      bottom: 7px;
+      left: 6px;
+      right: 6px;
+      height: 68%;
+      border-radius: 14px;
+      background: var(--liq, rgba(200, 220, 240, 0.55));
+      transition: background 0.7s var(--ease), box-shadow 0.7s var(--ease);
+      box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    .liquid .surface {
+      position: absolute;
+      top: 0;
+      left: 2px;
+      right: 2px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.3);
+      transition: background 0.7s var(--ease);
+    }
+    .liquid .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      opacity: 0;
+    }
+    .liquid .bubble:nth-child(2) { width: 4px; height: 4px; bottom: 20%; left: 30%; }
+    .liquid .bubble:nth-child(3) { width: 3px; height: 3px; bottom: 40%; right: 25%; }
+    .jug.transforming .liquid .bubble { animation: bubble-up 1.5s ease-out forwards; }
+    .jug.transforming .liquid .bubble:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bubble-up {
+      0%   { transform: translateY(0); opacity: 0; }
+      30%  { opacity: 0.6; }
+      100% { transform: translateY(-30px); opacity: 0; }
+    }
+    .jug.wine-done .jug-body {
+      box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.2), 0 0 14px rgba(141, 20, 17, 0.2);
+    }
+
+    /* ── Celebration ── */
+    .celebration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 6;
+      overflow: hidden;
+    }
+    .celebration span {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      opacity: 0;
+    }
+    .celebration.active span { animation: confetti 3s ease-out infinite; }
+    .celebration span:nth-child(1)  { left: 15%; background: #ffcb6b; animation-delay: 0s; }
+    .celebration span:nth-child(2)  { left: 25%; background: #e87a7a; animation-delay: 0.3s; }
+    .celebration span:nth-child(3)  { left: 38%; background: #a8d5a2; animation-delay: 0.6s; }
+    .celebration span:nth-child(4)  { left: 50%; background: #ffcb6b; animation-delay: 0.9s; }
+    .celebration span:nth-child(5)  { left: 62%; background: #7ab8e0; animation-delay: 1.2s; }
+    .celebration span:nth-child(6)  { left: 72%; background: #e87a7a; animation-delay: 1.5s; }
+    .celebration span:nth-child(7)  { left: 82%; background: #d9b3e8; animation-delay: 1.8s; }
+    .celebration span:nth-child(8)  { left: 44%; background: #a8d5a2; animation-delay: 2.1s; }
+    .celebration span:nth-child(9)  { left: 30%; background: #7ab8e0; animation-delay: 0.4s; }
+    .celebration span:nth-child(10) { left: 56%; background: #d9b3e8; animation-delay: 0.7s; }
+    @keyframes confetti {
+      0%   { top: -5%; transform: rotate(0deg) scale(1); opacity: 0; }
+      10%  { opacity: 0.9; }
+      100% { top: 105%; transform: rotate(720deg) scale(0.4); opacity: 0; }
+    }
+
+    /* ── Scripture ── */
+    .scripture {
+      position: absolute;
+      bottom: 34%;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      text-align: center;
+      font-size: clamp(0.65rem, 1.4vw, 0.88rem);
+      font-weight: 700;
+      color: rgba(80, 30, 10, 0.9);
+      text-shadow: 0 1px 6px rgba(255, 255, 255, 0.6);
+      line-height: 1.45;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+      max-width: 80%;
+      z-index: 6;
+    }
+    .scripture.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ───── Progress (shrink‑proof) ───── */
+    .progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .progress-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(160, 69, 27, 0.3);
+      background: transparent;
+      transition: all 0.35s var(--ease);
+    }
+    .progress-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.15);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    /* ───── Controls (shrink‑proof) ───── */
+    .controls {
+      background: rgba(160, 69, 27, 0.06);
+      border: 1px solid rgba(160, 69, 27, 0.08);
+      border-radius: var(--radius-md);
+      padding: clamp(8px, 1.5vh, 18px) clamp(12px, 2vw, 20px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 1vh, 12px);
+      flex-shrink: 0;
+    }
+    .controls p {
+      color: #4c2f1c;
+      line-height: 1.45;
+      font-size: clamp(0.78rem, 1.3vw, 0.95rem);
+      min-height: 2.4em;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(18px, 3vw, 32px);
+      font-family: inherit;
+      font-size: clamp(0.82rem, 1.2vw, 1rem);
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: var(--accent);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s, background 0.3s;
+    }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      background: var(--accent-light);
+    }
+    button:not(:disabled):active { transform: translateY(0); }
+
+    /* ═══════════════════════════════════════
+       VERY SHORT VIEWPORTS (small laptops)
+       ═══════════════════════════════════════ */
+    @media (max-height: 680px) {
+      header p { display: none; }
+      .controls p { min-height: 0; }
+      .lanterns { display: none; }
+    }
+
+    /* ═══════════════════════════════════════
+       MOBILE — release height lock, allow scroll
+       ═══════════════════════════════════════ */
+    @media (max-width: 720px) {
+      body {
+        height: auto;
+        min-height: 100dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      main {
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        gap: 14px;
+        padding: 16px;
+      }
+      .scene {
+        flex: 0 0 auto;
+        aspect-ratio: 4 / 3;
+        min-height: 260px;
+        max-height: 400px;
+      }
+      .figure-group {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+      }
+      .jugs {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .jug-handles { display: none; }
+      .table { display: none; }
+      .lanterns { display: none; }
+      .scripture { max-width: 90%; font-size: 0.68rem; }
+      button { width: 100%; }
+    }
+
+    /* Very small phones */
+    @media (max-width: 400px) {
+      .scene { aspect-ratio: 1 / 1; min-height: 240px; }
+      header h1 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Chapter 10 – First Miracle at Cana</h1>
+      <p>Tap "Perform the Sign" to watch the water jars turn from clear to rich wine as Jesus responds to Mary's request at the wedding feast.</p>
+    </header>
+
+    <section class="scene" aria-hidden="true">
+      <!-- Canopy -->
+      <div class="canopy"></div>
+      <div class="canopy-trim"></div>
+      <div class="canopy-drape left"></div>
+      <div class="canopy-drape right"></div>
+
+      <!-- Lanterns -->
+      <div class="lanterns">
+        <div class="lantern"><div class="string"></div><div class="bulb"></div></div>
+        <div class="lantern"><div class="string"></div><div class="bulb"></div></div>
+        <div class="lantern"><div class="string"></div><div class="bulb"></div></div>
+        <div class="lantern"><div class="string"></div><div class="bulb"></div></div>
+        <div class="lantern"><div class="string"></div><div class="bulb"></div></div>
+      </div>
+
+      <!-- Sun -->
+      <div class="sun"></div>
+
+      <!-- Floor -->
+      <div class="floor"></div>
+      <div class="floor-tiles"></div>
+
+      <!-- Table -->
+      <div class="table">
+        <div class="table-leg l"></div>
+        <div class="table-leg r"></div>
+      </div>
+
+      <!-- Miracle energy lines -->
+      <div class="miracle-lines" id="miracleLines">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <!-- Figures -->
+      <div class="figure-group">
+        <div class="mary">
+          <div class="veil"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+        </div>
+        <div class="jesus">
+          <div class="halo"></div>
+          <div class="head"></div>
+          <div class="body">
+            <div class="sash"></div>
+          </div>
+        </div>
+        <div class="bride">
+          <div class="veil-top"></div>
+          <div class="head"></div>
+          <div class="body"></div>
+        </div>
+        <div class="groom">
+          <div class="head"></div>
+          <div class="body">
+            <div class="belt"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jars -->
+      <div class="jugs" id="jugs">
+        <div class="jug" data-idx="0">
+          <div class="jug-neck"></div>
+          <div class="jug-body">
+            <div class="jug-handles"><span></span><span></span></div>
+            <div class="liquid"><div class="surface"></div><div class="bubble"></div><div class="bubble"></div></div>
+          </div>
+        </div>
+        <div class="jug" data-idx="1">
+          <div class="jug-neck"></div>
+          <div class="jug-body">
+            <div class="jug-handles"><span></span><span></span></div>
+            <div class="liquid"><div class="surface"></div><div class="bubble"></div><div class="bubble"></div></div>
+          </div>
+        </div>
+        <div class="jug" data-idx="2">
+          <div class="jug-neck"></div>
+          <div class="jug-body">
+            <div class="jug-handles"><span></span><span></span></div>
+            <div class="liquid"><div class="surface"></div><div class="bubble"></div><div class="bubble"></div></div>
+          </div>
+        </div>
+        <div class="jug" data-idx="3">
+          <div class="jug-neck"></div>
+          <div class="jug-body">
+            <div class="jug-handles"><span></span><span></span></div>
+            <div class="liquid"><div class="surface"></div><div class="bubble"></div><div class="bubble"></div></div>
+          </div>
+        </div>
+        <div class="jug" data-idx="4">
+          <div class="jug-neck"></div>
+          <div class="jug-body">
+            <div class="jug-handles"><span></span><span></span></div>
+            <div class="liquid"><div class="surface"></div><div class="bubble"></div><div class="bubble"></div></div>
+          </div>
+        </div>
+        <div class="jug" data-idx="5">
+          <div class="jug-neck"></div>
+          <div class="jug-body">
+            <div class="jug-handles"><span></span><span></span></div>
+            <div class="liquid"><div class="surface"></div><div class="bubble"></div><div class="bubble"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Celebration confetti -->
+      <div class="celebration" id="celebration">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <!-- Scripture -->
+      <div class="scripture" id="scripture">
+        "What Jesus did here in Cana of Galilee was the first<br/>
+        of the signs through which He revealed His glory."<br/>
+        <span style="opacity:0.6; font-size:0.88em;">— John 2:11</span>
+      </div>
+    </section>
+
+    <div class="progress" aria-hidden="true">
+      <span class="progress-dot" data-step="1"></span>
+      <span class="progress-dot" data-step="2"></span>
+      <span class="progress-dot" data-step="3"></span>
+    </div>
+
+    <section class="controls" aria-live="polite">
+      <p id="status"></p>
+      <div class="buttons">
+        <button id="stepBtn">Perform the Sign</button>
+        <button id="resetBtn">Reset Scene</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const els = {
+      scene:        $(".scene"),
+      jugs:         $$(".jug"),
+      liquids:      $$(".liquid"),
+      dots:         $$(".progress-dot"),
+      stepBtn:      $("#stepBtn"),
+      resetBtn:     $("#resetBtn"),
+      status:       $("#status"),
+      scripture:    $("#scripture"),
+      celebration:  $("#celebration"),
+      miracleLines: $("#miracleLines"),
+    };
+
+    const MAX = 3;
+
+    const COLORS = [
+      "rgba(200, 220, 240, 0.55)",
+      "#f2cdc6",
+      "#c85550",
+      "#8d1411",
+    ];
+    const SURFACE = [
+      "rgba(255, 255, 255, 0.3)",
+      "rgba(240, 200, 190, 0.4)",
+      "rgba(200, 100, 90, 0.3)",
+      "rgba(120, 20, 18, 0.3)",
+    ];
+    const MESSAGES = [
+      "Step 0 of 3 — The six stone jars are filled with clear water.",
+      "Step 1 of 3 — A blush appears as the servants draw some out… 🍷",
+      "Step 2 of 3 — The color deepens and wonder spreads among the guests. ✨",
+      "Step 3 of 3 — The water has become fine wine — the first sign is revealed! 🎉",
+    ];
+    const JUG_GROUPS = [ [], [0, 1], [2, 3], [4, 5] ];
+
+    let step = 0;
+    let transformedUpTo = -1;
+
+    /* ── Scene scaling ── */
+    function scaleScene() {
+      if (!els.scene) return;
+      const h = els.scene.clientHeight;
+      const ideal = 480;
+      const s = Math.min(1, h / ideal);
+      els.scene.style.setProperty("--s", s);
+    }
+
+    /* ── Render ── */
+    function render() {
+      const atPeak = step === MAX;
+      const active = step > 0;
+
+      els.liquids.forEach(liq => {
+        liq.style.setProperty("--liq", COLORS[step]);
+        const surf = liq.querySelector(".surface");
+        if (surf) surf.style.background = SURFACE[step];
+      });
+
+      els.jugs.forEach(jug => jug.classList.remove("transforming"));
+      if (step > 0 && step > transformedUpTo) {
+        JUG_GROUPS[step].forEach(i => {
+          if (els.jugs[i]) els.jugs[i].classList.add("transforming");
+        });
+        transformedUpTo = step;
+      }
+
+      els.jugs.forEach((jug, i) => {
+        const jugStep = i < 2 ? 1 : i < 4 ? 2 : 3;
+        jug.classList.toggle("transformed", jugStep <= step);
+        jug.classList.toggle("wine-done", atPeak);
+      });
+
+      els.miracleLines.classList.toggle("active", active && !atPeak);
+      els.dots.forEach((d, i) => d.classList.toggle("active", i < step));
+      els.celebration.classList.toggle("active", atPeak);
+      els.scripture.classList.toggle("show", atPeak);
+      els.status.textContent = MESSAGES[step];
+      els.stepBtn.disabled = atPeak;
+
+      /* ── Chapter transition trigger ── */
+      if (atPeak) {
+        chapterComplete();
+      }
+    }
+
+    /* ── Events ── */
+    els.stepBtn.addEventListener("click", () => {
+      if (step < MAX) { step++; render(); }
+    });
+
+    els.resetBtn.addEventListener("click", () => {
+      step = 0;
+      transformedUpTo = -1;
+      els.jugs.forEach(j => j.classList.remove("transforming", "transformed", "wine-done"));
+      render();
+      els.stepBtn.focus();
+    });
+
+    /* ── Init ── */
+    window.addEventListener("resize", scaleScene);
+    scaleScene();
+    render();
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(35,20,5,.6);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#fff8ee; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#a8e6cf,#55c89b);
+        color:#1b5e3a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(85,200,155,.3);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════
+    // ★ LEVEL 10 SETTINGS (LAST LEVEL)
+    // ════════════════════════════════════════════
+    const THIS_CHAPTER   = 10;
+    const CHAPTER_DONE   = "Jesus turned water into wine — His first miracle revealed His glory!";
+    const NEXT_FILE      = "";  // empty = last level
+    // ════════════════════════════════════════════
+
+    const CHAPTER_TITLES = [
+      "",
+      "Gabriel Visits Mary",
+      "Journey to Bethlehem",
+      "No Room at the Inn",
+      "Jesus Is Born",
+      "Angels Tell the Shepherds",
+      "Shepherds Visit Jesus",
+      "The Wise Men Follow the Star",
+      "Gifts for the King",
+      "The Escape to Egypt",
+      "First Miracle at Cana"
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById('chapterOverlay');
+      const card = document.getElementById('chapterCard');
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById('ovTitle').textContent = isLast
+        ? '🌟 Jesus First Miracle Complete!'
+        : `✨ Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById('ovDone').textContent = CHAPTER_DONE;
+
+      document.getElementById('ovNext').textContent = isLast
+        ? 'You journeyed through the whole Christmas Story! 🎄'
+        : `Next: Chapter ${nextChapter} — ${CHAPTER_TITLES[nextChapter] || ''}`;
+
+      const btn = document.getElementById('ovBtn');
+      btn.textContent = isLast ? '🔄 Play Again' : 'Continue →';
+      btn.onclick = () => {
+        window.location.href = isLast ? 'level1.html' : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = '1';
+        ov.style.pointerEvents = 'auto';
+        card.style.transform = 'scale(1)';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
