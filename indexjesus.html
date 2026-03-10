@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 1 – Guide Gabrielle to Mary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: only light;
+      --font-main: "Nunito", "Segoe UI", sans-serif;
+      --clr-gold: #ffc753;
+      --clr-gold-dark: #d39b2d;
+      --clr-gold-light: #ffe7a3;
+      --clr-brown: #9c6c32;
+      --clr-brown-dark: #5c3b1a;
+      --clr-sky-top: #b8dcff;
+      --clr-sky-bottom: #fef9f1;
+      --clr-ground-top: #f4d9a8;
+      --clr-ground-bottom: #e7b56d;
+      --clr-bg-start: #fef9f3;
+      --clr-bg-mid: #f9e4c8;
+      --clr-bg-end: #f6d09a;
+      --clr-card: #fff8ee;
+      --radius-card: 22px;
+      --radius-pill: 999px;
+      --transition-step: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: radial-gradient(circle at top, var(--clr-bg-start) 0%, var(--clr-bg-mid) 45%, var(--clr-bg-end) 100%);
+      overflow-x: hidden;
+    }
+
+    .scene {
+      width: min(96vw, 700px);
+      background: var(--clr-card);
+      border-radius: var(--radius-card);
+      box-shadow: 0 25px 60px rgba(188, 143, 91, 0.35);
+      padding: clamp(14px, 3vw, 28px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInUp 0.6s ease-out;
+      max-height: 96vh;
+      overflow-y: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .title h1 {
+      font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+      font-weight: 800;
+      color: var(--clr-brown);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .title p {
+      margin-top: 4px;
+      text-align: center;
+      color: #b47d3b;
+      font-size: clamp(0.78rem, 2vw, 0.9rem);
+      line-height: 1.4;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #f0dfc0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--clr-gold), #ffa43b);
+      border-radius: 8px;
+      transition: width 0.6s ease;
+    }
+
+    .storyboard {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      min-height: 180px;
+      max-height: 340px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--clr-sky-top) 0%, var(--clr-sky-bottom) 60%, var(--clr-ground-top) 60%, var(--clr-ground-top) 100%);
+      overflow: hidden;
+    }
+
+    .storyboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.5) 1.5px, transparent 1.5px);
+      background-size: 60px 60px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: drift linear infinite;
+    }
+    .cloud-1 { width: 70px; height: 26px; top: 8%; left: -70px; animation-duration: 22s; }
+    .cloud-2 { width: 55px; height: 20px; top: 18%; left: -55px; animation-duration: 30s; animation-delay: 6s; }
+    .cloud-3 { width: 45px; height: 18px; top: 5%;  left: -45px; animation-duration: 26s; animation-delay: 12s; }
+
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to   { transform: translateX(calc(100vw + 200px)); }
+    }
+
+    .ground {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 38%;
+      background: linear-gradient(180deg, var(--clr-ground-top) 0%, var(--clr-ground-bottom) 100%);
+    }
+
+    .path-step {
+      position: absolute;
+      bottom: 42%;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 3px dashed rgba(255,214,94,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      color: var(--clr-gold-dark);
+      transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      z-index: 1;
+    }
+
+    .path-step:nth-of-type(1) { left: 14%; }
+    .path-step:nth-of-type(2) { left: 38%; }
+    .path-step:nth-of-type(3) { left: 60%; }
+
+    .path-step.is-lit {
+      background: var(--clr-gold-light);
+      border-color: var(--clr-gold);
+      border-style: solid;
+      transform: scale(1.15);
+      box-shadow: 0 0 18px rgba(255, 214, 94, 0.6);
+      animation: starPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes starPulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(255,214,94,0.4); }
+      50%       { box-shadow: 0 0 24px rgba(255,214,94,0.8); }
+    }
+
+    /* ── ANGEL (scaled down) ── */
+    [data-angel] {
+      position: absolute;
+      bottom: 38%;
+      left: 6%;
+      width: 55px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: left var(--transition-step);
+      z-index: 3;
+    }
+
+    [data-angel].is-idle {
+      animation: bob 3s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    .halo-small {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(255,214,94,0.8);
+      border-radius: 50%;
+      margin-bottom: -14px;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    .angel-head {
+      width: 38px;
+      height: 38px;
+      background: #fdd9b5;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(205,140,100,0.25);
+      position: relative;
+    }
+
+    .angel-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 2px;
+    }
+
+    .angel-eye {
+      width: 6px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4a2f24;
+      position: relative;
+    }
+
+    .angel-eye::after {
+      content: "";
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .angel-mouth {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 5px;
+      border: 2px solid #c47a5c;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .angel-body {
+      width: 44px;
+      height: 56px;
+      background: #fffdf7;
+      border-radius: 22px 22px 14px 14px;
+      border: 2px solid rgba(255,214,94,0.35);
+      position: relative;
+    }
+
+    .wing {
+      position: absolute;
+      width: 46px;
+      height: 28px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 50%;
+      top: 6px;
+      transition: transform 0.4s ease;
+    }
+    .wing.left  { left: -34px; transform-origin: right center; }
+    .wing.right { right: -34px; transform-origin: left center; }
+
+    [data-angel].is-moving .wing.left  { animation: flapL 0.35s ease-in-out 2; }
+    [data-angel].is-moving .wing.right { animation: flapR 0.35s ease-in-out 2; }
+
+    @keyframes flapL {
+      0%,100% { transform: rotate(0); }
+      50%     { transform: rotate(-18deg); }
+    }
+    @keyframes flapR {
+      0%,100% { transform: rotate(0); }
+      50%     { transform: rotate(18deg); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 8px rgba(255,214,94,0.4); }
+      50%      { box-shadow: 0 0 20px rgba(255,214,94,0.9); }
+    }
+
+    /* ── MARY & JOSEPH (scaled down) ── */
+    .mary, .joseph {
+      position: absolute;
+      bottom: 38%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .mary {
+      right: 14%;
+      width: 68px;
+      z-index: 2;
+      transform: scale(0.82);
+      transform-origin: bottom center;
+    }
+
+    .mary .shawl {
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.95), rgba(152,191,255,0.7));
+      border-radius: 50%;
+      margin-bottom: -82px;
+      filter: drop-shadow(0 5px 10px rgba(96,140,200,0.35));
+    }
+
+    .figure-head {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: inset 0 -4px 0 rgba(205,140,100,0.25);
+    }
+
+    .mary .figure-head { background: #f7d5b1; }
+
+    .mary .figure-head::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      width: 56px;
+      height: 56px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #c48762;
+      z-index: -1;
+    }
+
+    .face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+    }
+
+    .eyes { display: flex; gap: 10px; }
+
+    .eyes span {
+      width: 7px;
+      height: 9px;
+      background: #4a2f24;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .eyes span::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .nose {
+      width: 7px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(196,122,92,0.5);
+    }
+
+    .smile {
+      width: 18px;
+      height: 9px;
+      border: 2px solid #c47a5c;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+    }
+
+    .blush { display: flex; gap: 12px; margin-top: -4px; }
+    .blush span {
+      width: 9px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255,141,141,0.4);
+    }
+
+    .figure-body { position: relative; border-radius: 60px 60px 20px 20px; }
+
+    .mary .figure-body {
+      width: 64px;
+      height: 90px;
+      background: linear-gradient(180deg, #9ec9ff 0%, #6aa7ff 100%);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .name-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .joseph {
+      right: 0%;
+      bottom: 28%;
+      transform: scale(0.5);
+      transform-origin: bottom right;
+      width: 110px;
+    }
+
+    .joseph .figure-head {
+      width: 58px;
+      height: 58px;
+      background: #f2c8a2;
+    }
+
+    .joseph .figure-head::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      width: 86px;
+      height: 86px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #6b4527;
+      z-index: -1;
+    }
+
+    .joseph .eyes span { width: 11px; height: 11px; }
+    .joseph .nose { width: 11px; height: 5px; }
+    .joseph .smile { width: 28px; height: 9px; border-radius: 0 0 14px 14px; }
+
+    .beard {
+      width: 56px;
+      height: 30px;
+      background: #8b5a2b;
+      border-radius: 24px 24px 40px 40px;
+      margin-top: -8px;
+    }
+
+    .joseph .figure-body {
+      width: 116px;
+      height: 126px;
+      background: linear-gradient(180deg, #c79b7c 0%, #8e5b32 100%);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 70px 70px 30px 30px;
+    }
+
+    .staff {
+      width: 5px;
+      height: 105px;
+      background: #8b5a2b;
+      border-radius: 3px;
+      margin-top: -10px;
+    }
+
+    /* ── MANGER (scaled down) ── */
+    .manger {
+      position: absolute;
+      bottom: 10%;
+      right: 18%;
+      width: 120px;
+      height: 52px;
+      background: #f5d17b;
+      border-radius: 100px / 42px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 6px;
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.4);
+    }
+
+    .manger-base {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      width: 76px;
+      height: 40px;
+      background: #c48b5a;
+      border-radius: 12px;
+      transform: translateX(-50%);
+    }
+
+    .baby-mini {
+      transform: scale(0.17);
+      transform-origin: top center;
+      position: relative;
+      top: -22px;
+      animation: cradle 4s ease-in-out infinite;
+    }
+
+    .baby-head {
+      width: 110px;
+      height: 110px;
+      background: #fdd9b5;
+      border-radius: 50%;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .baby-head::after {
+      content: "";
+      position: absolute;
+      top: 38px;
+      left: 50%;
+      width: 36px;
+      height: 16px;
+      border: 3px solid #c47a5c;
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      transform: translateX(-50%);
+    }
+
+    .baby-head::before {
+      content: "";
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      width: 46px;
+      height: 12px;
+      border-radius: 12px;
+      border: 3px solid #4a2f24;
+      border-top: none;
+      transform: translateX(-50%);
+      box-shadow: inset 0 4px 0 rgba(255,255,255,0.3);
+    }
+
+    .baby-swaddle {
+      width: 200px;
+      height: 160px;
+      background: #f4f0ff;
+      border-radius: 100px 100px 40px 40px;
+      margin-top: -30px;
+      border: 4px solid #ded3fb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .baby-swaddle::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.4), transparent 50%);
+    }
+
+    @keyframes cradle {
+      0%, 100% { transform: scale(0.17) rotate(-2deg); }
+      50%      { transform: scale(0.17) rotate(2deg); }
+    }
+
+    /* ── SPEECH BUBBLE ── */
+    .speech-bubble {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: #fff;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: clamp(0.7rem, 1.8vw, 0.82rem);
+      font-weight: 700;
+      color: var(--clr-brown);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 10;
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+      text-align: center;
+      max-width: 80%;
+      pointer-events: none;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #fff;
+    }
+
+    .speech-bubble.is-visible {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+    }
+
+    /* ── INSTRUCTIONS & CONTROLS ── */
+    .instructions {
+      background: #fff0cc;
+      border-radius: 14px;
+      padding: 10px 14px;
+      text-align: center;
+      color: #8a5a21;
+      font-size: clamp(0.8rem, 2vw, 0.92rem);
+      font-weight: 600;
+      transition: background 0.4s ease;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+    }
+
+    .instructions.is-done {
+      background: #d4edda;
+      color: #2d6a3f;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .guide-btn {
+      flex: 1;
+      max-width: 260px;
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #ffca6b 0%, #ffa43b 100%);
+      color: var(--clr-brown-dark);
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 11px 22px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+      box-shadow: 0 4px 14px rgba(255,164,59,0.35);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .guide-btn:hover:not(:disabled) {
+      box-shadow: 0 6px 20px rgba(255,164,59,0.5);
+      transform: translateY(-2px);
+    }
+
+    .guide-btn:active:not(:disabled) {
+      transform: scale(0.97) translateY(0);
+      box-shadow: 0 2px 8px rgba(255,164,59,0.3);
+    }
+
+    .guide-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .guide-btn:focus-visible {
+      outline: 3px solid var(--clr-gold);
+      outline-offset: 3px;
+    }
+
+    .restart-btn {
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #a8e6cf 0%, #55c89b 100%);
+      color: #1b5e3a;
+      font-family: var(--font-main);
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 11px 18px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 14px rgba(85,200,155,0.3);
+      display: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .restart-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(85,200,155,0.5); }
+    .restart-btn:active { transform: scale(0.97); }
+    .restart-btn:focus-visible { outline: 3px solid #55c89b; outline-offset: 3px; }
+    .restart-btn.is-visible { display: block; }
+
+    .tip {
+      text-align: center;
+      color: #a3743c;
+      font-size: 0.8rem;
+    }
+
+    .step-counter {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--clr-brown);
+      opacity: 0.7;
+    }
+
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      opacity: 0;
+    }
+
+    .confetti.is-active {
+      animation: confettiFall 1.8s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(200px) rotate(720deg) scale(0.3); }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .scene { width: 100%; padding: 12px; gap: 10px; border-radius: 16px; }
+      .storyboard { min-height: 160px; max-height: 220px; border-radius: 14px; }
+      .path-step { width: 32px; height: 32px; font-size: 0.85rem; border-width: 2px; }
+      [data-angel] { width: 45px; height: 80px; }
+      .halo-small { width: 36px; height: 36px; margin-bottom: -10px; border-width: 2px; }
+      .angel-head { width: 30px; height: 30px; }
+      .angel-eye { width: 5px; height: 5px; }
+      .angel-face { gap: 6px; }
+      .angel-mouth { width: 8px; height: 4px; bottom: 5px; }
+      .angel-body { width: 36px; height: 44px; }
+      .wing { width: 36px; height: 22px; top: 4px; }
+      .wing.left { left: -26px; }
+      .wing.right { right: -26px; }
+      .mary { right: 10%; transform: scale(0.65); }
+      .mary .shawl { width: 80px; height: 80px; margin-bottom: -72px; }
+      .joseph { transform: scale(0.4); }
+      .manger { width: 95px; height: 42px; right: 14%; }
+      .manger-base { width: 60px; height: 32px; bottom: -14px; }
+      .baby-mini { transform: scale(0.13); top: -18px; }
+      @keyframes cradle {
+        0%, 100% { transform: scale(0.13) rotate(-2deg); }
+        50%      { transform: scale(0.13) rotate(2deg); }
+      }
+      .speech-bubble { font-size: 0.7rem; padding: 6px 10px; border-radius: 10px; }
+      .controls { flex-direction: column; align-items: center; }
+      .guide-btn, .restart-btn { width: 100%; max-width: 100%; }
+    }
+
+    @media (max-width: 420px) {
+      .scene { padding: 10px; gap: 8px; }
+      .title h1 { font-size: 1.1rem; }
+      .storyboard { min-height: 140px; max-height: 190px; }
+      .path-step { width: 28px; height: 28px; font-size: 0.75rem; }
+      [data-angel] { width: 40px; height: 70px; }
+      .halo-small { width: 30px; height: 30px; margin-bottom: -8px; }
+      .angel-head { width: 26px; height: 26px; }
+      .angel-body { width: 30px; height: 38px; }
+      .wing { width: 30px; height: 18px; }
+      .wing.left { left: -22px; }
+      .wing.right { right: -22px; }
+      .mary { transform: scale(0.55); }
+      .joseph { transform: scale(0.35); }
+      .manger { width: 80px; height: 36px; }
+      .manger-base { width: 52px; height: 28px; bottom: -12px; }
+    }
+
+    @media (min-height: 800px) {
+      .storyboard { max-height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene" aria-label="Chapter 1 scene: Guide Gabrielle to Mary">
+    <section class="title">
+      <h1>✨ Chapter 1: Gabrielle Visits Mary</h1>
+      <p>Tap the golden button to guide the angel step by step.</p>
+    </section>
+
+    <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="3">
+      <div class="progress-fill" data-progress></div>
+    </div>
+
+    <section class="storyboard" aria-live="polite">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+
+      <div class="confetti-container" data-confetti></div>
+      <div class="speech-bubble" data-speech></div>
+
+      <div class="path-step" data-step="1">⭐</div>
+      <div class="path-step" data-step="2">⭐</div>
+      <div class="path-step" data-step="3">⭐</div>
+
+      <div class="character angel is-idle" data-angel aria-label="Angel Gabrielle">
+        <div class="halo-small"></div>
+        <div class="angel-head">
+          <div class="angel-face">
+            <div class="angel-eye"></div>
+            <div class="angel-eye"></div>
+          </div>
+          <div class="angel-mouth"></div>
+        </div>
+        <div class="angel-body">
+          <div class="wing left"></div>
+          <div class="wing right"></div>
+        </div>
+      </div>
+
+      <div class="character mary" aria-label="Mary">
+        <div class="shawl"></div>
+        <div class="figure-head">
+          <div class="face">
+            <div class="eyes"><span></span><span></span></div>
+            <div class="nose"></div>
+            <div class="smile"></div>
+            <div class="blush"><span></span><span></span></div>
+          </div>
+        </div>
+        <div class="figure-body">
+          <span class="name-tag">Mary</span>
+        </div>
+      </div>
+
+      <div class="character joseph" aria-label="Joseph">
+        <div class="figure-head">
+          <div class="face">
+            <div class="eyes"><span></span><span></span></div>
+            <div class="nose"></div>
+            <div class="smile"></div>
+          </div>
+        </div>
+        <div class="beard"></div>
+        <div class="figure-body">
+          <span class="name-tag">Joseph</span>
+        </div>
+        <div class="staff"></div>
+      </div>
+
+      <div class="manger" aria-label="Baby Jesus in the manger">
+        <div class="baby-mini">
+          <div class="baby-head"></div>
+          <div class="baby-swaddle"></div>
+        </div>
+        <div class="manger-base"></div>
+      </div>
+
+      <div class="ground"></div>
+    </section>
+
+    <p class="instructions" data-message>
+      Tap "Guide Gabrielle" to begin the journey.
+    </p>
+
+    <p class="step-counter" data-step-counter>Step 0 of 3</p>
+
+    <div class="controls">
+      <button class="guide-btn" type="button" data-guide>
+        ✨ Guide Gabrielle
+      </button>
+      <button class="restart-btn" type="button" data-restart>
+        🔄 Replay
+      </button>
+    </div>
+
+    <p class="tip">Tip: Three taps = three gentle steps to Mary.</p>
+  </main>
+
+  <script>
+    class LevelOneGame {
+      static CONFIG = {
+        totalSteps: 3,
+        positions: ["6%", "34%", "56%", "68%"],
+        messages: [
+          'Tap "Guide Gabrielle" to begin the journey.',
+          "Gabrielle is following the first star! ⭐",
+          "Almost there — one more star to reach Mary! 🌟",
+          "Hooray! Gabrielle delivered God's joyful message! 🎉"
+        ],
+        speeches: [
+          "",
+          "Do not be afraid…",
+          "You will have a son…",
+          "He will be called Jesus!"
+        ],
+        moveDuration: 700,
+        confettiCount: 40,
+        confettiColors: ["#ffd700", "#ff6b6b", "#48dbfb", "#ff9ff3", "#54a0ff", "#5f27cd"]
+      };
+
+      constructor() {
+        this.els = {
+          angel:        document.querySelector("[data-angel]"),
+          guideBtn:     document.querySelector("[data-guide]"),
+          restartBtn:   document.querySelector("[data-restart]"),
+          message:      document.querySelector("[data-message]"),
+          speech:       document.querySelector("[data-speech]"),
+          steps:        document.querySelectorAll("[data-step]"),
+          progressFill: document.querySelector("[data-progress]"),
+          progressBar:  document.querySelector(".progress-track"),
+          stepCounter:  document.querySelector("[data-step-counter]"),
+          confetti:     document.querySelector("[data-confetti]"),
+        };
+
+        this.progress = 0;
+        this.isAnimating = false;
+
+        this.#bindEvents();
+        this.#render();
+      }
+
+      #bindEvents() {
+        this.els.guideBtn.addEventListener("click", () => this.#advance());
+        this.els.restartBtn.addEventListener("click", () => this.#reset());
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            if (!this.els.guideBtn.disabled) this.#advance();
+          }
+        });
+      }
+
+      #advance() {
+        const { totalSteps, positions, moveDuration } = LevelOneGame.CONFIG;
+
+        if (this.progress >= totalSteps || this.isAnimating) return;
+
+        this.isAnimating = true;
+        this.progress += 1;
+
+        this.els.angel.classList.remove("is-idle");
+        this.els.angel.classList.add("is-moving");
+
+        this.els.angel.style.left = positions[this.progress];
+
+        if (this.els.steps[this.progress - 1]) {
+          this.els.steps[this.progress - 1].classList.add("is-lit");
+        }
+
+        this.#render();
+
+        setTimeout(() => {
+          this.els.angel.classList.remove("is-moving");
+          this.isAnimating = false;
+
+          this.#showSpeech(LevelOneGame.CONFIG.speeches[this.progress]);
+
+          if (this.progress >= totalSteps) {
+            this.els.angel.classList.add("is-idle");
+            this.#onComplete();
+          } else {
+            this.els.angel.classList.add("is-idle");
+          }
+        }, moveDuration);
+      }
+
+      #render() {
+        const { totalSteps, messages } = LevelOneGame.CONFIG;
+
+        this.els.message.textContent = messages[this.progress];
+
+        const pct = (this.progress / totalSteps) * 100;
+        this.els.progressFill.style.width = `${pct}%`;
+        this.els.progressBar.setAttribute("aria-valuenow", this.progress);
+
+        this.els.stepCounter.textContent = `Step ${this.progress} of ${totalSteps}`;
+
+        if (this.progress >= totalSteps) {
+          this.els.guideBtn.disabled = true;
+          this.els.guideBtn.textContent = "🎉 Gabrielle found Mary!";
+          this.els.message.classList.add("is-done");
+        }
+      }
+
+      #showSpeech(text) {
+        if (!text) return;
+        this.els.speech.textContent = text;
+        this.els.speech.classList.add("is-visible");
+
+        setTimeout(() => {
+          this.els.speech.classList.remove("is-visible");
+        }, 2500);
+      }
+
+      #onComplete() {
+        this.els.restartBtn.classList.add("is-visible");
+        this.#spawnConfetti();
+
+        /* ── Chapter transition trigger ── */
+        if (typeof chapterComplete === 'function') {
+          chapterComplete();
+        }
+      }
+
+      #spawnConfetti() {
+        const { confettiCount, confettiColors } = LevelOneGame.CONFIG;
+        const container = this.els.confetti;
+
+        for (let i = 0; i < confettiCount; i++) {
+          const piece = document.createElement("div");
+          piece.classList.add("confetti");
+
+          piece.style.left = `${Math.random() * 100}%`;
+          piece.style.top = `${Math.random() * 30}%`;
+          piece.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+          piece.style.animationDelay = `${Math.random() * 0.6}s`;
+          const size = `${6 + Math.random() * 6}px`;
+          piece.style.width = size;
+          piece.style.height = size;
+
+          container.appendChild(piece);
+          requestAnimationFrame(() => piece.classList.add("is-active"));
+        }
+
+        setTimeout(() => { container.innerHTML = ""; }, 3000);
+      }
+
+      #reset() {
+        const { positions } = LevelOneGame.CONFIG;
+
+        this.progress = 0;
+        this.isAnimating = false;
+
+        this.els.angel.style.left = positions[0];
+        this.els.angel.classList.remove("is-moving");
+        this.els.angel.classList.add("is-idle");
+
+        this.els.steps.forEach((step) => step.classList.remove("is-lit"));
+
+        this.els.guideBtn.disabled = false;
+        this.els.guideBtn.textContent = "✨ Guide Gabrielle";
+        this.els.restartBtn.classList.remove("is-visible");
+        this.els.message.classList.remove("is-done");
+        this.els.speech.classList.remove("is-visible");
+        this.els.confetti.innerHTML = "";
+
+        /* ── Allow chapter transition to fire again ── */
+        chapterTriggered = false;
+
+        this.#render();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => new LevelOneGame());
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(120,90,40,.45);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#fff8ee; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#ffca6b,#ffa43b);
+        color:#5c3b1a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(255,164,59,.35);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════
+    // ★ LEVEL 1 SETTINGS
+    // ════════════════════════════════════════════
+    const THIS_CHAPTER   = 1;
+    const CHAPTER_DONE   = "Angel Gabrielle delivered God\u2019s wonderful message \u2014 Mary will have a son named Jesus!";
+    const NEXT_FILE      = "indexjesus2.html";
+    // ════════════════════════════════════════════
+
+    const CHAPTER_TITLES = [
+      "",
+      "Gabriel Visits Mary",
+      "Journey to Bethlehem",
+      "The Birth of Jesus",
+      "Journey to Jerusalem",
+      "Missing Jesus",
+      "Back to Jerusalem",
+      "Baptism in the Jordan",
+      "Temptation in the Desert",
+      "Jesus Begins His Ministry",
+      "First Miracle at Cana"
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById('chapterOverlay');
+      const card = document.getElementById('chapterCard');
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById('ovTitle').textContent = isLast
+        ? '\uD83C\uDF1F The Christmas Story Complete!'
+        : `\u2728 Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById('ovDone').textContent = CHAPTER_DONE;
+
+      document.getElementById('ovNext').textContent = isLast
+        ? 'You journeyed through the whole Christmas Story! \uD83C\uDF84'
+        : `Next: Chapter ${nextChapter} \u2014 ${CHAPTER_TITLES[nextChapter] || ''}`;
+
+      const btn = document.getElementById('ovBtn');
+      btn.textContent = isLast ? '\uD83D\uDD04 Play Again' : 'Continue \u2192';
+      btn.onclick = () => {
+        window.location.href = isLast ? 'indexjesus1.html' : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = '1';
+        ov.style.pointerEvents = 'auto';
+        card.style.transform = 'scale(1)';
+      }, 1600);
+    }
+  </script>
+</body>
+</html>
