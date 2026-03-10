@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 8 – Temptation in the Desert</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #ffdba6;
+      --accent-glow: rgba(255, 219, 166, 0.45);
+      --bg-dark: #05070d;
+      --bg-mid: #0b1324;
+      --bg-top: #1c2c4d;
+      --card-bg: rgba(7, 14, 25, 0.93);
+      --text-primary: #f8f5ec;
+      --text-soft: #d5e4ff;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --ease-move: 0.9s cubic-bezier(0.45, 0.05, 0.2, 0.95);
+      font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+      color-scheme: only light;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-dark) 100%);
+      color: var(--text-primary);
+    }
+
+    main {
+      width: min(96vw, 700px);
+      max-height: 96vh;
+      overflow-y: auto;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: clamp(14px, 3vw, 28px);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ───── Header ───── */
+    header { text-align: center; }
+    header h1 {
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    header p {
+      margin-top: 6px;
+      max-width: 34rem;
+      margin-inline: auto;
+      color: var(--text-soft);
+      line-height: 1.45;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
+    }
+
+    /* ───── Scene ───── */
+    .scene {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 220px;
+      max-height: 380px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: linear-gradient(180deg, #2c4d7a 0%, #1a3254 35%, #0f1c2f 60%, #0b1626 100%);
+      box-shadow: inset 0 -25px 55px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ── Stars ── */
+    .stars span {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      animation: twinkle 2.4s ease-in-out infinite;
+    }
+    .stars span:nth-child(even) { animation-delay: 1.2s; width: 2px; height: 2px; }
+    .stars span:nth-child(3n)   { animation-duration: 3.2s; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; }
+      50%      { opacity: 1; }
+    }
+
+    /* ── Moon ── */
+    .moon {
+      position: absolute;
+      top: 5%;
+      right: 11%;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff6d2 0%, #ffe4a1 55%, transparent);
+      box-shadow: 0 0 50px rgba(255, 228, 161, 0.6);
+      animation: moon-glow 5s ease-in-out infinite alternate;
+    }
+    @keyframes moon-glow {
+      0%   { box-shadow: 0 0 50px rgba(255, 228, 161, 0.6); }
+      100% { box-shadow: 0 0 80px rgba(255, 228, 161, 0.8); }
+    }
+
+    /* ── Wind streaks ── */
+    .wind {
+      position: absolute;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      opacity: 0.35;
+      animation: drift 5s linear infinite;
+    }
+    .wind:nth-child(1) { top: 26%; left: 15%; width: 100px; animation-delay: 0s; }
+    .wind:nth-child(2) { top: 40%; left: 28%; width: 130px; animation-delay: 1.8s; }
+    .wind:nth-child(3) { top: 54%; left: 22%; width: 110px; animation-delay: 3.5s; }
+    @keyframes drift {
+      0%   { transform: translateX(-60px); opacity: 0; }
+      20%  { opacity: 0.35; }
+      80%  { opacity: 0.35; }
+      100% { transform: translateX(140px); opacity: 0; }
+    }
+
+    /* ── Sand particles ── */
+    .sand-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .sand-particles span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(210, 180, 130, 0.5);
+      animation: sand-blow 4s linear infinite;
+    }
+    .sand-particles span:nth-child(1) { top: 50%; left: 10%; animation-delay: 0s; }
+    .sand-particles span:nth-child(2) { top: 60%; left: 25%; animation-delay: 0.7s; }
+    .sand-particles span:nth-child(3) { top: 45%; left: 40%; animation-delay: 1.4s; }
+    .sand-particles span:nth-child(4) { top: 55%; left: 55%; animation-delay: 2.1s; }
+    .sand-particles span:nth-child(5) { top: 48%; left: 70%; animation-delay: 2.8s; }
+    .sand-particles span:nth-child(6) { top: 62%; left: 85%; animation-delay: 3.5s; }
+    @keyframes sand-blow {
+      0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translate(80px, -30px) scale(0.4); opacity: 0; }
+    }
+
+    /* ── Mountain ── */
+    .mountain {
+      position: absolute;
+      bottom: 0;
+      left: 8%;
+      width: 82%;
+      height: 72%;
+      background: linear-gradient(135deg, #3b2b20 0%, #1d140e 60%);
+      clip-path: polygon(10% 100%, 36% 55%, 56% 70%, 82% 8%, 100% 0%, 100% 100%);
+      box-shadow: inset -20px -40px 60px rgba(0, 0, 0, 0.5);
+    }
+    .ridge {
+      position: absolute;
+      bottom: 0;
+      left: 12%;
+      width: 70%;
+      height: 60%;
+      background: linear-gradient(135deg, rgba(255, 197, 125, 0.2), transparent);
+      clip-path: polygon(0 100%, 28% 44%, 55% 58%, 80% 0, 100% 0, 100% 100%);
+      opacity: 0.6;
+    }
+
+    /* ── Path ── */
+    .path {
+      position: absolute;
+      bottom: 6%;
+      left: 22%;
+      width: 50%;
+      height: 58%;
+      border: 2px dashed rgba(255, 217, 143, 0.7);
+      border-left: none;
+      border-bottom: none;
+      border-radius: 0 40% 0 0;
+      transform: rotate(-4deg);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* ── City basin ── */
+    .city-basin {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(180deg, transparent 0%, rgba(12, 16, 28, 0.7) 100%);
+      pointer-events: none;
+    }
+
+    /* ── Cities ── */
+    .cities {
+      position: absolute;
+      bottom: 7%;
+      left: 7%;
+      right: 7%;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .city {
+      flex: 1;
+      height: 50px;
+      border-radius: 5px;
+      background: linear-gradient(180deg, #24335a, #131b33);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 1s ease;
+    }
+    .city::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 180, 80, 0.08), transparent);
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .city::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      background-image:
+        repeating-linear-gradient(90deg, rgba(255, 221, 128, 0.75) 0 2px, transparent 2px 8px),
+        repeating-linear-gradient(180deg, transparent 0 5px, rgba(0,0,0,0.3) 5px 10px);
+      opacity: 0.35;
+      transition: opacity 0.8s ease;
+    }
+    .cities.tempted .city {
+      box-shadow: 0 0 30px rgba(255, 200, 100, 0.2);
+    }
+    .cities.tempted .city::before { opacity: 1; }
+    .cities.tempted .city::after  { opacity: 0.7; }
+
+    /* ── Devil ── */
+    .devil {
+      position: absolute;
+      right: 19%;
+      bottom: 56%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: filter 1s ease;
+      transform: scale(0.7);
+      transform-origin: bottom center;
+    }
+    .devil .horns {
+      display: flex;
+      justify-content: space-between;
+      width: 66px;
+      margin-bottom: -6px;
+    }
+    .devil .horns span {
+      width: 16px;
+      height: 26px;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, #f6c86d, #c49340);
+    }
+    .devil .horns span:first-child { transform: rotate(-12deg); }
+    .devil .horns span:last-child  { transform: rotate(12deg); }
+    .devil .head {
+      width: 56px;
+      height: 62px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #3d1414, #1e0808);
+      border: 2px solid rgba(255, 205, 112, 0.3);
+      transition: box-shadow 1s ease, border-color 1s ease;
+    }
+    .devil .eyes {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .devil .eyes span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e85535;
+      box-shadow: 0 0 6px rgba(232, 85, 53, 0.6);
+      transition: background 0.8s ease, box-shadow 0.8s ease;
+    }
+    .devil .body {
+      width: 64px;
+      height: 100px;
+      margin-top: 6px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #45140f, #1c0504);
+      position: relative;
+      transition: box-shadow 1s ease;
+    }
+    .devil .body .cloak-edge {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 20px;
+      background: radial-gradient(ellipse, rgba(28, 5, 4, 0.6), transparent);
+      border-radius: 50%;
+    }
+    .devil.glow .head {
+      box-shadow: 0 0 30px rgba(255, 205, 112, 0.3);
+      border-color: rgba(255, 205, 112, 0.6);
+    }
+    .devil.glow .body {
+      box-shadow: 0 0 25px rgba(255, 180, 80, 0.15);
+    }
+    .devil.glow .eyes span {
+      background: #ff6b3d;
+      box-shadow: 0 0 12px rgba(255, 107, 61, 0.8);
+    }
+
+    /* ── Temptation aura (step 3) ── */
+    .tempt-aura {
+      position: absolute;
+      right: 14%;
+      bottom: 52%;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 160, 60, 0.12), transparent 70%);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      pointer-events: none;
+    }
+    .tempt-aura.show { opacity: 1; }
+
+    /* ── Jesus ── */
+    .jesus {
+      --pos-left: 16%;
+      --pos-bottom: 12%;
+      position: absolute;
+      left: var(--pos-left);
+      bottom: var(--pos-bottom);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: left var(--ease-move), bottom var(--ease-move);
+      transform: scale(0.7);
+      transform-origin: bottom center;
+    }
+    .jesus .halo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255, 235, 181, 0.75);
+      background: radial-gradient(circle, rgba(255, 245, 200, 0.12), transparent 70%);
+      margin-bottom: -24px;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .jesus .head {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffe7ce, #f2cba6);
+      position: relative;
+      z-index: 1;
+    }
+    .jesus .body {
+      width: 64px;
+      height: 114px;
+      margin-top: 7px;
+      border-radius: 44px 32px 18px 18px;
+      background: linear-gradient(180deg, #fff5d0, #f0c070);
+      position: relative;
+      overflow: hidden;
+    }
+    .jesus .body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0.3), transparent, rgba(255,255,255,0.2));
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    /* Legs */
+    .jesus .legs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: -4px;
+    }
+    .jesus .leg {
+      width: 14px;
+      height: 56px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #c79c69, #7f5833);
+      transform-origin: top center;
+    }
+    .jesus.walking .leg.back  { animation: stride 0.75s ease-in-out infinite; }
+    .jesus.walking .leg.front { animation: stride 0.75s ease-in-out infinite 0.375s; }
+    @keyframes stride {
+      0%, 100% { transform: rotate(7deg); }
+      50%      { transform: rotate(-7deg); }
+    }
+
+    /* Feet */
+    .jesus .feet {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: -2px;
+    }
+    .jesus .foot {
+      width: 28px;
+      height: 10px;
+      border-radius: 14px;
+      background: #4c3521;
+    }
+
+    /* At-peak state */
+    .jesus.at-peak .halo {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .jesus.at-peak .body::after { opacity: 1; }
+
+    /* ── Scripture overlay ── */
+    .scripture {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: clamp(0.7rem, 1.8vw, 0.95rem);
+      font-weight: 700;
+      color: rgba(255, 235, 190, 0.9);
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+      line-height: 1.5;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease 0.5s;
+      max-width: 80%;
+    }
+    .scripture.show { opacity: 1; }
+
+    /* ───── Progress Dots ───── */
+    .progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+    .progress-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 219, 166, 0.5);
+      background: transparent;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .progress-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.15);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* ───── Controls ───── */
+    .controls {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .controls p {
+      color: #f0eddc;
+      line-height: 1.45;
+      min-height: 2.5em;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 28px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #1b1109;
+      background: var(--accent);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    button:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    button:not(:disabled):active {
+      transform: translateY(0);
+    }
+
+    /* ───── Mobile ───── */
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      main {
+        width: 100%;
+        padding: 12px;
+        gap: 10px;
+        border-radius: 16px;
+      }
+      .scene {
+        min-height: 180px;
+        max-height: 280px;
+        border-radius: 14px;
+      }
+      .devil  { right: 12%; transform: scale(0.55); }
+      .jesus  { transform: scale(0.55); transform-origin: bottom center; }
+      .moon   { width: 45px; height: 45px; }
+      .scripture { font-size: 0.65rem; max-width: 90%; }
+      .city { height: 35px; }
+      button  { width: 100%; padding: 12px 20px; }
+    }
+
+    /* ───── Large screens ───── */
+    @media (min-height: 800px) {
+      .scene { max-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Chapter 8 – Temptation in the Desert</h1>
+      <p>Help Jesus take three steady steps up the rugged cliff. At the summit, He stands beside the tempter yet remains faithful, gazing over the kingdoms below.</p>
+    </header>
+
+    <section class="scene" aria-hidden="true">
+      <!-- Stars -->
+      <div class="stars">
+        <span style="top:10%;left:16%"></span>
+        <span style="top:18%;left:30%"></span>
+        <span style="top:6%;left:48%"></span>
+        <span style="top:15%;left:64%"></span>
+        <span style="top:28%;left:80%"></span>
+        <span style="top:22%;left:44%"></span>
+        <span style="top:5%;left:74%"></span>
+        <span style="top:32%;left:12%"></span>
+      </div>
+
+      <div class="moon"></div>
+
+      <!-- Wind -->
+      <div class="wind"></div>
+      <div class="wind"></div>
+      <div class="wind"></div>
+
+      <!-- Sand particles -->
+      <div class="sand-particles">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+
+      <!-- Terrain -->
+      <div class="mountain"></div>
+      <div class="ridge"></div>
+      <div class="path"></div>
+
+      <!-- Cities below -->
+      <div class="city-basin"></div>
+      <div class="cities" id="cities">
+        <div class="city"></div>
+        <div class="city"></div>
+        <div class="city"></div>
+        <div class="city"></div>
+      </div>
+
+      <!-- Temptation aura -->
+      <div class="tempt-aura" id="temptAura"></div>
+
+      <!-- Jesus -->
+      <div class="jesus" id="jesus">
+        <div class="halo"></div>
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="legs">
+          <div class="leg back"></div>
+          <div class="leg front"></div>
+        </div>
+        <div class="feet">
+          <div class="foot"></div>
+          <div class="foot"></div>
+        </div>
+      </div>
+
+      <!-- Devil -->
+      <div class="devil" id="devil">
+        <div class="horns"><span></span><span></span></div>
+        <div class="head">
+          <div class="eyes"><span></span><span></span></div>
+        </div>
+        <div class="body">
+          <div class="cloak-edge"></div>
+        </div>
+      </div>
+
+      <!-- Scripture quote on final step -->
+      <div class="scripture" id="scripture">
+        "Away from me, Satan! For it is written:<br/>
+        Worship the Lord your God, and serve Him only."<br/>
+        <span style="opacity:0.65; font-size:0.85em;">— Matthew 4:10</span>
+      </div>
+    </section>
+
+    <div class="progress" aria-hidden="true">
+      <span class="progress-dot" data-step="1"></span>
+      <span class="progress-dot" data-step="2"></span>
+      <span class="progress-dot" data-step="3"></span>
+    </div>
+
+    <section class="controls" aria-live="polite">
+      <p id="status"></p>
+      <div class="buttons">
+        <button id="stepBtn">Take a Step</button>
+        <button id="resetBtn">Reset Scene</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const els = {
+      jesus:     $("#jesus"),
+      devil:     $("#devil"),
+      cities:    $("#cities"),
+      temptAura: $("#temptAura"),
+      scripture: $("#scripture"),
+      status:    $("#status"),
+      stepBtn:   $("#stepBtn"),
+      resetBtn:  $("#resetBtn"),
+      dots:      $$(".progress-dot"),
+    };
+
+    const MAX_STEPS = 3;
+
+    const POSITIONS = [
+      { left: "16%", bottom: "12%" },
+      { left: "28%", bottom: "28%" },
+      { left: "40%", bottom: "42%" },
+      { left: "54%", bottom: "56%" },
+    ];
+
+    const MESSAGES = [
+      "Step 0 of 3 — Jesus enters the wilderness, eyeing the steep climb ahead.",
+      "Step 1 of 3 — He takes the first ascent; hunger rises but His resolve holds firm. 🏜️",
+      "Step 2 of 3 — Higher still — the kingdoms begin to glimmer beneath the cliff. ⛰️",
+      "Step 3 of 3 — At the summit beside the tempter, Jesus refuses the offer of every kingdom! ✝️",
+    ];
+
+    let step = 0;
+
+    function render() {
+      const pos = POSITIONS[step];
+      const atPeak = step === MAX_STEPS;
+      const climbing = step > 0 && step < MAX_STEPS;
+
+      els.jesus.style.setProperty("--pos-left", pos.left);
+      els.jesus.style.setProperty("--pos-bottom", pos.bottom);
+
+      els.jesus.classList.toggle("walking", climbing);
+      els.jesus.classList.toggle("at-peak", atPeak);
+      els.devil.classList.toggle("glow", atPeak);
+      els.cities.classList.toggle("tempted", atPeak);
+      els.temptAura.classList.toggle("show", atPeak);
+      els.scripture.classList.toggle("show", atPeak);
+
+      els.dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i < step);
+      });
+
+      els.status.textContent = MESSAGES[step];
+      els.stepBtn.disabled = atPeak;
+
+      /* ── Chapter transition trigger ── */
+      if (atPeak) {
+        chapterComplete();
+      }
+    }
+
+    els.stepBtn.addEventListener("click", () => {
+      if (step < MAX_STEPS) {
+        step++;
+        render();
+      }
+    });
+
+    els.resetBtn.addEventListener("click", () => {
+      step = 0;
+      render();
+      els.stepBtn.focus();
+    });
+
+    render();
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(35,20,5,.6);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#fff8ee; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#a8e6cf,#55c89b);
+        color:#1b5e3a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(85,200,155,.3);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════
+    // ★ LEVEL 8 SETTINGS
+    // ════════════════════════════════════════════
+    const THIS_CHAPTER   = 8;
+    const CHAPTER_DONE   = "Jesus resisted every temptation — worship the Lord your God and serve Him only!";
+    const NEXT_FILE      = "indexjesus9.html";
+    // ════════════════════════════════════════════
+
+    const CHAPTER_TITLES = [
+      "",
+      "Gabriel Visits Mary",
+      "Journey to Bethlehem",
+      "No Room at the Inn",
+      "Jesus Is Born",
+      "Angels Tell the Shepherds",
+      "Shepherds Visit Jesus",
+      "The Wise Men Follow the Star",
+      "Temptation in the Desert",
+      "Jesus Begins His Ministry",
+      "First Miracle at Cana"
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById('chapterOverlay');
+      const card = document.getElementById('chapterCard');
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById('ovTitle').textContent = isLast
+        ? '🌟 The Christmas Story Complete!'
+        : `✨ Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById('ovDone').textContent = CHAPTER_DONE;
+
+      document.getElementById('ovNext').textContent = isLast
+        ? 'You journeyed through the whole Christmas Story! 🎄'
+        : `Next: Chapter ${nextChapter} — ${CHAPTER_TITLES[nextChapter] || ''}`;
+
+      const btn = document.getElementById('ovBtn');
+      btn.textContent = isLast ? '🔄 Play Again' : 'Continue →';
+      btn.onclick = () => {
+        window.location.href = isLast ? 'indexjesus1.html' : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = '1';
+        ov.style.pointerEvents = 'auto';
+        card.style.transform = 'scale(1)';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
