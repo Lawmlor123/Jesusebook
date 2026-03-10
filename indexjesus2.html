@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Level 2 – Journey to Bethlehem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: only light;
+      --font-main: "Nunito", "Segoe UI", sans-serif;
+      --clr-gold: #f6d077;
+      --clr-gold-dark: #c9a035;
+      --clr-gold-light: #ffe8a3;
+      --clr-sky-dark: #0c1424;
+      --clr-sky-mid: #1c2a4a;
+      --clr-ground-top: #5a4129;
+      --clr-ground-bottom: #2e2115;
+      --clr-card: rgba(11, 19, 34, 0.92);
+      --clr-text: #f3f7ff;
+      --clr-text-muted: #c7d6ff;
+      --radius-card: 22px;
+      --radius-pill: 999px;
+      --transition-step: 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: radial-gradient(circle at top, var(--clr-sky-mid) 0%, var(--clr-sky-dark) 60%, #060910 100%);
+      color: var(--clr-text);
+      overflow-x: hidden;
+    }
+
+    .scene {
+      width: min(96vw, 700px);
+      background: var(--clr-card);
+      border-radius: var(--radius-card);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      padding: clamp(14px, 3vw, 28px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInUp 0.6s ease-out;
+      max-height: 96vh;
+      overflow-y: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .title h1 {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+      font-weight: 800;
+      color: var(--clr-gold);
+      line-height: 1.2;
+    }
+
+    .title p {
+      margin: 4px 0 0;
+      text-align: center;
+      color: var(--clr-text-muted);
+      font-size: clamp(0.78rem, 2vw, 0.9rem);
+      line-height: 1.4;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--clr-gold), #ff9e54);
+      border-radius: 8px;
+      transition: width 0.6s ease;
+    }
+
+    .storyboard {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      min-height: 180px;
+      max-height: 340px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0f1b33 0%, #1a2f4f 45%, #473522 46%, #6b4b2a 100%);
+    }
+
+    .storyboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .moon {
+      position: absolute;
+      top: 6%;
+      left: 8%;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fffbe6 0%, #f6e2a2 60%, rgba(255, 255, 255, 0) 70%);
+      box-shadow: 0 0 20px rgba(255, 240, 190, 0.9);
+      animation: moonGlow 5s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes moonGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 240, 190, 0.7); }
+      50%      { box-shadow: 0 0 35px rgba(255, 240, 190, 1); }
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .star:nth-child(1)  { top: 12%; left: 18%; animation-duration: 2.5s; }
+    .star:nth-child(2)  { top: 8%;  left: 35%; animation-duration: 3.2s; animation-delay: 0.5s; }
+    .star:nth-child(3)  { top: 15%; left: 52%; animation-duration: 2.8s; animation-delay: 1s; }
+    .star:nth-child(4)  { top: 5%;  left: 70%; animation-duration: 3.5s; animation-delay: 0.3s; }
+    .star:nth-child(5)  { top: 20%; left: 85%; animation-duration: 2.2s; animation-delay: 0.8s; }
+    .star:nth-child(6)  { top: 10%; left: 92%; animation-duration: 3s;   animation-delay: 1.2s; }
+    .star:nth-child(7)  { top: 25%; left: 28%; animation-duration: 2.7s; animation-delay: 0.6s; }
+    .star:nth-child(8)  { top: 3%;  left: 60%; animation-duration: 3.3s; animation-delay: 0.2s; }
+    .star:nth-child(9)  { top: 18%; left: 78%; animation-duration: 2.4s; animation-delay: 1.5s; }
+    .star:nth-child(10) { top: 28%; left: 45%; animation-duration: 3.1s; animation-delay: 0.9s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50%      { opacity: 1;   transform: scale(1.3); }
+    }
+
+    .shooting-star {
+      position: absolute;
+      top: 10%;
+      left: -5%;
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+      border-radius: 2px;
+      opacity: 0;
+      animation: shoot 6s linear infinite;
+      animation-delay: 3s;
+      z-index: 1;
+    }
+
+    @keyframes shoot {
+      0%   { transform: translateX(0) translateY(0) rotate(-25deg); opacity: 0; }
+      5%   { opacity: 1; }
+      15%  { opacity: 0; transform: translateX(350px) translateY(100px) rotate(-25deg); }
+      100% { opacity: 0; }
+    }
+
+    .road {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 60%;
+      background: linear-gradient(var(--clr-ground-top), var(--clr-ground-bottom));
+      clip-path: polygon(18% 100%, 38% 58%, 60% 48%, 82% 100%);
+      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+    }
+
+    .bethlehem-sign {
+      position: absolute;
+      top: 18%;
+      right: 8%;
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: rgba(246, 208, 119, 0.75);
+      text-shadow: 0 0 10px rgba(246, 208, 119, 0.5);
+      z-index: 1;
+      transition: opacity 0.5s ease, text-shadow 0.5s ease;
+    }
+
+    .bethlehem-sign.is-close {
+      color: rgba(246, 208, 119, 1);
+      text-shadow: 0 0 20px rgba(246, 208, 119, 0.8);
+    }
+
+    .bethlehem-hills {
+      position: absolute;
+      bottom: 42%;
+      right: 0;
+      width: 60%;
+      height: 28%;
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.8));
+      clip-path: polygon(0 60%, 25% 45%, 45% 55%, 70% 35%, 100% 60%, 100% 100%, 0 100%);
+    }
+
+    /* ── CARAVAN (scaled down) ── */
+    .caravan {
+      position: absolute;
+      bottom: 18%;
+      left: 6%;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      transition: left var(--transition-step);
+      z-index: 5;
+      transform: scale(0.65);
+      transform-origin: bottom left;
+    }
+
+    .caravan.is-hopping {
+      animation: hop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes hop {
+      0%   { transform: scale(0.65) translateY(0); }
+      40%  { transform: scale(0.65) translateY(-22px); }
+      100% { transform: scale(0.65) translateY(0); }
+    }
+
+    .donkey {
+      position: relative;
+      width: 140px;
+      height: 120px;
+    }
+
+    .donkey-body {
+      width: 120px;
+      height: 60px;
+      background: #8a7764;
+      border-radius: 40px;
+      position: absolute;
+      bottom: 30px;
+      left: 10px;
+    }
+
+    .donkey-neck {
+      width: 40px;
+      height: 70px;
+      background: #8a7764;
+      position: absolute;
+      left: 85px;
+      bottom: 60px;
+      border-radius: 20px;
+    }
+
+    .donkey-head {
+      width: 48px;
+      height: 48px;
+      background: #8a7764;
+      border-radius: 40px 40px 32px 32px;
+      position: absolute;
+      left: 96px;
+      bottom: 105px;
+    }
+
+    .donkey-ear {
+      width: 12px;
+      height: 32px;
+      background: #a08a72;
+      border-radius: 12px;
+      position: absolute;
+      top: -28px;
+      transition: transform 0.3s ease;
+    }
+
+    .donkey-ear.left  { left: 4px;  transform: rotate(-10deg); }
+    .donkey-ear.right { right: 4px; transform: rotate(10deg); }
+
+    .caravan.is-hopping .donkey-ear.left  { transform: rotate(-25deg); }
+    .caravan.is-hopping .donkey-ear.right { transform: rotate(25deg); }
+
+    .donkey-eye {
+      width: 12px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+      top: 18px;
+      left: 28px;
+    }
+
+    .donkey-eye::after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #2a1c11;
+      border-radius: 50%;
+      top: 1px;
+      left: 4px;
+    }
+
+    .donkey-leg {
+      width: 14px;
+      height: 60px;
+      background: #7b6957;
+      position: absolute;
+      bottom: 0;
+      border-radius: 8px;
+      transition: transform 0.25s ease;
+    }
+
+    .donkey-leg::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 14px;
+      height: 10px;
+      background: #42342a;
+      border-radius: 4px;
+    }
+
+    .donkey-leg.back        { left: 22px; }
+    .donkey-leg.back.second { left: 42px; }
+    .donkey-leg.front        { left: 90px; }
+    .donkey-leg.front.second { left: 110px; }
+
+    .caravan.is-hopping .donkey-leg.back        { transform: rotate(-8deg); }
+    .caravan.is-hopping .donkey-leg.back.second  { transform: rotate(8deg); }
+    .caravan.is-hopping .donkey-leg.front        { transform: rotate(8deg); }
+    .caravan.is-hopping .donkey-leg.front.second { transform: rotate(-8deg); }
+
+    .mary {
+      position: absolute;
+      bottom: 80px;
+      left: 42px;
+      width: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mary-head {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #f8d7b6;
+      box-shadow: inset 0 -5px 0 rgba(206, 140, 100, 0.25);
+      position: relative;
+      z-index: 2;
+    }
+
+    .mary-face {
+      position: absolute;
+      top: 14px;
+      right: 6px;
+      width: 22px;
+      height: 18px;
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 50% 50% 40% 40%;
+      transform: rotate(-8deg);
+    }
+
+    .mary-eye {
+      position: absolute;
+      width: 12px;
+      height: 6px;
+      border-bottom: 2px solid #4a2f24;
+      border-radius: 50%;
+      top: 6px;
+      right: 4px;
+    }
+
+    .mary-nose {
+      position: absolute;
+      width: 8px;
+      height: 2px;
+      background: #c48762;
+      top: 10px;
+      right: -2px;
+      transform: rotate(70deg);
+      border-radius: 2px;
+    }
+
+    .mary-veil {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(180deg, rgba(170, 200, 255, 0.85), rgba(80, 120, 200, 0.9));
+      border-radius: 35px 35px 50px 50px;
+      position: absolute;
+      top: 20px;
+      z-index: 1;
+    }
+
+    .mary-body {
+      width: 60px;
+      height: 90px;
+      border-radius: 30px 30px 18px 18px;
+      background: linear-gradient(180deg, #6ba7ff, #3c6fd4);
+      border: 3px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mary-bump {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .joseph {
+      width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .joseph-head {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #f5c79f;
+      position: relative;
+      box-shadow: inset 0 -5px 0 rgba(168, 110, 70, 0.3);
+    }
+
+    .joseph-face {
+      position: absolute;
+      top: 14px;
+      left: 8px;
+      width: 22px;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 50% 50% 40% 40%;
+      transform: rotate(10deg);
+    }
+
+    .joseph-eye {
+      position: absolute;
+      width: 12px;
+      height: 6px;
+      border-bottom: 2px solid #4a2f24;
+      border-radius: 50%;
+      top: 6px;
+      left: -2px;
+    }
+
+    .joseph-nose {
+      position: absolute;
+      width: 9px;
+      height: 2px;
+      background: #8b5a2b;
+      top: 11px;
+      left: -4px;
+      transform: rotate(-65deg);
+      border-radius: 2px;
+    }
+
+    .joseph-head::before {
+      content: "";
+      position: absolute;
+      inset: -8px 0 auto;
+      height: 28px;
+      border-radius: 20px 20px 4px 4px;
+      background: #6b4a2f;
+    }
+
+    .joseph-beard {
+      width: 50px;
+      height: 30px;
+      background: #6b4a2f;
+      border-radius: 0 0 30px 30px;
+      margin-top: -6px;
+    }
+
+    .joseph-body {
+      width: 70px;
+      height: 110px;
+      border-radius: 40px 40px 18px 18px;
+      background: linear-gradient(180deg, #c79b7a, #8b5b38);
+      border: 3px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .joseph-staff {
+      width: 10px;
+      height: 140px;
+      background: linear-gradient(180deg, #8a6038, #4e2f18);
+      border-radius: 5px;
+      margin-top: -20px;
+    }
+
+    /* ── GABRIEL (scaled down) ── */
+    .gabriel {
+      position: absolute;
+      bottom: 68%;
+      left: 55%;
+      width: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: float 4s ease-in-out infinite;
+      z-index: 4;
+      transform-origin: center center;
+    }
+
+    .halo {
+      width: 52px;
+      height: 52px;
+      border: 3px solid rgba(255, 238, 170, 0.8);
+      border-radius: 50%;
+      margin-bottom: -20px;
+      box-shadow: 0 0 16px rgba(255, 238, 170, 0.5);
+      animation: haloGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes haloGlow {
+      0%, 100% { box-shadow: 0 0 12px rgba(255, 238, 170, 0.4); }
+      50%      { box-shadow: 0 0 26px rgba(255, 238, 170, 0.9); }
+    }
+
+    .gabriel-head {
+      width: 34px;
+      height: 34px;
+      background: #fdd9b5;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(205, 140, 100, 0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .gabriel-eyes {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .gabriel-eyes span {
+      width: 5px;
+      height: 6px;
+      background: #4a2f24;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .gabriel-eyes span::after {
+      content: "";
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .gabriel-smile {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 5px;
+      border: 2px solid #c47a5c;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .gabriel-body {
+      width: 54px;
+      height: 68px;
+      border-radius: 28px 28px 16px 16px;
+      background: linear-gradient(180deg, #fdfcf7, #f3eedc);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      position: relative;
+      margin-top: -6px;
+    }
+
+    .gabriel-wing {
+      position: absolute;
+      width: 68px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 50%;
+      top: 10px;
+      filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.2));
+      transition: transform 0.3s ease;
+    }
+
+    .gabriel-wing.left  { left: -48px; transform: rotate(-15deg); }
+    .gabriel-wing.right { right: -48px; transform: rotate(15deg); }
+
+    .gabriel.is-waving .gabriel-wing.left  { animation: gWingL 0.4s ease-in-out 3; }
+    .gabriel.is-waving .gabriel-wing.right { animation: gWingR 0.4s ease-in-out 3; }
+
+    @keyframes gWingL {
+      0%, 100% { transform: rotate(-15deg); }
+      50%      { transform: rotate(-30deg); }
+    }
+    @keyframes gWingR {
+      0%, 100% { transform: rotate(15deg); }
+      50%      { transform: rotate(30deg); }
+    }
+
+    .gabriel-light {
+      position: absolute;
+      inset: -30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 247, 210, 0.35), transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(-4px); }
+      50%      { transform: translateY(8px); }
+    }
+
+    .speech-bubble {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: clamp(0.7rem, 1.8vw, 0.82rem);
+      font-weight: 700;
+      color: #2a1c11;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      z-index: 10;
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+      text-align: center;
+      max-width: 80%;
+      pointer-events: none;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .speech-bubble.is-visible {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+    }
+
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      opacity: 0;
+    }
+
+    .confetti.is-active {
+      animation: confettiFall 2s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(220px) rotate(720deg) scale(0.2); }
+    }
+
+    .dust-container {
+      position: absolute;
+      bottom: 14%;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      pointer-events: none;
+      z-index: 4;
+      overflow: hidden;
+    }
+
+    .dust {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(180, 150, 100, 0.5);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .dust.is-active {
+      animation: dustPuff 0.8s ease-out forwards;
+    }
+
+    @keyframes dustPuff {
+      0%   { opacity: 0.7; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-30px) scale(2.5); }
+    }
+
+    .instructions {
+      margin: 0;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 10px 14px;
+      color: #d7e7ff;
+      font-size: clamp(0.8rem, 2vw, 0.92rem);
+      font-weight: 600;
+      transition: background 0.4s ease, color 0.4s ease;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+    }
+
+    .instructions.is-done {
+      background: rgba(76, 175, 80, 0.2);
+      color: #a5d6a7;
+    }
+
+    .step-counter {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--clr-gold-dark);
+      opacity: 0.7;
+    }
+
+    .progress-hints {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .hint-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(246, 208, 119, 0.5);
+      background: transparent;
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .hint-dot.active {
+      background: var(--clr-gold);
+      border-color: var(--clr-gold);
+      box-shadow: 0 0 8px rgba(246, 208, 119, 0.6);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .journey-btn {
+      flex: 1;
+      max-width: 260px;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 11px 22px;
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ffda8a, #ff9e54);
+      color: #5a3613;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+      box-shadow: 0 4px 14px rgba(255, 158, 84, 0.35);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .journey-btn:hover:not(:disabled) {
+      box-shadow: 0 6px 22px rgba(255, 158, 84, 0.55);
+      transform: translateY(-2px);
+    }
+
+    .journey-btn:active:not(:disabled) {
+      transform: scale(0.97) translateY(0);
+      box-shadow: 0 2px 8px rgba(255, 158, 84, 0.3);
+    }
+
+    .journey-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .journey-btn:focus-visible {
+      outline: 3px solid var(--clr-gold);
+      outline-offset: 3px;
+    }
+
+    .restart-btn {
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #a8e6cf 0%, #55c89b 100%);
+      color: #1b5e3a;
+      font-family: var(--font-main);
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 11px 18px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 14px rgba(85, 200, 155, 0.3);
+      display: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .restart-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(85, 200, 155, 0.5); }
+    .restart-btn:active { transform: scale(0.97); }
+    .restart-btn:focus-visible { outline: 3px solid #55c89b; outline-offset: 3px; }
+    .restart-btn.is-visible { display: block; }
+
+    .tip {
+      text-align: center;
+      color: rgba(199, 214, 255, 0.6);
+      font-size: 0.8rem;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .scene { width: 100%; padding: 12px; gap: 10px; border-radius: 16px; }
+      .storyboard { min-height: 160px; max-height: 220px; border-radius: 14px; }
+      .moon { width: 40px; height: 40px; }
+      .caravan { transform: scale(0.48); gap: 8px; }
+      @keyframes hop {
+        0%   { transform: scale(0.48) translateY(0); }
+        40%  { transform: scale(0.48) translateY(-18px); }
+        100% { transform: scale(0.48) translateY(0); }
+      }
+      .gabriel { width: 85px; }
+      .halo { width: 40px; height: 40px; margin-bottom: -15px; }
+      .gabriel-head { width: 26px; height: 26px; }
+      .gabriel-eyes { top: 8px; gap: 6px; }
+      .gabriel-eyes span { width: 4px; height: 4px; }
+      .gabriel-smile { width: 8px; height: 4px; bottom: 5px; }
+      .gabriel-body { width: 42px; height: 52px; }
+      .gabriel-wing { width: 52px; height: 30px; }
+      .gabriel-wing.left { left: -36px; }
+      .gabriel-wing.right { right: -36px; }
+      .speech-bubble { font-size: 0.7rem; padding: 6px 10px; border-radius: 10px; }
+      .controls { flex-direction: column; align-items: center; }
+      .journey-btn, .restart-btn { width: 100%; max-width: 100%; }
+    }
+
+    @media (max-width: 420px) {
+      .scene { padding: 10px; gap: 8px; }
+      .title h1 { font-size: 1.1rem; }
+      .storyboard { min-height: 140px; max-height: 190px; }
+      .caravan { transform: scale(0.4); }
+      @keyframes hop {
+        0%   { transform: scale(0.4) translateY(0); }
+        40%  { transform: scale(0.4) translateY(-16px); }
+        100% { transform: scale(0.4) translateY(0); }
+      }
+    }
+
+    @media (min-height: 800px) {
+      .storyboard { max-height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene" aria-label="Chapter 2 scene: Mary and Joseph travel to Bethlehem">
+    <section class="title">
+      <h1>🌙 Chapter 2: Journey to Bethlehem</h1>
+      <p>Three moonlit hops bring them to the city of David.</p>
+    </section>
+
+    <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="3">
+      <div class="progress-fill" data-progress></div>
+    </div>
+
+    <section class="storyboard" aria-live="polite">
+      <div class="moon"></div>
+
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+
+      <div class="shooting-star"></div>
+      <div class="speech-bubble" data-speech></div>
+      <div class="confetti-container" data-confetti></div>
+      <div class="dust-container" data-dust></div>
+
+      <div class="bethlehem-sign" data-sign>BETHLEHEM</div>
+      <div class="bethlehem-hills"></div>
+      <div class="road"></div>
+
+      <div class="gabriel" data-gabriel aria-label="Angel Gabriel watching from above">
+        <div class="gabriel-light"></div>
+        <div class="halo"></div>
+        <div class="gabriel-head">
+          <div class="gabriel-eyes"><span></span><span></span></div>
+          <div class="gabriel-smile"></div>
+        </div>
+        <div class="gabriel-body">
+          <div class="gabriel-wing left"></div>
+          <div class="gabriel-wing right"></div>
+        </div>
+      </div>
+
+      <div class="caravan" data-caravan aria-label="Mary on a donkey with Joseph walking">
+        <div class="donkey">
+          <div class="donkey-body"></div>
+          <div class="donkey-neck"></div>
+          <div class="donkey-head">
+            <div class="donkey-ear left"></div>
+            <div class="donkey-ear right"></div>
+            <div class="donkey-eye"></div>
+          </div>
+          <div class="donkey-leg back"></div>
+          <div class="donkey-leg back second"></div>
+          <div class="donkey-leg front"></div>
+          <div class="donkey-leg front second"></div>
+
+          <div class="mary">
+            <div class="mary-head">
+              <div class="mary-face"></div>
+              <div class="mary-eye"></div>
+              <div class="mary-nose"></div>
+            </div>
+            <div class="mary-veil"></div>
+            <div class="mary-body">
+              <div class="mary-bump"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="joseph">
+          <div class="joseph-head">
+            <div class="joseph-face"></div>
+            <div class="joseph-eye"></div>
+            <div class="joseph-nose"></div>
+          </div>
+          <div class="joseph-beard"></div>
+          <div class="joseph-body"></div>
+          <div class="joseph-staff"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="progress-hints" aria-hidden="true">
+      <span class="hint-dot"></span>
+      <span class="hint-dot"></span>
+      <span class="hint-dot"></span>
+    </div>
+
+    <p class="instructions" data-message>
+      Tap "Continue the Journey" to make their first hop toward Bethlehem.
+    </p>
+
+    <p class="step-counter" data-step-counter>Hop 0 of 3</p>
+
+    <div class="controls">
+      <button class="journey-btn" type="button" data-journey>
+        🐴 Continue the Journey
+      </button>
+      <button class="restart-btn" type="button" data-restart>
+        🔄 Replay
+      </button>
+    </div>
+
+    <p class="tip">Tip: Three hops under the moonlight to reach Bethlehem.</p>
+  </main>
+
+  <script>
+    class LevelTwoGame {
+      static CONFIG = {
+        totalSteps: 3,
+        checkpoints: ["6%", "30%", "54%", "72%"],
+        messages: [
+          "Tap \"Continue the Journey\" to make their first hop toward Bethlehem.",
+          "Hop one! The desert road glows as they press on under Gabriel\u2019s watch. \uD83C\uDF1F",
+          "Hop two! Bethlehem\u2019s hills loom closer in the moonlight. \uD83C\uDF19",
+          "Hop three! They arrive in Bethlehem, ready for the census. \uD83C\uDF89"
+        ],
+        speeches: [
+          "",
+          "The road is long, but God is near\u2026",
+          "Almost there, do not lose heart!",
+          "Welcome to Bethlehem!"
+        ],
+        hopDuration: 550,
+        moveDuration: 800,
+        dustCount: 8,
+        confettiCount: 45,
+        confettiColors: ["#ffd700", "#ff6b6b", "#48dbfb", "#ff9ff3", "#54a0ff", "#feca57"]
+      };
+
+      constructor() {
+        this.els = {
+          caravan:      document.querySelector("[data-caravan]"),
+          gabriel:      document.querySelector("[data-gabriel]"),
+          journeyBtn:   document.querySelector("[data-journey]"),
+          restartBtn:   document.querySelector("[data-restart]"),
+          message:      document.querySelector("[data-message]"),
+          speech:       document.querySelector("[data-speech]"),
+          sign:         document.querySelector("[data-sign]"),
+          dots:         document.querySelectorAll(".hint-dot"),
+          progressFill: document.querySelector("[data-progress]"),
+          progressBar:  document.querySelector(".progress-track"),
+          stepCounter:  document.querySelector("[data-step-counter]"),
+          confetti:     document.querySelector("[data-confetti]"),
+          dust:         document.querySelector("[data-dust]"),
+        };
+
+        this.step = 0;
+        this.isAnimating = false;
+
+        this.#bindEvents();
+        this.#render();
+      }
+
+      #bindEvents() {
+        this.els.journeyBtn.addEventListener("click", () => this.#advance());
+        this.els.restartBtn.addEventListener("click", () => this.#reset());
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            if (!this.els.journeyBtn.disabled) this.#advance();
+          }
+        });
+      }
+
+      #advance() {
+        const { totalSteps, checkpoints, hopDuration, moveDuration } = LevelTwoGame.CONFIG;
+
+        if (this.step >= totalSteps || this.isAnimating) return;
+
+        this.isAnimating = true;
+        this.step += 1;
+
+        this.els.caravan.classList.add("is-hopping");
+        this.els.gabriel.classList.add("is-waving");
+        this.els.caravan.style.left = checkpoints[this.step];
+
+        this.#spawnDust();
+
+        if (this.els.dots[this.step - 1]) {
+          this.els.dots[this.step - 1].classList.add("active");
+        }
+
+        if (this.step >= 2) {
+          this.els.sign.classList.add("is-close");
+        }
+
+        this.#render();
+
+        setTimeout(() => {
+          this.els.caravan.classList.remove("is-hopping");
+        }, hopDuration);
+
+        setTimeout(() => {
+          this.els.gabriel.classList.remove("is-waving");
+          this.isAnimating = false;
+
+          this.#showSpeech(LevelTwoGame.CONFIG.speeches[this.step]);
+
+          if (this.step >= totalSteps) {
+            this.#onComplete();
+          }
+        }, moveDuration);
+      }
+
+      #render() {
+        const { totalSteps, messages } = LevelTwoGame.CONFIG;
+
+        this.els.message.textContent = messages[this.step];
+
+        const pct = (this.step / totalSteps) * 100;
+        this.els.progressFill.style.width = `${pct}%`;
+        this.els.progressBar.setAttribute("aria-valuenow", this.step);
+
+        this.els.stepCounter.textContent = `Hop ${this.step} of ${totalSteps}`;
+
+        if (this.step >= totalSteps) {
+          this.els.journeyBtn.disabled = true;
+          this.els.journeyBtn.textContent = "🎉 Bethlehem Reached!";
+          this.els.message.classList.add("is-done");
+        }
+      }
+
+      #showSpeech(text) {
+        if (!text) return;
+        this.els.speech.textContent = text;
+        this.els.speech.classList.add("is-visible");
+
+        setTimeout(() => {
+          this.els.speech.classList.remove("is-visible");
+        }, 2800);
+      }
+
+      #onComplete() {
+        this.els.restartBtn.classList.add("is-visible");
+        this.#spawnConfetti();
+
+        /* ── Chapter transition trigger ── */
+        if (typeof chapterComplete === 'function') {
+          chapterComplete();
+        }
+      }
+
+      #spawnDust() {
+        const { dustCount } = LevelTwoGame.CONFIG;
+        const container = this.els.dust;
+
+        for (let i = 0; i < dustCount; i++) {
+          const particle = document.createElement("div");
+          particle.classList.add("dust");
+          particle.style.left = `${Math.random() * 30 + 5}%`;
+          particle.style.bottom = `${Math.random() * 10}px`;
+          const size = `${6 + Math.random() * 8}px`;
+          particle.style.width = size;
+          particle.style.height = size;
+          particle.style.animationDelay = `${Math.random() * 0.3}s`;
+
+          container.appendChild(particle);
+          requestAnimationFrame(() => particle.classList.add("is-active"));
+        }
+
+        setTimeout(() => { container.innerHTML = ""; }, 1200);
+      }
+
+      #spawnConfetti() {
+        const { confettiCount, confettiColors } = LevelTwoGame.CONFIG;
+        const container = this.els.confetti;
+
+        for (let i = 0; i < confettiCount; i++) {
+          const piece = document.createElement("div");
+          piece.classList.add("confetti");
+          piece.style.left = `${Math.random() * 100}%`;
+          piece.style.top = `${Math.random() * 30}%`;
+          piece.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+          piece.style.animationDelay = `${Math.random() * 0.7}s`;
+          const size = `${6 + Math.random() * 7}px`;
+          piece.style.width = size;
+          piece.style.height = size;
+
+          container.appendChild(piece);
+          requestAnimationFrame(() => piece.classList.add("is-active"));
+        }
+
+        setTimeout(() => { container.innerHTML = ""; }, 3500);
+      }
+
+      #reset() {
+        const { checkpoints } = LevelTwoGame.CONFIG;
+
+        this.step = 0;
+        this.isAnimating = false;
+
+        this.els.caravan.style.left = checkpoints[0];
+        this.els.caravan.classList.remove("is-hopping");
+        this.els.gabriel.classList.remove("is-waving");
+        this.els.dots.forEach((dot) => dot.classList.remove("active"));
+        this.els.sign.classList.remove("is-close");
+
+        this.els.journeyBtn.disabled = false;
+        this.els.journeyBtn.textContent = "🐴 Continue the Journey";
+        this.els.restartBtn.classList.remove("is-visible");
+        this.els.message.classList.remove("is-done");
+        this.els.speech.classList.remove("is-visible");
+        this.els.confetti.innerHTML = "";
+        this.els.dust.innerHTML = "";
+
+        /* ── Allow chapter transition to fire again ── */
+        chapterTriggered = false;
+
+        this.#render();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => new LevelTwoGame());
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(35,20,5,.6);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#fff8ee; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#a8e6cf,#55c89b);
+        color:#1b5e3a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(85,200,155,.3);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════
+    // ★ LEVEL 2 SETTINGS
+    // ════════════════════════════════════════════
+    const THIS_CHAPTER   = 2;
+    const CHAPTER_DONE   = "Mary and Joseph traveled through the moonlit desert and arrived safely in Bethlehem!";
+    const NEXT_FILE      = "indexjesus3.html";
+    // ════════════════════════════════════════════
+
+    const CHAPTER_TITLES = [
+      "",
+      "Gabriel Visits Mary",
+      "Journey to Bethlehem",
+      "The Birth of Jesus",
+      "Journey to Jerusalem",
+      "Missing Jesus",
+      "Back to Jerusalem",
+      "Baptism in the Jordan",
+      "Temptation in the Desert",
+      "Jesus Begins His Ministry",
+      "First Miracle at Cana"
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById('chapterOverlay');
+      const card = document.getElementById('chapterCard');
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById('ovTitle').textContent = isLast
+        ? '🌟 The Christmas Story Complete!'
+        : `✨ Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById('ovDone').textContent = CHAPTER_DONE;
+
+      document.getElementById('ovNext').textContent = isLast
+        ? 'You journeyed through the whole Christmas Story! 🎄'
+        : `Next: Chapter ${nextChapter} — ${CHAPTER_TITLES[nextChapter] || ''}`;
+
+      const btn = document.getElementById('ovBtn');
+      btn.textContent = isLast ? '🔄 Play Again' : 'Continue →';
+      btn.onclick = () => {
+        window.location.href = isLast ? 'indexjesus1.html' : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = '1';
+        ov.style.pointerEvents = 'auto';
+        card.style.transform = 'scale(1)';
+      }, 1800);
+    }
+  </script>
+</body>
+</html>
