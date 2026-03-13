@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 11 – Jesus Cleans God's House</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: only light;
+      --font-main: "Nunito", "Segoe UI", sans-serif;
+      --clr-gold: #ffc753;
+      --clr-gold-dark: #d39b2d;
+      --clr-gold-light: #ffe7a3;
+      --clr-brown: #9c6c32;
+      --clr-brown-dark: #5c3b1a;
+      --clr-sky-top: #b8dcff;
+      --clr-sky-bottom: #fef9f1;
+      --clr-ground-top: #f4d9a8;
+      --clr-ground-bottom: #e7b56d;
+      --clr-bg-start: #fef9f3;
+      --clr-bg-mid: #f9e4c8;
+      --clr-bg-end: #f6d09a;
+      --clr-card: #fff8ee;
+      --radius-card: 22px;
+      --radius-pill: 999px;
+      --transition-step: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: radial-gradient(circle at top, var(--clr-bg-start) 0%, var(--clr-bg-mid) 45%, var(--clr-bg-end) 100%);
+      overflow-x: hidden;
+    }
+
+    .scene {
+      width: min(96vw, 700px);
+      background: var(--clr-card);
+      border-radius: var(--radius-card);
+      box-shadow: 0 25px 60px rgba(188, 143, 91, 0.35);
+      padding: clamp(14px, 3vw, 28px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInUp 0.6s ease-out;
+      max-height: 96vh;
+      overflow-y: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .title h1 {
+      font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+      font-weight: 800;
+      color: var(--clr-brown);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .title p {
+      margin-top: 4px;
+      text-align: center;
+      color: #b47d3b;
+      font-size: clamp(0.78rem, 2vw, 0.9rem);
+      line-height: 1.4;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #f0dfc0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--clr-gold), #ffa43b);
+      border-radius: 8px;
+      transition: width 0.6s ease;
+    }
+
+    /* ── STORYBOARD ── */
+    .storyboard {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      min-height: 180px;
+      max-height: 340px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--clr-sky-top) 0%, var(--clr-sky-bottom) 55%, var(--clr-ground-top) 55%, var(--clr-ground-top) 100%);
+      overflow: hidden;
+    }
+
+    .storyboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.5) 1.5px, transparent 1.5px);
+      background-size: 60px 60px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: drift linear infinite;
+    }
+    .cloud-1 { width: 70px; height: 26px; top: 8%; left: -70px; animation-duration: 22s; }
+    .cloud-2 { width: 55px; height: 20px; top: 18%; left: -55px; animation-duration: 30s; animation-delay: 6s; }
+    .cloud-3 { width: 45px; height: 18px; top: 5%; left: -45px; animation-duration: 26s; animation-delay: 12s; }
+
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to   { transform: translateX(calc(100vw + 200px)); }
+    }
+
+    .ground {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 42%;
+      background: linear-gradient(180deg, var(--clr-ground-top) 0%, var(--clr-ground-bottom) 100%);
+    }
+
+    /* ── PATH STEPS ── */
+    .path-step {
+      position: absolute;
+      bottom: 46%;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 3px dashed rgba(255,214,94,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--clr-gold-dark);
+      transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      z-index: 1;
+    }
+
+    .path-step:nth-of-type(1) { left: 16%; }
+    .path-step:nth-of-type(2) { left: 34%; }
+    .path-step:nth-of-type(3) { left: 50%; }
+
+    .path-step.is-lit {
+      background: var(--clr-gold-light);
+      border-color: var(--clr-gold);
+      border-style: solid;
+      transform: scale(1.15);
+      box-shadow: 0 0 18px rgba(255, 214, 94, 0.6);
+      animation: starPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes starPulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(255,214,94,0.4); }
+      50%      { box-shadow: 0 0 24px rgba(255,214,94,0.8); }
+    }
+
+    /* ── TEMPLE ── */
+    .temple {
+      position: absolute;
+      right: 3%;
+      bottom: 42%;
+      width: 38%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .temple-roof {
+      width: 115%;
+      height: 0;
+      border-left: 30px solid transparent;
+      border-right: 30px solid transparent;
+      border-bottom: 42px solid var(--clr-gold);
+      position: relative;
+      transition: border-bottom-color 1s ease;
+    }
+
+    .temple-roof::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 16px solid #ffe082;
+    }
+
+    .temple-body {
+      width: 100%;
+      min-height: 75px;
+      background: linear-gradient(180deg, #FFFDE7, #FFF8E1);
+      border: 3px solid var(--clr-gold);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      align-items: stretch;
+      padding: 8px 10px 6px;
+      transition: box-shadow 1s ease, border-color 1s ease;
+    }
+
+    .temple-body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      opacity: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,215,0,0.15));
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
+
+    .temple.is-clean .temple-body {
+      box-shadow: 0 0 35px rgba(255,215,0,0.5);
+      border-color: #FFD700;
+    }
+
+    .temple.is-clean .temple-body::after {
+      opacity: 1;
+      animation: templeGlow 2s ease-in-out infinite;
+    }
+
+    .temple.is-clean .temple-roof {
+      border-bottom-color: #FFD700;
+    }
+
+    @keyframes templeGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .temple-column {
+      width: 10px;
+      background: linear-gradient(90deg, #E8E8E8, #FFF, #E8E8E8);
+      border-radius: 3px;
+      border: 1px solid #CCC;
+      min-height: 55px;
+    }
+
+    .temple-door {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 26%;
+      height: 50%;
+      background: linear-gradient(180deg, #5c3b1a, #3a2210);
+      border-radius: 10px 10px 0 0;
+      border: 2px solid #3a2210;
+      border-bottom: none;
+    }
+
+    /* ── TABLE ── */
+    .table-merchant {
+      position: absolute;
+      bottom: 42%;
+      right: 16%;
+      width: 14%;
+      z-index: 3;
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease;
+    }
+
+    .table-top {
+      width: 100%;
+      height: 10px;
+      background: #b5651d;
+      border-radius: 3px;
+      border: 2px solid #8B4513;
+    }
+
+    .table-legs {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 15%;
+    }
+
+    .table-leg {
+      width: 4px;
+      height: 12px;
+      background: #8B4513;
+      border-radius: 1px;
+    }
+
+    .table-merchant.is-flipped {
+      transform: rotate(110deg) translateX(30px) translateY(-20px);
+      opacity: 0.3;
+    }
+
+    /* ── MESS ITEMS ── */
+    .mess-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .mess-item {
+      position: absolute;
+      font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+      transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease;
+      animation: wobble 2.5s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+    }
+
+    .mess-item.is-scattered {
+      animation: none;
+      opacity: 0;
+    }
+
+    /* ── SPARKLES ── */
+    .sparkle-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .sparkle {
+      position: absolute;
+      font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      animation: sparkleFloat 2.5s ease-in-out infinite;
+    }
+
+    .sparkle.is-visible { opacity: 1; }
+
+    @keyframes sparkleFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.2); }
+    }
+
+    /* ── JESUS ── */
+    [data-jesus] {
+      position: absolute;
+      bottom: 42%;
+      left: 5%;
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: left var(--transition-step);
+      z-index: 5;
+    }
+
+    [data-jesus].is-idle { animation: bob 3s ease-in-out infinite; }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    [data-jesus].is-moving { animation: walk 0.35s ease-in-out 2; }
+
+    @keyframes walk {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .jesus-hair {
+      width: 42px;
+      height: 46px;
+      background: #6b3a1f;
+      border-radius: 50%;
+      margin-bottom: -40px;
+      z-index: 0;
+      transition: box-shadow 0.8s ease;
+    }
+
+    [data-jesus].is-holy .jesus-hair {
+      box-shadow: 0 0 18px rgba(255,215,0,0.7);
+    }
+
+    .jesus-head {
+      width: 34px;
+      height: 34px;
+      background: #f7d5b1;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(205,140,100,0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .jesus-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+    }
+
+    .jesus-eyes { display: flex; gap: 8px; }
+
+    .jesus-eyes span {
+      width: 5px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4a2f24;
+      position: relative;
+    }
+
+    .jesus-eyes span::after {
+      content: "";
+      position: absolute;
+      top: 1px; right: 1px;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .jesus-nose {
+      width: 5px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(196,122,92,0.5);
+    }
+
+    .jesus-mouth {
+      width: 10px;
+      height: 5px;
+      border: 2px solid #c47a5c;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      transition: all 0.3s ease;
+    }
+
+    .jesus-mouth.is-stern {
+      height: 2px;
+      width: 10px;
+      border: none;
+      border-radius: 0;
+      background: #c47a5c;
+    }
+
+    .jesus-beard {
+      width: 26px;
+      height: 14px;
+      background: #6b3a1f;
+      border-radius: 10px 10px 18px 18px;
+      margin-top: -4px;
+      z-index: 1;
+    }
+
+    .jesus-body {
+      width: 42px;
+      height: 52px;
+      background: linear-gradient(180deg, #FFFDF7, #F0E6D0);
+      border-radius: 22px 22px 14px 14px;
+      border: 2px solid rgba(210,180,140,0.5);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .jesus-sash {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(178,34,34,0.35), rgba(139,0,0,0.35));
+      border-radius: 6px;
+    }
+
+    .jesus-name {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--clr-brown);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      z-index: 2;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+    }
+
+    .jesus-arm {
+      position: absolute;
+      width: 12px;
+      height: 26px;
+      background: #FFFDF7;
+      border: 2px solid rgba(210,180,140,0.5);
+      border-radius: 8px;
+      top: 10px;
+      transition: transform 0.4s ease;
+    }
+
+    .jesus-arm.left {
+      left: -8px;
+      transform-origin: top center;
+    }
+
+    .jesus-arm.right {
+      right: -8px;
+      transform-origin: top center;
+    }
+
+    [data-jesus].is-angry .jesus-arm.left { transform: rotate(30deg); }
+    [data-jesus].is-angry .jesus-arm.right { transform: rotate(-30deg); }
+
+    /* ── SPEECH BUBBLE ── */
+    .speech-bubble {
+      position: absolute;
+      top: 4%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: #fff;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: clamp(0.7rem, 1.8vw, 0.82rem);
+      font-weight: 700;
+      color: var(--clr-brown);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 20;
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+      text-align: center;
+      max-width: 80%;
+      pointer-events: none;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #fff;
+    }
+
+    .speech-bubble.is-visible {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+    }
+
+    /* ── INSTRUCTIONS & CONTROLS ── */
+    .instructions {
+      background: #fff0cc;
+      border-radius: 14px;
+      padding: 10px 14px;
+      text-align: center;
+      color: #8a5a21;
+      font-size: clamp(0.8rem, 2vw, 0.92rem);
+      font-weight: 600;
+      transition: background 0.4s ease;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+    }
+
+    .instructions.is-done {
+      background: #d4edda;
+      color: #2d6a3f;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .guide-btn {
+      flex: 1;
+      max-width: 280px;
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #ffca6b 0%, #ffa43b 100%);
+      color: var(--clr-brown-dark);
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 11px 22px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+      box-shadow: 0 4px 14px rgba(255,164,59,0.35);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .guide-btn:hover:not(:disabled) {
+      box-shadow: 0 6px 20px rgba(255,164,59,0.5);
+      transform: translateY(-2px);
+    }
+
+    .guide-btn:active:not(:disabled) {
+      transform: scale(0.97) translateY(0);
+      box-shadow: 0 2px 8px rgba(255,164,59,0.3);
+    }
+
+    .guide-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .guide-btn:focus-visible {
+      outline: 3px solid var(--clr-gold);
+      outline-offset: 3px;
+    }
+
+    .restart-btn {
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #a8e6cf 0%, #55c89b 100%);
+      color: #1b5e3a;
+      font-family: var(--font-main);
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 11px 18px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 14px rgba(85,200,155,0.3);
+      display: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .restart-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(85,200,155,0.5); }
+    .restart-btn:active { transform: scale(0.97); }
+    .restart-btn:focus-visible { outline: 3px solid #55c89b; outline-offset: 3px; }
+    .restart-btn.is-visible { display: block; }
+
+    .tip {
+      text-align: center;
+      color: #a3743c;
+      font-size: 0.8rem;
+    }
+
+    .step-counter {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--clr-brown);
+      opacity: 0.7;
+    }
+
+    /* ── CONFETTI ── */
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      opacity: 0;
+    }
+
+    .confetti.is-active {
+      animation: confettiFall 1.8s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(200px) rotate(720deg) scale(0.3); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .scene { width: 100%; padding: 12px; gap: 10px; border-radius: 16px; }
+      .storyboard { min-height: 160px; max-height: 220px; border-radius: 14px; }
+      .path-step { width: 30px; height: 30px; font-size: 0.8rem; border-width: 2px; }
+      [data-jesus] { width: 40px; }
+      .jesus-hair { width: 35px; height: 38px; margin-bottom: -33px; }
+      .jesus-head { width: 28px; height: 28px; }
+      .jesus-eyes { gap: 6px; }
+      .jesus-eyes span { width: 4px; height: 5px; }
+      .jesus-nose { width: 4px; height: 2px; }
+      .jesus-mouth { width: 8px; height: 4px; }
+      .jesus-beard { width: 21px; height: 11px; }
+      .jesus-body { width: 35px; height: 44px; }
+      .jesus-arm { width: 10px; height: 20px; }
+      .jesus-arm.left { left: -6px; }
+      .jesus-arm.right { right: -6px; }
+      .jesus-name { font-size: 0.45rem; }
+      .temple { width: 36%; }
+      .temple-column { width: 8px; min-height: 42px; }
+      .temple-roof { border-left-width: 22px; border-right-width: 22px; border-bottom-width: 32px; }
+      .temple-door { width: 28%; height: 45%; }
+      .table-merchant { width: 12%; }
+      .table-top { height: 8px; }
+      .table-leg { height: 10px; width: 3px; }
+      .mess-item { font-size: clamp(0.7rem, 2vw, 1rem); }
+      .speech-bubble { font-size: 0.7rem; padding: 6px 10px; border-radius: 10px; }
+      .controls { flex-direction: column; align-items: center; }
+      .guide-btn, .restart-btn { width: 100%; max-width: 100%; }
+    }
+
+    @media (max-width: 420px) {
+      .scene { padding: 10px; gap: 8px; }
+      .title h1 { font-size: 1.1rem; }
+      .storyboard { min-height: 140px; max-height: 190px; }
+      .path-step { width: 26px; height: 26px; font-size: 0.7rem; }
+      [data-jesus] { width: 34px; }
+      .jesus-hair { width: 30px; height: 33px; margin-bottom: -28px; }
+      .jesus-head { width: 24px; height: 24px; }
+      .jesus-body { width: 30px; height: 38px; }
+      .jesus-beard { width: 18px; height: 9px; }
+      .jesus-arm { width: 8px; height: 16px; }
+      .temple { width: 34%; }
+      .temple-column { width: 6px; min-height: 35px; }
+    }
+
+    @media (min-height: 800px) {
+      .storyboard { max-height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene" aria-label="Chapter 11 scene: Jesus Cleans God's House">
+    <section class="title">
+      <h1>🏛️ Chapter 11: Jesus Cleans God's House</h1>
+      <p>Help Jesus clean the Temple — tap the button to take each step!</p>
+    </section>
+
+    <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="3">
+      <div class="progress-fill" data-progress></div>
+    </div>
+
+    <section class="storyboard" aria-live="polite">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+
+      <div class="confetti-container" data-confetti></div>
+      <div class="speech-bubble" data-speech></div>
+
+      <div class="path-step" data-step="1">⭐</div>
+      <div class="path-step" data-step="2">⭐</div>
+      <div class="path-step" data-step="3">⭐</div>
+
+      <!-- Jesus -->
+      <div class="character is-idle" data-jesus aria-label="Jesus">
+        <div class="jesus-hair"></div>
+        <div class="jesus-head">
+          <div class="jesus-face">
+            <div class="jesus-eyes"><span></span><span></span></div>
+            <div class="jesus-nose"></div>
+            <div class="jesus-mouth" data-mouth></div>
+          </div>
+        </div>
+        <div class="jesus-beard"></div>
+        <div class="jesus-body">
+          <div class="jesus-arm left"></div>
+          <div class="jesus-arm right"></div>
+          <div class="jesus-sash"></div>
+          <span class="jesus-name">Jesus</span>
+        </div>
+      </div>
+
+      <!-- Temple -->
+      <div class="temple" data-temple>
+        <div class="temple-roof"></div>
+        <div class="temple-body">
+          <div class="temple-column"></div>
+          <div class="temple-column"></div>
+          <div class="temple-column"></div>
+          <div class="temple-column"></div>
+          <div class="temple-door"></div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-merchant" data-table>
+        <div class="table-top"></div>
+        <div class="table-legs">
+          <div class="table-leg"></div>
+          <div class="table-leg"></div>
+        </div>
+      </div>
+
+      <!-- Mess -->
+      <div class="mess-layer" data-mess-layer></div>
+
+      <!-- Sparkles -->
+      <div class="sparkle-layer" data-sparkle-layer></div>
+
+      <div class="ground"></div>
+    </section>
+
+    <p class="instructions" data-message>
+      Tap "Enter the Temple" to see what Jesus found inside.
+    </p>
+
+    <p class="step-counter" data-step-counter>Step 0 of 3</p>
+
+    <div class="controls">
+      <button class="guide-btn" type="button" data-guide>
+        🏛️ Enter the Temple
+      </button>
+      <button class="restart-btn" type="button" data-restart>
+        🔄 Replay
+      </button>
+    </div>
+
+    <p class="tip">Tip: Three taps to help Jesus clean God's house! 🧹</p>
+  </main>
+
+  <script>
+    class TempleGame {
+      static CONFIG = {
+        totalSteps: 3,
+        positions: ["5%", "18%", "36%", "52%"],
+        messages: [
+          'Tap "Enter the Temple" to see what Jesus found inside.',
+          "Oh no! People are buying and selling animals inside God\u2019s house! \uD83D\uDE2E",
+          "Jesus overturned the tables! \u201CStop selling in my Father\u2019s house!\u201D \uD83D\uDE24",
+          "\u201CMy house shall be called a house of prayer.\u201D \u2014 John 2:16 \uD83C\uDF89\uD83D\uDE4F"
+        ],
+        speeches: [
+          "",
+          "What is happening here?!",
+          "This is my Father\u2019s house!",
+          "A house of prayer for all! \u2728"
+        ],
+        buttonTexts: [
+          "\uD83C\uDFDB\uFE0F Enter the Temple",
+          "\uD83D\uDE24 Jesus Says Stop!",
+          "\u2728 See God\u2019s Clean House",
+          "\uD83C\uDF89 God\u2019s House is Clean!"
+        ],
+        moveDuration: 700,
+        confettiCount: 40,
+        confettiColors: ["#ffd700", "#ff6b6b", "#48dbfb", "#ff9ff3", "#54a0ff", "#5f27cd"],
+        messItems: [
+          { emoji: "\uD83D\uDC04", left: "62%", top: "22%" },
+          { emoji: "\uD83D\uDC11", left: "76%", top: "30%" },
+          { emoji: "\uD83D\uDD4A\uFE0F", left: "84%", top: "10%" },
+          { emoji: "\uD83E\uDE99", left: "70%", top: "40%" },
+          { emoji: "\uD83E\uDE99", left: "88%", top: "36%" },
+          { emoji: "\uD83D\uDCB0", left: "92%", top: "22%" },
+          { emoji: "\uD83D\uDC11", left: "66%", top: "12%" },
+          { emoji: "\uD83D\uDD4A\uFE0F", left: "80%", top: "5%" },
+        ],
+        scatterDirections: [
+          { x: -160, y: -70 },
+          { x: 90, y: -110 },
+          { x: -110, y: 90 },
+          { x: 130, y: 50 },
+          { x: -70, y: -130 },
+          { x: 100, y: -40 },
+          { x: -140, y: 60 },
+          { x: 70, y: -90 },
+        ],
+        sparklePositions: [
+          { left: "62%", top: "18%" },
+          { left: "74%", top: "28%" },
+          { left: "82%", top: "12%" },
+          { left: "68%", top: "38%" },
+          { left: "86%", top: "32%" },
+          { left: "78%", top: "44%" },
+          { left: "90%", top: "20%" },
+          { left: "70%", top: "8%" },
+          { left: "64%", top: "30%" },
+          { left: "92%", top: "40%" },
+        ]
+      };
+
+      constructor() {
+        this.els = {
+          jesus:         document.querySelector("[data-jesus]"),
+          mouth:         document.querySelector("[data-mouth]"),
+          guideBtn:      document.querySelector("[data-guide]"),
+          restartBtn:    document.querySelector("[data-restart]"),
+          message:       document.querySelector("[data-message]"),
+          speech:        document.querySelector("[data-speech]"),
+          steps:         document.querySelectorAll("[data-step]"),
+          progressFill:  document.querySelector("[data-progress]"),
+          progressBar:   document.querySelector(".progress-track"),
+          stepCounter:   document.querySelector("[data-step-counter]"),
+          confetti:      document.querySelector("[data-confetti]"),
+          temple:        document.querySelector("[data-temple]"),
+          table:         document.querySelector("[data-table]"),
+          messLayer:     document.querySelector("[data-mess-layer]"),
+          sparkleLayer:  document.querySelector("[data-sparkle-layer]"),
+        };
+
+        this.progress = 0;
+        this.isAnimating = false;
+
+        this.#createMess();
+        this.#createSparkles();
+        this.#bindEvents();
+        this.#render();
+      }
+
+      #bindEvents() {
+        this.els.guideBtn.addEventListener("click", () => this.#advance());
+        this.els.restartBtn.addEventListener("click", () => this.#reset());
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            if (!this.els.guideBtn.disabled) this.#advance();
+          }
+        });
+      }
+
+      #createMess() {
+        const { messItems } = TempleGame.CONFIG;
+        this.els.messLayer.innerHTML = "";
+        messItems.forEach((item, i) => {
+          const el = document.createElement("div");
+          el.className = "mess-item";
+          el.textContent = item.emoji;
+          el.style.left = item.left;
+          el.style.top = item.top;
+          el.style.animationDelay = `${i * 0.3}s`;
+          this.els.messLayer.appendChild(el);
+        });
+      }
+
+      #createSparkles() {
+        const { sparklePositions } = TempleGame.CONFIG;
+        this.els.sparkleLayer.innerHTML = "";
+        const emojis = ["\u2728", "\u2B50", "\uD83D\uDCAB", "\uD83C\uDF1F"];
+        sparklePositions.forEach((pos, i) => {
+          const el = document.createElement("div");
+          el.className = "sparkle";
+          el.textContent = emojis[i % emojis.length];
+          el.style.left = pos.left;
+          el.style.top = pos.top;
+          el.style.animationDelay = `${i * 0.35}s`;
+          this.els.sparkleLayer.appendChild(el);
+        });
+      }
+
+      #advance() {
+        const { totalSteps, positions, moveDuration } = TempleGame.CONFIG;
+        if (this.progress >= totalSteps || this.isAnimating) return;
+
+        this.isAnimating = true;
+        this.progress += 1;
+
+        this.els.jesus.classList.remove("is-idle");
+        this.els.jesus.classList.add("is-moving");
+        this.els.jesus.style.left = positions[this.progress];
+
+        if (this.els.steps[this.progress - 1]) {
+          this.els.steps[this.progress - 1].classList.add("is-lit");
+        }
+
+        if (this.progress === 2) {
+          this.#scatterMess();
+          this.#flipTable();
+          this.els.mouth.classList.add("is-stern");
+          this.els.jesus.classList.add("is-angry");
+        }
+
+        if (this.progress === 3) {
+          this.#showSparkles();
+          this.els.temple.classList.add("is-clean");
+          this.els.mouth.classList.remove("is-stern");
+          this.els.jesus.classList.remove("is-angry");
+          this.els.jesus.classList.add("is-holy");
+        }
+
+        this.#render();
+
+        setTimeout(() => {
+          this.els.jesus.classList.remove("is-moving");
+          this.isAnimating = false;
+          this.#showSpeech(TempleGame.CONFIG.speeches[this.progress]);
+
+          if (this.progress >= totalSteps) {
+            this.els.jesus.classList.add("is-idle");
+            this.#onComplete();
+          } else {
+            this.els.jesus.classList.add("is-idle");
+          }
+        }, moveDuration);
+      }
+
+      #scatterMess() {
+        const items = this.els.messLayer.querySelectorAll(".mess-item");
+        const { scatterDirections } = TempleGame.CONFIG;
+        items.forEach((item, i) => {
+          const dir = scatterDirections[i] || { x: 100, y: -50 };
+          setTimeout(() => {
+            item.classList.add("is-scattered");
+            item.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${Math.random() * 360}deg) scale(0.3)`;
+          }, i * 80);
+        });
+      }
+
+      #flipTable() {
+        this.els.table.classList.add("is-flipped");
+      }
+
+      #showSparkles() {
+        const sparkles = this.els.sparkleLayer.querySelectorAll(".sparkle");
+        sparkles.forEach((s, i) => {
+          setTimeout(() => s.classList.add("is-visible"), i * 100);
+        });
+      }
+
+      #render() {
+        const { totalSteps, messages, buttonTexts } = TempleGame.CONFIG;
+
+        this.els.message.textContent = messages[this.progress];
+
+        const pct = (this.progress / totalSteps) * 100;
+        this.els.progressFill.style.width = `${pct}%`;
+        this.els.progressBar.setAttribute("aria-valuenow", this.progress);
+        this.els.stepCounter.textContent = `Step ${this.progress} of ${totalSteps}`;
+
+        if (this.progress < totalSteps) {
+          this.els.guideBtn.textContent = buttonTexts[this.progress];
+        }
+
+        if (this.progress >= totalSteps) {
+          this.els.guideBtn.disabled = true;
+          this.els.guideBtn.textContent = buttonTexts[totalSteps];
+          this.els.message.classList.add("is-done");
+        }
+      }
+
+      #showSpeech(text) {
+        if (!text) return;
+        this.els.speech.textContent = text;
+        this.els.speech.classList.add("is-visible");
+        setTimeout(() => {
+          this.els.speech.classList.remove("is-visible");
+        }, 2500);
+      }
+
+      #onComplete() {
+        this.els.restartBtn.classList.add("is-visible");
+        this.#spawnConfetti();
+
+        if (typeof chapterComplete === "function") {
+          chapterComplete();
+        }
+      }
+
+      #spawnConfetti() {
+        const { confettiCount, confettiColors } = TempleGame.CONFIG;
+        const container = this.els.confetti;
+
+        for (let i = 0; i < confettiCount; i++) {
+          const piece = document.createElement("div");
+          piece.classList.add("confetti");
+          piece.style.left = `${Math.random() * 100}%`;
+          piece.style.top = `${Math.random() * 30}%`;
+          piece.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+          piece.style.animationDelay = `${Math.random() * 0.6}s`;
+          const size = `${6 + Math.random() * 6}px`;
+          piece.style.width = size;
+          piece.style.height = size;
+          container.appendChild(piece);
+          requestAnimationFrame(() => piece.classList.add("is-active"));
+        }
+
+        setTimeout(() => { container.innerHTML = ""; }, 3000);
+      }
+
+      #reset() {
+        const { positions, buttonTexts } = TempleGame.CONFIG;
+
+        this.progress = 0;
+        this.isAnimating = false;
+
+        this.els.jesus.style.left = positions[0];
+        this.els.jesus.classList.remove("is-moving", "is-angry", "is-holy");
+        this.els.jesus.classList.add("is-idle");
+        this.els.mouth.classList.remove("is-stern");
+
+        this.els.steps.forEach((s) => s.classList.remove("is-lit"));
+
+        this.#createMess();
+
+        const sparkles = this.els.sparkleLayer.querySelectorAll(".sparkle");
+        sparkles.forEach((s) => s.classList.remove("is-visible"));
+
+        this.els.table.classList.remove("is-flipped");
+        this.els.temple.classList.remove("is-clean");
+
+        this.els.guideBtn.disabled = false;
+        this.els.guideBtn.textContent = buttonTexts[0];
+        this.els.restartBtn.classList.remove("is-visible");
+        this.els.message.classList.remove("is-done");
+        this.els.speech.classList.remove("is-visible");
+        this.els.confetti.innerHTML = "";
+
+        chapterTriggered = false;
+
+        this.#render();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => new TempleGame());
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(120,90,40,.45);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#fff8ee; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#ffca6b,#ffa43b);
+        color:#5c3b1a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(255,164,59,.35);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    const THIS_CHAPTER   = 11;
+    const CHAPTER_DONE   = "Jesus cleaned God\u2019s house \u2014 it\u2019s a place for prayer, not selling! \uD83C\uDFDB\uFE0F\uD83D\uDE4F";
+    const NEXT_FILE      = "indexjesus12.html";
+
+    const CHAPTER_TITLES = [
+      "",
+      "Gabriel Visits Mary",
+      "Journey to Bethlehem",
+      "The Birth of Jesus",
+      "Journey to Jerusalem",
+      "Missing Jesus",
+      "Back to Jerusalem",
+      "Baptism in the Jordan",
+      "Temptation in the Desert",
+      "Jesus Begins His Ministry",
+      "First Miracle at Cana",
+      "Jesus Cleans God\u2019s House",
+      "Jesus and Nicodemus"
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById("chapterOverlay");
+      const card = document.getElementById("chapterCard");
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById("ovTitle").textContent = isLast
+        ? "\uD83C\uDF1F The Story Complete!"
+        : `\u2728 Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById("ovDone").textContent = CHAPTER_DONE;
+
+      document.getElementById("ovNext").textContent = isLast
+        ? "You journeyed through the whole story!"
+        : `Next: Chapter ${nextChapter} \u2014 ${CHAPTER_TITLES[nextChapter] || ""}`;
+
+      const btn = document.getElementById("ovBtn");
+      btn.textContent = isLast ? "\uD83D\uDD04 Play Again" : "Continue \u2192";
+      btn.onclick = () => {
+        window.location.href = isLast ? "indexjesus1.html" : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = "1";
+        ov.style.pointerEvents = "auto";
+        card.style.transform = "scale(1)";
+      }, 1600);
+    }
+  </script>
+</body>
+</html>
