@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 12 – The Woman at the Well</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: only light;
+      --font-main: "Nunito", "Segoe UI", sans-serif;
+      --clr-gold: #ffc753;
+      --clr-gold-dark: #d39b2d;
+      --clr-gold-light: #ffe7a3;
+      --clr-brown: #9c6c32;
+      --clr-brown-dark: #5c3b1a;
+      --clr-sky-top: #b8dcff;
+      --clr-sky-bottom: #fef9f1;
+      --clr-ground-top: #e8d4a0;
+      --clr-ground-bottom: #d4a860;
+      --clr-bg-start: #fef9f3;
+      --clr-bg-mid: #f9e4c8;
+      --clr-bg-end: #f6d09a;
+      --clr-card: #fff8ee;
+      --radius-card: 22px;
+      --radius-pill: 999px;
+      --transition-step: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: radial-gradient(circle at top, var(--clr-bg-start) 0%, var(--clr-bg-mid) 45%, var(--clr-bg-end) 100%);
+      overflow-x: hidden;
+    }
+
+    .scene {
+      width: min(96vw, 700px);
+      background: var(--clr-card);
+      border-radius: var(--radius-card);
+      box-shadow: 0 25px 60px rgba(188, 143, 91, 0.35);
+      padding: clamp(14px, 3vw, 28px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInUp 0.6s ease-out;
+      max-height: 96vh;
+      overflow-y: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .title h1 {
+      font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+      font-weight: 800;
+      color: var(--clr-brown);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .title p {
+      margin-top: 4px;
+      text-align: center;
+      color: #b47d3b;
+      font-size: clamp(0.78rem, 2vw, 0.9rem);
+      line-height: 1.4;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #f0dfc0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--clr-gold), #ffa43b);
+      border-radius: 8px;
+      transition: width 0.6s ease;
+    }
+
+    /* ── STORYBOARD ── */
+    .storyboard {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      min-height: 180px;
+      max-height: 340px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--clr-sky-top) 0%, var(--clr-sky-bottom) 55%, var(--clr-ground-top) 55%, var(--clr-ground-top) 100%);
+      overflow: hidden;
+    }
+
+    .storyboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.5) 1.5px, transparent 1.5px);
+      background-size: 60px 60px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: drift linear infinite;
+    }
+    .cloud-1 { width: 70px; height: 26px; top: 8%; left: -70px; animation-duration: 22s; }
+    .cloud-2 { width: 55px; height: 20px; top: 18%; left: -55px; animation-duration: 30s; animation-delay: 6s; }
+    .cloud-3 { width: 45px; height: 18px; top: 5%; left: -45px; animation-duration: 26s; animation-delay: 12s; }
+
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to   { transform: translateX(calc(100vw + 200px)); }
+    }
+
+    .ground {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 42%;
+      background: linear-gradient(180deg, var(--clr-ground-top) 0%, var(--clr-ground-bottom) 100%);
+    }
+
+    /* ── PATH STEPS ── */
+    .path-step {
+      position: absolute;
+      bottom: 46%;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 3px dashed rgba(255,214,94,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--clr-gold-dark);
+      transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      z-index: 1;
+    }
+
+    .path-step:nth-of-type(1) { left: 18%; }
+    .path-step:nth-of-type(2) { left: 34%; }
+    .path-step:nth-of-type(3) { left: 48%; }
+
+    .path-step.is-lit {
+      background: var(--clr-gold-light);
+      border-color: var(--clr-gold);
+      border-style: solid;
+      transform: scale(1.15);
+      box-shadow: 0 0 18px rgba(255, 214, 94, 0.6);
+      animation: starPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes starPulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(255,214,94,0.4); }
+      50%      { box-shadow: 0 0 24px rgba(255,214,94,0.8); }
+    }
+
+    /* ── WELL ── */
+    .well {
+      position: absolute;
+      bottom: 42%;
+      left: 57%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .well-frame {
+      position: relative;
+      width: 48px;
+      height: 38px;
+      margin-bottom: -2px;
+    }
+
+    .well-post {
+      position: absolute;
+      bottom: 0;
+      width: 5px;
+      height: 38px;
+      background: linear-gradient(90deg, #6B3410, #8B4513, #6B3410);
+      border-radius: 2px;
+    }
+
+    .well-post.l { left: 6px; }
+    .well-post.r { right: 6px; }
+
+    .well-beam {
+      position: absolute;
+      top: 0;
+      left: 2px;
+      right: 2px;
+      height: 5px;
+      background: linear-gradient(90deg, #5C2D0E, #8B4513, #5C2D0E);
+      border-radius: 2px;
+    }
+
+    .well-rope {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 14px;
+      background: #D2B48C;
+    }
+
+    .well-bucket {
+      position: absolute;
+      top: 19px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 8px;
+      background: #A0522D;
+      border-radius: 0 0 3px 3px;
+      border: 1px solid #6B3410;
+      border-top: 2px solid #8B4513;
+    }
+
+    .well-base {
+      width: 58px;
+      height: 22px;
+      background: linear-gradient(180deg, #C4AC90, #A89070);
+      border-radius: 8px;
+      border: 3px solid #8B7355;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 -4px 8px rgba(0,0,0,0.15);
+    }
+
+    .well-water {
+      position: absolute;
+      bottom: 2px;
+      left: 4px;
+      right: 4px;
+      height: 8px;
+      background: linear-gradient(180deg, #87CEEB, #4682B4);
+      border-radius: 3px;
+      transition: background 1s ease, box-shadow 1s ease;
+    }
+
+    .well.is-living .well-water {
+      background: linear-gradient(180deg, #FFD700, #FFA500);
+      box-shadow: 0 0 15px rgba(255,215,0,0.6);
+      animation: livingWater 2s ease-in-out infinite;
+    }
+
+    @keyframes livingWater {
+      0%, 100% { box-shadow: 0 0 8px rgba(255,215,0,0.4); }
+      50% { box-shadow: 0 0 22px rgba(255,215,0,0.9); }
+    }
+
+    .well-label {
+      font-size: 0.5rem;
+      font-weight: 700;
+      color: var(--clr-brown);
+      text-align: center;
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ── SAMARITAN WOMAN ── */
+    .woman {
+      position: absolute;
+      bottom: 42%;
+      left: 72%;
+      width: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      animation: bob 3s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+
+    .woman-covering {
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle at top, #CD6839, #A0522D);
+      border-radius: 50%;
+      margin-bottom: -44px;
+      z-index: 0;
+      filter: drop-shadow(0 3px 6px rgba(139,69,19,0.3));
+    }
+
+    .woman-head {
+      width: 32px;
+      height: 32px;
+      background: #d4a574;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(160,100,60,0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .woman-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+    }
+
+    .woman-eyes { display: flex; gap: 7px; }
+
+    .woman-eyes span {
+      width: 5px;
+      height: 6px;
+      border-radius: 50%;
+      background: #3a2218;
+      position: relative;
+    }
+
+    .woman-eyes span::after {
+      content: "";
+      position: absolute;
+      top: 1px; right: 1px;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .woman-nose {
+      width: 4px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(160,90,60,0.5);
+    }
+
+    .woman-mouth {
+      width: 9px;
+      height: 4px;
+      border: 2px solid #b06848;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      transition: all 0.4s ease;
+    }
+
+    .woman-mouth.is-surprised {
+      width: 7px;
+      height: 7px;
+      border: 2px solid #b06848;
+      border-radius: 50%;
+    }
+
+    .woman-mouth.is-joyful {
+      width: 12px;
+      height: 6px;
+      border: 2px solid #b06848;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .woman-blush { display: flex; gap: 10px; margin-top: -2px; }
+    .woman-blush span {
+      width: 7px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255,120,120,0);
+      transition: background 0.6s ease;
+    }
+
+    .woman.is-blushing .woman-blush span {
+      background: rgba(255,120,120,0.4);
+    }
+
+    .woman-body {
+      width: 42px;
+      height: 50px;
+      background: linear-gradient(180deg, #E07050, #C65D3E);
+      border-radius: 22px 22px 14px 14px;
+      border: 2px solid rgba(160,70,50,0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .woman-name {
+      font-size: 0.45rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    /* ── WATER JAR ── */
+    .water-jar {
+      position: absolute;
+      bottom: 44%;
+      left: 80%;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .jar-neck {
+      width: 8px;
+      height: 4px;
+      background: #CD853F;
+      border-radius: 2px 2px 0 0;
+      border: 1px solid #8B5A2B;
+      border-bottom: none;
+    }
+
+    .jar-body {
+      width: 14px;
+      height: 16px;
+      background: linear-gradient(180deg, #DEB887, #A0703C);
+      border-radius: 2px 2px 7px 7px;
+      border: 1px solid #8B5A2B;
+    }
+
+    .water-jar.is-dropped {
+      transform: translateX(-10px) translateY(12px) rotate(80deg);
+    }
+
+    /* ── JESUS ── */
+    [data-jesus] {
+      position: absolute;
+      bottom: 42%;
+      left: 5%;
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: left var(--transition-step);
+      z-index: 5;
+    }
+
+    [data-jesus].is-idle { animation: bob 3s ease-in-out infinite; }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    [data-jesus].is-moving { animation: walk 0.35s ease-in-out 2; }
+
+    @keyframes walk {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .jesus-hair {
+      width: 42px;
+      height: 46px;
+      background: #6b3a1f;
+      border-radius: 50%;
+      margin-bottom: -40px;
+      z-index: 0;
+      transition: box-shadow 0.8s ease;
+    }
+
+    [data-jesus].is-holy .jesus-hair {
+      box-shadow: 0 0 20px rgba(255,215,0,0.7);
+    }
+
+    .jesus-head {
+      width: 34px;
+      height: 34px;
+      background: #f7d5b1;
+      border-radius: 50%;
+      box-shadow: inset 0 -3px 0 rgba(205,140,100,0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .jesus-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+    }
+
+    .jesus-eyes { display: flex; gap: 8px; }
+
+    .jesus-eyes span {
+      width: 5px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4a2f24;
+      position: relative;
+    }
+
+    .jesus-eyes span::after {
+      content: "";
+      position: absolute;
+      top: 1px; right: 1px;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .jesus-nose {
+      width: 5px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(196,122,92,0.5);
+    }
+
+    .jesus-mouth {
+      width: 10px;
+      height: 5px;
+      border: 2px solid #c47a5c;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      transition: all 0.3s ease;
+    }
+
+    .jesus-beard {
+      width: 26px;
+      height: 14px;
+      background: #6b3a1f;
+      border-radius: 10px 10px 18px 18px;
+      margin-top: -4px;
+      z-index: 1;
+    }
+
+    .jesus-body {
+      width: 42px;
+      height: 52px;
+      background: linear-gradient(180deg, #FFFDF7, #F0E6D0);
+      border-radius: 22px 22px 14px 14px;
+      border: 2px solid rgba(210,180,140,0.5);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .jesus-sash {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(70,130,180,0.35), rgba(30,80,140,0.35));
+      border-radius: 6px;
+    }
+
+    .jesus-name {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--clr-brown);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      z-index: 2;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+    }
+
+    .jesus-arm {
+      position: absolute;
+      width: 12px;
+      height: 26px;
+      background: #FFFDF7;
+      border: 2px solid rgba(210,180,140,0.5);
+      border-radius: 8px;
+      top: 10px;
+      transition: transform 0.5s ease;
+    }
+
+    .jesus-arm.left {
+      left: -8px;
+      transform-origin: top center;
+    }
+
+    .jesus-arm.right {
+      right: -8px;
+      transform-origin: top center;
+    }
+
+    [data-jesus].is-offering .jesus-arm.right {
+      transform: rotate(-40deg) translateY(-4px);
+    }
+
+    /* ── WATER DROPS ── */
+    .water-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .water-drop {
+      position: absolute;
+      font-size: clamp(0.8rem, 2vw, 1.2rem);
+      transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.2s ease;
+      animation: floatDrop 3s ease-in-out infinite;
+    }
+
+    @keyframes floatDrop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .water-drop.is-transformed {
+      animation: none;
+      opacity: 0;
+    }
+
+    /* ── SPARKLES ── */
+    .sparkle-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .sparkle {
+      position: absolute;
+      font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      animation: sparkleFloat 2.5s ease-in-out infinite;
+    }
+
+    .sparkle.is-visible { opacity: 1; }
+
+    @keyframes sparkleFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.2); }
+    }
+
+    /* ── SPEECH BUBBLE ── */
+    .speech-bubble {
+      position: absolute;
+      top: 4%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: #fff;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: clamp(0.7rem, 1.8vw, 0.82rem);
+      font-weight: 700;
+      color: var(--clr-brown);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      z-index: 20;
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+      text-align: center;
+      max-width: 80%;
+      pointer-events: none;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #fff;
+    }
+
+    .speech-bubble.is-visible {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+    }
+
+    /* ── INSTRUCTIONS & CONTROLS ── */
+    .instructions {
+      background: #fff0cc;
+      border-radius: 14px;
+      padding: 10px 14px;
+      text-align: center;
+      color: #8a5a21;
+      font-size: clamp(0.8rem, 2vw, 0.92rem);
+      font-weight: 600;
+      transition: background 0.4s ease;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+    }
+
+    .instructions.is-done {
+      background: #d4edda;
+      color: #2d6a3f;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .guide-btn {
+      flex: 1;
+      max-width: 280px;
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #ffca6b 0%, #ffa43b 100%);
+      color: var(--clr-brown-dark);
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 11px 22px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+      box-shadow: 0 4px 14px rgba(255,164,59,0.35);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .guide-btn:hover:not(:disabled) {
+      box-shadow: 0 6px 20px rgba(255,164,59,0.5);
+      transform: translateY(-2px);
+    }
+
+    .guide-btn:active:not(:disabled) {
+      transform: scale(0.97) translateY(0);
+      box-shadow: 0 2px 8px rgba(255,164,59,0.3);
+    }
+
+    .guide-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .guide-btn:focus-visible {
+      outline: 3px solid var(--clr-gold);
+      outline-offset: 3px;
+    }
+
+    .restart-btn {
+      border: none;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #a8e6cf 0%, #55c89b 100%);
+      color: #1b5e3a;
+      font-family: var(--font-main);
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 11px 18px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 14px rgba(85,200,155,0.3);
+      display: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .restart-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(85,200,155,0.5); }
+    .restart-btn:active { transform: scale(0.97); }
+    .restart-btn:focus-visible { outline: 3px solid #55c89b; outline-offset: 3px; }
+    .restart-btn.is-visible { display: block; }
+
+    .tip {
+      text-align: center;
+      color: #a3743c;
+      font-size: 0.8rem;
+    }
+
+    .step-counter {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--clr-brown);
+      opacity: 0.7;
+    }
+
+    /* ── CONFETTI ── */
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      opacity: 0;
+    }
+
+    .confetti.is-active {
+      animation: confettiFall 1.8s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(200px) rotate(720deg) scale(0.3); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .scene { width: 100%; padding: 12px; gap: 10px; border-radius: 16px; }
+      .storyboard { min-height: 160px; max-height: 220px; border-radius: 14px; }
+      .path-step { width: 30px; height: 30px; font-size: 0.8rem; border-width: 2px; }
+
+      [data-jesus] { width: 40px; }
+      .jesus-hair { width: 35px; height: 38px; margin-bottom: -33px; }
+      .jesus-head { width: 28px; height: 28px; }
+      .jesus-eyes { gap: 6px; }
+      .jesus-eyes span { width: 4px; height: 5px; }
+      .jesus-nose { width: 4px; height: 2px; }
+      .jesus-mouth { width: 8px; height: 4px; }
+      .jesus-beard { width: 21px; height: 11px; }
+      .jesus-body { width: 35px; height: 44px; }
+      .jesus-arm { width: 10px; height: 20px; }
+      .jesus-arm.left { left: -6px; }
+      .jesus-arm.right { right: -6px; }
+      .jesus-name { font-size: 0.45rem; }
+
+      .woman { width: 40px; }
+      .woman-covering { width: 42px; height: 42px; margin-bottom: -37px; }
+      .woman-head { width: 27px; height: 27px; }
+      .woman-eyes { gap: 5px; }
+      .woman-eyes span { width: 4px; height: 5px; }
+      .woman-nose { width: 3px; }
+      .woman-mouth { width: 7px; height: 3px; }
+      .woman-mouth.is-surprised { width: 6px; height: 6px; }
+      .woman-mouth.is-joyful { width: 10px; height: 5px; }
+      .woman-body { width: 35px; height: 42px; }
+      .woman-name { font-size: 0.4rem; }
+      .woman-blush span { width: 5px; height: 3px; }
+
+      .well-frame { width: 40px; height: 30px; }
+      .well-post { width: 4px; height: 30px; }
+      .well-beam { height: 4px; }
+      .well-rope { height: 10px; }
+      .well-bucket { top: 15px; width: 8px; height: 6px; }
+      .well-base { width: 48px; height: 18px; }
+      .well-water { height: 6px; }
+      .well-label { font-size: 0.4rem; }
+
+      .jar-neck { width: 6px; height: 3px; }
+      .jar-body { width: 11px; height: 12px; }
+
+      .speech-bubble { font-size: 0.7rem; padding: 6px 10px; border-radius: 10px; }
+      .controls { flex-direction: column; align-items: center; }
+      .guide-btn, .restart-btn { width: 100%; max-width: 100%; }
+    }
+
+    @media (max-width: 420px) {
+      .scene { padding: 10px; gap: 8px; }
+      .title h1 { font-size: 1.1rem; }
+      .storyboard { min-height: 140px; max-height: 190px; }
+      .path-step { width: 26px; height: 26px; font-size: 0.7rem; }
+
+      [data-jesus] { width: 34px; }
+      .jesus-hair { width: 30px; height: 33px; margin-bottom: -28px; }
+      .jesus-head { width: 24px; height: 24px; }
+      .jesus-body { width: 30px; height: 38px; }
+      .jesus-beard { width: 18px; height: 9px; }
+      .jesus-arm { width: 8px; height: 16px; }
+
+      .woman { width: 34px; }
+      .woman-covering { width: 36px; height: 36px; margin-bottom: -32px; }
+      .woman-head { width: 23px; height: 23px; }
+      .woman-body { width: 30px; height: 36px; }
+
+      .well-frame { width: 34px; height: 26px; }
+      .well-post { width: 3px; height: 26px; }
+      .well-base { width: 42px; height: 16px; }
+    }
+
+    @media (min-height: 800px) {
+      .storyboard { max-height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene" aria-label="Chapter 12 scene: The Woman at the Well">
+    <section class="title">
+      <h1>💧 Chapter 12: The Woman at the Well</h1>
+      <p>Help Jesus share living water — tap the button step by step!</p>
+    </section>
+
+    <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="3">
+      <div class="progress-fill" data-progress></div>
+    </div>
+
+    <section class="storyboard" aria-live="polite">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+
+      <div class="confetti-container" data-confetti></div>
+      <div class="speech-bubble" data-speech></div>
+
+      <div class="path-step" data-step="1">⭐</div>
+      <div class="path-step" data-step="2">⭐</div>
+      <div class="path-step" data-step="3">⭐</div>
+
+      <!-- Jesus -->
+      <div class="character is-idle" data-jesus aria-label="Jesus">
+        <div class="jesus-hair"></div>
+        <div class="jesus-head">
+          <div class="jesus-face">
+            <div class="jesus-eyes"><span></span><span></span></div>
+            <div class="jesus-nose"></div>
+            <div class="jesus-mouth" data-mouth></div>
+          </div>
+        </div>
+        <div class="jesus-beard"></div>
+        <div class="jesus-body">
+          <div class="jesus-arm left"></div>
+          <div class="jesus-arm right"></div>
+          <div class="jesus-sash"></div>
+          <span class="jesus-name">Jesus</span>
+        </div>
+      </div>
+
+      <!-- Well -->
+      <div class="well" data-well aria-label="Jacob's Well">
+        <div class="well-frame">
+          <div class="well-post l"></div>
+          <div class="well-post r"></div>
+          <div class="well-beam"></div>
+          <div class="well-rope"></div>
+          <div class="well-bucket"></div>
+        </div>
+        <div class="well-base">
+          <div class="well-water"></div>
+        </div>
+        <div class="well-label">Well</div>
+      </div>
+
+      <!-- Samaritan Woman -->
+      <div class="woman" data-woman aria-label="Samaritan Woman">
+        <div class="woman-covering"></div>
+        <div class="woman-head">
+          <div class="woman-face">
+            <div class="woman-eyes"><span></span><span></span></div>
+            <div class="woman-nose"></div>
+            <div class="woman-mouth" data-woman-mouth></div>
+          </div>
+        </div>
+        <div class="woman-blush"><span></span><span></span></div>
+        <div class="woman-body">
+          <span class="woman-name">Woman</span>
+        </div>
+      </div>
+
+      <!-- Water Jar -->
+      <div class="water-jar" data-jar aria-label="Water jar">
+        <div class="jar-neck"></div>
+        <div class="jar-body"></div>
+      </div>
+
+      <!-- Water drops layer -->
+      <div class="water-layer" data-water-layer></div>
+
+      <!-- Sparkle layer -->
+      <div class="sparkle-layer" data-sparkle-layer></div>
+
+      <div class="ground"></div>
+    </section>
+
+    <p class="instructions" data-message>
+      Tap "Journey to Galilee" to follow Jesus on His path.
+    </p>
+
+    <p class="step-counter" data-step-counter>Step 0 of 3</p>
+
+    <div class="controls">
+      <button class="guide-btn" type="button" data-guide>
+        🚶 Journey to Galilee
+      </button>
+      <button class="restart-btn" type="button" data-restart>
+        🔄 Replay
+      </button>
+    </div>
+
+    <p class="tip">Tip: Three taps to discover living water! 💧✨</p>
+  </main>
+
+  <script>
+    class WellGame {
+      static CONFIG = {
+        totalSteps: 3,
+        positions: ["5%", "20%", "38%", "52%"],
+        messages: [
+          'Tap "Journey to Galilee" to follow Jesus on His path.',
+          "Jesus stops at Jacob\u2019s well in Samaria. A woman comes to draw water. \uD83D\uDCA7",
+          "\u201CGive me a drink,\u201D Jesus asks. The woman is amazed \u2014 Jews don\u2019t talk to Samaritans! \uD83D\uDE2E",
+          "\u201CI who speak to you am He!\u201D The woman believes and runs to tell her whole town! \uD83C\uDF89\uD83D\uDE4F"
+        ],
+        speeches: [
+          "",
+          "Will you give me a drink?",
+          "If you knew\u2026 living water!",
+          "I who speak to you am He! \u2728"
+        ],
+        buttonTexts: [
+          "\uD83D\uDEB6 Journey to Galilee",
+          "\uD83D\uDCA7 Ask for Water",
+          "\u2728 Reveal Living Water",
+          "\uD83C\uDF89 The Woman Believes!"
+        ],
+        moveDuration: 700,
+        confettiCount: 40,
+        confettiColors: ["#ffd700", "#87CEEB", "#48dbfb", "#ff9ff3", "#54a0ff", "#ffa43b"],
+        waterDrops: [
+          { emoji: "\uD83D\uDCA7", left: "58%", top: "22%" },
+          { emoji: "\uD83D\uDCA7", left: "62%", top: "15%" },
+          { emoji: "\uD83D\uDCA7", left: "55%", top: "30%" },
+          { emoji: "\uD83D\uDCA7", left: "60%", top: "36%" },
+          { emoji: "\uD83D\uDCA7", left: "64%", top: "26%" },
+          { emoji: "\uD83D\uDCA7", left: "54%", top: "18%" },
+        ],
+        sparklePositions: [
+          { left: "52%", top: "14%" },
+          { left: "58%", top: "20%" },
+          { left: "64%", top: "12%" },
+          { left: "56%", top: "30%" },
+          { left: "68%", top: "26%" },
+          { left: "60%", top: "36%" },
+          { left: "54%", top: "8%" },
+          { left: "72%", top: "18%" },
+          { left: "66%", top: "34%" },
+          { left: "50%", top: "24%" },
+        ]
+      };
+
+      constructor() {
+        this.els = {
+          jesus:        document.querySelector("[data-jesus]"),
+          mouth:        document.querySelector("[data-mouth]"),
+          guideBtn:     document.querySelector("[data-guide]"),
+          restartBtn:   document.querySelector("[data-restart]"),
+          message:      document.querySelector("[data-message]"),
+          speech:       document.querySelector("[data-speech]"),
+          steps:        document.querySelectorAll("[data-step]"),
+          progressFill: document.querySelector("[data-progress]"),
+          progressBar:  document.querySelector(".progress-track"),
+          stepCounter:  document.querySelector("[data-step-counter]"),
+          confetti:     document.querySelector("[data-confetti]"),
+          well:         document.querySelector("[data-well]"),
+          woman:        document.querySelector("[data-woman]"),
+          womanMouth:   document.querySelector("[data-woman-mouth]"),
+          jar:          document.querySelector("[data-jar]"),
+          waterLayer:   document.querySelector("[data-water-layer]"),
+          sparkleLayer: document.querySelector("[data-sparkle-layer]"),
+        };
+
+        this.progress = 0;
+        this.isAnimating = false;
+
+        this.#createWaterDrops();
+        this.#createSparkles();
+        this.#bindEvents();
+        this.#render();
+      }
+
+      #bindEvents() {
+        this.els.guideBtn.addEventListener("click", () => this.#advance());
+        this.els.restartBtn.addEventListener("click", () => this.#reset());
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === " " || e.key === "Enter") {
+            e.preventDefault();
+            if (!this.els.guideBtn.disabled) this.#advance();
+          }
+        });
+      }
+
+      #createWaterDrops() {
+        const { waterDrops } = WellGame.CONFIG;
+        this.els.waterLayer.innerHTML = "";
+        waterDrops.forEach((d, i) => {
+          const el = document.createElement("div");
+          el.className = "water-drop";
+          el.textContent = d.emoji;
+          el.style.left = d.left;
+          el.style.top = d.top;
+          el.style.animationDelay = `${i * 0.4}s`;
+          this.els.waterLayer.appendChild(el);
+        });
+      }
+
+      #createSparkles() {
+        const { sparklePositions } = WellGame.CONFIG;
+        this.els.sparkleLayer.innerHTML = "";
+        const emojis = ["\u2728", "\u2B50", "\uD83D\uDCAB", "\uD83C\uDF1F"];
+        sparklePositions.forEach((pos, i) => {
+          const el = document.createElement("div");
+          el.className = "sparkle";
+          el.textContent = emojis[i % emojis.length];
+          el.style.left = pos.left;
+          el.style.top = pos.top;
+          el.style.animationDelay = `${i * 0.35}s`;
+          this.els.sparkleLayer.appendChild(el);
+        });
+      }
+
+      #advance() {
+        const { totalSteps, positions, moveDuration } = WellGame.CONFIG;
+        if (this.progress >= totalSteps || this.isAnimating) return;
+
+        this.isAnimating = true;
+        this.progress += 1;
+
+        this.els.jesus.classList.remove("is-idle");
+        this.els.jesus.classList.add("is-moving");
+        this.els.jesus.style.left = positions[this.progress];
+
+        if (this.els.steps[this.progress - 1]) {
+          this.els.steps[this.progress - 1].classList.add("is-lit");
+        }
+
+        /* Step-specific effects */
+        if (this.progress === 2) {
+          this.els.womanMouth.classList.add("is-surprised");
+          this.els.woman.classList.add("is-blushing");
+          this.els.jesus.classList.add("is-offering");
+        }
+
+        if (this.progress === 3) {
+          this.#scatterWaterDrops();
+          this.#showSparkles();
+          this.els.well.classList.add("is-living");
+          this.els.jar.classList.add("is-dropped");
+          this.els.womanMouth.classList.remove("is-surprised");
+          this.els.womanMouth.classList.add("is-joyful");
+          this.els.jesus.classList.add("is-holy");
+          this.els.jesus.classList.remove("is-offering");
+        }
+
+        this.#render();
+
+        setTimeout(() => {
+          this.els.jesus.classList.remove("is-moving");
+          this.isAnimating = false;
+          this.#showSpeech(WellGame.CONFIG.speeches[this.progress]);
+
+          if (this.progress >= totalSteps) {
+            this.els.jesus.classList.add("is-idle");
+            this.#onComplete();
+          } else {
+            this.els.jesus.classList.add("is-idle");
+          }
+        }, moveDuration);
+      }
+
+      #scatterWaterDrops() {
+        const drops = this.els.waterLayer.querySelectorAll(".water-drop");
+        drops.forEach((drop, i) => {
+          setTimeout(() => {
+            drop.classList.add("is-transformed");
+            drop.style.transform = `translateY(-${30 + Math.random() * 40}px) scale(0.3)`;
+          }, i * 80);
+        });
+      }
+
+      #showSparkles() {
+        const sparkles = this.els.sparkleLayer.querySelectorAll(".sparkle");
+        sparkles.forEach((s, i) => {
+          setTimeout(() => s.classList.add("is-visible"), i * 100);
+        });
+      }
+
+      #render() {
+        const { totalSteps, messages, buttonTexts } = WellGame.CONFIG;
+
+        this.els.message.textContent = messages[this.progress];
+
+        const pct = (this.progress / totalSteps) * 100;
+        this.els.progressFill.style.width = `${pct}%`;
+        this.els.progressBar.setAttribute("aria-valuenow", this.progress);
+        this.els.stepCounter.textContent = `Step ${this.progress} of ${totalSteps}`;
+
+        if (this.progress < totalSteps) {
+          this.els.guideBtn.textContent = buttonTexts[this.progress];
+        }
+
+        if (this.progress >= totalSteps) {
+          this.els.guideBtn.disabled = true;
+          this.els.guideBtn.textContent = buttonTexts[totalSteps];
+          this.els.message.classList.add("is-done");
+        }
+      }
+
+      #showSpeech(text) {
+        if (!text) return;
+        this.els.speech.textContent = text;
+        this.els.speech.classList.add("is-visible");
+        setTimeout(() => {
+          this.els.speech.classList.remove("is-visible");
+        }, 2500);
+      }
+
+      #onComplete() {
+        this.els.restartBtn.classList.add("is-visible");
+        this.#spawnConfetti();
+        if (typeof chapterComplete === "function") {
+          chapterComplete();
+        }
+      }
+
+      #spawnConfetti() {
+        const { confettiCount, confettiColors } = WellGame.CONFIG;
+        const container = this.els.confetti;
+        for (let i = 0; i < confettiCount; i++) {
+          const piece = document.createElement("div");
+          piece.classList.add("confetti");
+          piece.style.left = `${Math.random() * 100}%`;
+          piece.style.top = `${Math.random() * 30}%`;
+          piece.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+          piece.style.animationDelay = `${Math.random() * 0.6}s`;
+          const size = `${6 + Math.random() * 6}px`;
+          piece.style.width = size;
+          piece.style.height = size;
+          container.appendChild(piece);
+          requestAnimationFrame(() => piece.classList.add("is-active"));
+        }
+        setTimeout(() => { container.innerHTML = ""; }, 3000);
+      }
+
+      #reset() {
+        const { positions, buttonTexts } = WellGame.CONFIG;
+
+        this.progress = 0;
+        this.isAnimating = false;
+
+        this.els.jesus.style.left = positions[0];
+        this.els.jesus.classList.remove("is-moving", "is-holy", "is-offering");
+        this.els.jesus.classList.add("is-idle");
+
+        this.els.steps.forEach((s) => s.classList.remove("is-lit"));
+
+        this.#createWaterDrops();
+
+        const sparkles = this.els.sparkleLayer.querySelectorAll(".sparkle");
+        sparkles.forEach((s) => s.classList.remove("is-visible"));
+
+        this.els.well.classList.remove("is-living");
+        this.els.jar.classList.remove("is-dropped");
+        this.els.womanMouth.classList.remove("is-surprised", "is-joyful");
+        this.els.woman.classList.remove("is-blushing");
+
+        this.els.guideBtn.disabled = false;
+        this.els.guideBtn.textContent = buttonTexts[0];
+        this.els.restartBtn.classList.remove("is-visible");
+        this.els.message.classList.remove("is-done");
+        this.els.speech.classList.remove("is-visible");
+        this.els.confetti.innerHTML = "";
+
+        chapterTriggered = false;
+
+        this.#render();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => new WellGame());
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(120,90,40,.45);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#fff8ee; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#5c3b1a;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#8a5a21;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#9c6c32;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#ffca6b,#ffa43b);
+        color:#5c3b1a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(255,164,59,.35);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    const THIS_CHAPTER   = 12;
+    const CHAPTER_DONE   = "Jesus revealed Himself as the Messiah to the Samaritan woman \u2014 and she ran to share the Good News with her whole town! \uD83D\uDCA7\u2728";
+    const NEXT_FILE      = "indexjesus13.html";
+
+    const CHAPTER_TITLES = [
+      "",
+      "Gabriel Visits Mary",
+      "Journey to Bethlehem",
+      "The Birth of Jesus",
+      "Journey to Jerusalem",
+      "Missing Jesus",
+      "Back to Jerusalem",
+      "Baptism in the Jordan",
+      "Temptation in the Desert",
+      "Jesus Begins His Ministry",
+      "First Miracle at Cana",
+      "Jesus Cleans God\u2019s House",
+      "The Woman at the Well",
+      "The Official\u2019s Son Healed"
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById("chapterOverlay");
+      const card = document.getElementById("chapterCard");
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById("ovTitle").textContent = isLast
+        ? "\uD83C\uDF1F The Story Complete!"
+        : `\u2728 Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById("ovDone").textContent = CHAPTER_DONE;
+
+      document.getElementById("ovNext").textContent = isLast
+        ? "You journeyed through the whole story!"
+        : `Next: Chapter ${nextChapter} \u2014 ${CHAPTER_TITLES[nextChapter] || ""}`;
+
+      const btn = document.getElementById("ovBtn");
+      btn.textContent = isLast ? "\uD83D\uDD04 Play Again" : "Continue \u2192";
+      btn.onclick = () => {
+        window.location.href = isLast ? "indexjesus1.html" : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = "1";
+        ov.style.pointerEvents = "auto";
+        card.style.transform = "scale(1)";
+      }, 1600);
+    }
+  </script>
+</body>
+</html>
