@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 14 – The Great Catch of Fish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #a0451b;
+      --accent-light: #c45a28;
+      --accent-glow: rgba(160, 69, 27, 0.3);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --text-dark: #1a3040;
+      --text-mid: #2a4a5a;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --s: 1;
+      font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+      color-scheme: only light;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    body {
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(8px, 1.5vh, 20px);
+      background: linear-gradient(180deg, #e8f0f8 0%, #c0d8ec 40%, #a0bcd0 100%);
+      color: var(--text-dark);
+    }
+
+    main {
+      width: min(96vw, 960px);
+      height: 100%;
+      max-height: 100%;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: clamp(10px, 2vh, 32px) clamp(14px, 3vw, 36px);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 1.2vh, 16px);
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    header { text-align: center; flex-shrink: 0; }
+    header h1 {
+      font-size: clamp(1.15rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    header p {
+      margin: clamp(2px, 0.6vh, 10px) auto 0;
+      max-width: 38rem;
+      color: var(--text-mid);
+      line-height: 1.45;
+      font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    }
+
+    /* ── Scene ── */
+    .scene {
+      position: relative;
+      width: 100%;
+      flex: 1 1 0;
+      min-height: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: linear-gradient(180deg,
+        #fce8c4 0%,
+        #f4d4a0 6%,
+        #b0d4f0 22%,
+        #88bce0 38%,
+        #70a8d4 44%
+      );
+      box-shadow: inset 0 -25px 55px rgba(0, 0, 0, 0.22);
+    }
+
+    /* ── Sun (sunrise) ── */
+    .sun {
+      position: absolute;
+      top: 2%;
+      right: 14%;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fffadd 0%, #ffd680 50%, transparent 70%);
+      box-shadow: 0 0 70px rgba(255, 200, 80, 0.45);
+      animation: sun-pulse 5s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    @keyframes sun-pulse {
+      0%   { box-shadow: 0 0 60px rgba(255, 200, 80, 0.35); }
+      100% { box-shadow: 0 0 100px rgba(255, 200, 80, 0.6); }
+    }
+
+    /* ── Clouds ── */
+    .cloud {
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.45);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .cloud-1 { top: 6%; left: 12%; width: 80px; height: 24px; }
+    .cloud-2 { top: 12%; left: 32%; width: 55px; height: 18px; opacity: 0.35; }
+    .cloud-3 { top: 4%; right: 36%; width: 65px; height: 20px; opacity: 0.3; }
+
+    /* ── Distant Mountains ── */
+    .mountains {
+      position: absolute;
+      bottom: 55%;
+      left: 0; right: 0;
+      height: 18%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .mtn {
+      position: absolute;
+      bottom: 0;
+      border-radius: 50% 50% 0 0;
+    }
+    .mtn-1 { left: -5%; width: 36%; height: 60%; background: linear-gradient(180deg, #8aaa9a, #6a8878); opacity: 0.45; }
+    .mtn-2 { left: 24%; width: 42%; height: 48%; background: linear-gradient(180deg, #90b0a0, #70908a); opacity: 0.35; }
+    .mtn-3 { right: -5%; width: 38%; height: 70%; background: linear-gradient(180deg, #80a090, #608870); opacity: 0.4; }
+
+    /* ── Water ── */
+    .water {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 58%;
+      background: linear-gradient(180deg,
+        #68a8d0 0%,
+        #5090b8 15%,
+        #4080a8 30%,
+        #356a90 50%,
+        #2c5a7c 70%,
+        #2a5878 100%
+      );
+      z-index: 0;
+    }
+    .water::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent);
+    }
+
+    /* ── Waves ── */
+    .wave {
+      position: absolute;
+      left: -10%;
+      width: 120%;
+      height: 1px;
+      pointer-events: none;
+    }
+    .wave::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg,
+        transparent 0, rgba(255,255,255,0.08) 40px,
+        transparent 80px
+      );
+    }
+    .wave-1 { top: 8%; animation: wave-drift 9s ease-in-out infinite; }
+    .wave-2 { top: 22%; animation: wave-drift 12s ease-in-out infinite reverse; }
+    .wave-3 { top: 38%; animation: wave-drift 15s ease-in-out infinite; }
+    .wave-4 { top: 55%; animation: wave-drift 11s ease-in-out infinite reverse; }
+    @keyframes wave-drift {
+      0%   { transform: translateX(0); }
+      50%  { transform: translateX(4%); }
+      100% { transform: translateX(0); }
+    }
+
+    /* ── Shore ── */
+    .shore {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 20%;
+      background: linear-gradient(180deg, #d4b888, #c4a468, #b89050);
+      z-index: 1;
+    }
+    .shore::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(180deg, rgba(100,160,200,0.3), transparent);
+    }
+    .shore-texture {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 20%;
+      z-index: 1;
+      background-image:
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0 1px, transparent 1px 55px);
+      pointer-events: none;
+    }
+
+    /* ── Reeds ── */
+    .reeds {
+      position: absolute;
+      bottom: 19%;
+      left: 4%;
+      z-index: 2;
+      pointer-events: none;
+      transform: scale(var(--s));
+      transform-origin: bottom left;
+    }
+    .reed {
+      position: absolute;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(180deg, #5a9040, #3a6828);
+    }
+    .reed-1 { left: 0; height: 30px; transform: rotate(-4deg); }
+    .reed-2 { left: 7px; height: 38px; transform: rotate(2deg); }
+    .reed-3 { left: 13px; height: 26px; transform: rotate(-6deg); }
+    .reed-4 { left: 19px; height: 32px; transform: rotate(3deg); }
+    .reed-5 { left: 24px; height: 22px; transform: rotate(-2deg); }
+
+    /* ── Location Label ── */
+    .loc-label {
+      position: absolute;
+      font-size: clamp(0.5rem, 0.85vw, 0.62rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .loc-galilee {
+      bottom: 42%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.2);
+    }
+    .loc-shore {
+      bottom: 7%;
+      left: 6%;
+      color: rgba(110, 75, 30, 0.35);
+    }
+
+    /* ═══════════════════════════════════════
+       JESUS FIGURE (on shore)
+       ═══════════════════════════════════════ */
+    .jesus {
+      position: absolute;
+      bottom: 20%;
+      left: 8%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 3;
+      transform: scale(var(--s));
+      transform-origin: bottom center;
+    }
+    .jesus .halo {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 237, 178, 0.6);
+      background: radial-gradient(circle, rgba(255, 245, 200, 0.1), transparent 70%);
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 0 10px rgba(255, 237, 178, 0.4));
+      animation: halo-glow 3s ease-in-out infinite alternate;
+      transition: filter 0.8s ease, border-color 0.8s ease;
+    }
+    @keyframes halo-glow {
+      0%   { filter: drop-shadow(0 0 10px rgba(255, 237, 178, 0.3)); }
+      100% { filter: drop-shadow(0 0 18px rgba(255, 237, 178, 0.6)); }
+    }
+    .jesus.speaking .halo {
+      border-color: rgba(255, 237, 178, 1);
+      filter: drop-shadow(0 0 30px rgba(255, 237, 178, 0.95));
+      animation: halo-surge 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes halo-surge {
+      0%   { filter: drop-shadow(0 0 22px rgba(255, 237, 178, 0.8)); }
+      100% { filter: drop-shadow(0 0 38px rgba(255, 245, 200, 1)); }
+    }
+    .jesus .head {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ffe7ce, #f0cfa1);
+      border: 2px solid rgba(0, 0, 0, 0.06);
+      position: relative;
+      z-index: 1;
+    }
+    .jesus .body {
+      width: 84px;
+      height: 110px;
+      margin-top: 5px;
+      border-radius: 38px 22px 14px 14px;
+      background: linear-gradient(180deg, #fff2dd, #e6b46a);
+      position: relative;
+      overflow: hidden;
+    }
+    .jesus .sash {
+      position: absolute;
+      top: 16%;
+      left: 18%;
+      width: 64%;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(190, 130, 55, 0.2), transparent);
+      border-radius: 14px;
+      transform: rotate(-6deg);
+    }
+    .jesus .speak-burst {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 245, 200, 0.22), transparent 65%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .jesus.speaking .speak-burst {
+      opacity: 1;
+      animation: burst-pulse 2s ease-in-out infinite;
+    }
+    @keyframes burst-pulse {
+      0%   { transform: translateX(-50%) scale(0.7); opacity: 0.5; }
+      50%  { transform: translateX(-50%) scale(1.3); opacity: 0.2; }
+      100% { transform: translateX(-50%) scale(0.7); opacity: 0.5; }
+    }
+
+    /* ═══════════════════════════════════════
+       BOAT + FISHERMEN
+       ═══════════════════════════════════════ */
+    .boat-group {
+      position: absolute;
+      bottom: 28%;
+      right: 12%;
+      z-index: 2;
+      transform: scale(var(--s));
+      transform-origin: bottom center;
+      transition: transform 0.5s var(--ease);
+    }
+    .boat-group.rocking {
+      animation: boat-rock 2.2s ease-in-out infinite;
+    }
+    @keyframes boat-rock {
+      0%   { transform: scale(var(--s)) rotate(0deg); }
+      25%  { transform: scale(var(--s)) rotate(-2.5deg); }
+      75%  { transform: scale(var(--s)) rotate(2.5deg); }
+      100% { transform: scale(var(--s)) rotate(0deg); }
+    }
+
+    .boat-hull {
+      width: 160px;
+      height: 36px;
+      background: linear-gradient(180deg, #b08050, #8a6038);
+      border-radius: 4px 4px 50% 50%;
+      position: relative;
+      border: 1px solid rgba(80, 50, 20, 0.2);
+    }
+    .boat-hull::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      height: 6px;
+      background: linear-gradient(180deg, #c89868, #a88050);
+      border-radius: 5px;
+    }
+    /* Planks */
+    .boat-hull::after {
+      content: "";
+      position: absolute;
+      inset: 4px 8px;
+      background: repeating-linear-gradient(0deg,
+        rgba(0,0,0,0.04) 0 1px, transparent 1px 8px
+      );
+      border-radius: 0 0 45% 45%;
+      pointer-events: none;
+    }
+
+    .mast {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 75px;
+      background: linear-gradient(90deg, #8a6a40, #6a4a28, #8a6a40);
+      border-radius: 2px;
+      z-index: 0;
+    }
+    .crossbeam {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: #7a5a38;
+      border-radius: 2px;
+    }
+
+    /* ── Fishermen ── */
+    .fisher {
+      position: absolute;
+      bottom: 34px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+      transition: transform 0.8s var(--ease);
+    }
+    .fisher-1 { left: 18px; }
+    .fisher-2 { right: 18px; }
+
+    .f-head {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #f0d4aa, #d4b88a);
+      position: relative;
+    }
+    .fisher-1 .f-head::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: -2px;
+      right: -2px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8a6040;
+    }
+    .fisher-2 .f-head::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -1px;
+      right: -1px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6a7060;
+    }
+    .f-body {
+      width: 32px;
+      height: 44px;
+      margin-top: 2px;
+      border-radius: 14px 14px 8px 8px;
+      position: relative;
+    }
+    .fisher-1 .f-body {
+      background: linear-gradient(180deg, #7a6250, #5a4230);
+    }
+    .fisher-2 .f-body {
+      background: linear-gradient(180deg, #5a6858, #3a4838);
+      width: 28px;
+      height: 40px;
+    }
+
+    .fisher.casting {
+      transform: rotate(8deg) translateX(4px);
+    }
+    .fisher.amazed {
+      transform: rotate(-5deg) translateY(-4px);
+    }
+
+    /* ── Net ── */
+    .net {
+      position: absolute;
+      top: 34px;
+      right: 16px;
+      width: 42px;
+      height: 18px;
+      border: 2px dashed rgba(170, 150, 110, 0.35);
+      border-top: none;
+      border-radius: 0 0 45% 45%;
+      transition: all 0.9s var(--ease);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .net.cast {
+      height: 48px;
+      width: 56px;
+      border-color: rgba(170, 150, 110, 0.55);
+    }
+    .net.full {
+      height: 58px;
+      width: 72px;
+      border-color: rgba(170, 150, 110, 0.8);
+      background: radial-gradient(ellipse at center 70%, rgba(190, 205, 218, 0.3), transparent 70%);
+      animation: net-strain 1.2s ease-in-out infinite alternate;
+    }
+    @keyframes net-strain {
+      0%   { transform: rotate(-1deg) translateY(0); }
+      100% { transform: rotate(1.5deg) translateY(2px); }
+    }
+
+    /* ── Net fish (inside net) ── */
+    .net-fish {
+      position: absolute;
+      top: 36px;
+      right: 14px;
+      width: 76px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .nf {
+      position: absolute;
+      width: 12px;
+      height: 6px;
+      border-radius: 55% 35% 35% 55%;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    .nf::after {
+      content: "";
+      position: absolute;
+      right: -4px;
+      top: 0;
+      border-left: 5px solid currentColor;
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+    }
+    .nf:nth-child(1) { top: 35%; left: 22%; background: #b0c4d0; color: #b0c4d0; transform: rotate(12deg); }
+    .nf:nth-child(2) { top: 48%; left: 38%; background: #c0d0dc; color: #c0d0dc; transform: rotate(-8deg); }
+    .nf:nth-child(3) { top: 58%; left: 18%; background: #a4b8c4; color: #a4b8c4; transform: rotate(20deg); }
+    .nf:nth-child(4) { top: 44%; left: 54%; background: #ccd8e0; color: #ccd8e0; transform: rotate(-15deg); }
+    .nf:nth-child(5) { top: 62%; left: 40%; background: #b8c8d4; color: #b8c8d4; transform: rotate(6deg); }
+    .nf:nth-child(6) { top: 52%; left: 8%;  background: #c4d4dc; color: #c4d4dc; transform: rotate(-22deg); }
+    .nf:nth-child(7) { top: 68%; left: 28%; background: #aec0cc; color: #aec0cc; transform: rotate(14deg); }
+    .net-fish.active .nf { opacity: 0.8; }
+
+    /* ═══════════════════════════════════════
+       JUMPING FISH
+       ═══════════════════════════════════════ */
+    .jumping-fish {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .jf {
+      position: absolute;
+      width: 18px;
+      height: 9px;
+      border-radius: 55% 35% 35% 55%;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .jf::after {
+      content: "";
+      position: absolute;
+      right: -5px;
+      top: 0;
+      border-left: 6px solid currentColor;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .jf-1 { bottom: 42%; right: 20%; background: #c0d0dc; color: #c0d0dc; }
+    .jf-2 { bottom: 38%; right: 30%; background: #b4c4d0; color: #b4c4d0; }
+    .jf-3 { bottom: 45%; right: 42%; background: #a8bcc8; color: #a8bcc8; }
+    .jf-4 { bottom: 36%; right: 14%; background: #d0dce4; color: #d0dce4; }
+    .jf-5 { bottom: 40%; right: 52%; background: #bcc8d4; color: #bcc8d4; }
+    .jf-6 { bottom: 44%; right: 36%; background: #c8d4dc; color: #c8d4dc; }
+    .jf-7 { bottom: 34%; right: 24%; background: #b0c0cc; color: #b0c0cc; }
+    .jf-8 { bottom: 48%; right: 46%; background: #c4d0d8; color: #c4d0d8; }
+
+    .jumping-fish.active .jf {
+      animation: fish-leap 2.6s ease-in-out infinite;
+    }
+    .jumping-fish.active .jf-2 { animation-delay: 0.3s; }
+    .jumping-fish.active .jf-3 { animation-delay: 0.55s; }
+    .jumping-fish.active .jf-4 { animation-delay: 0.8s; }
+    .jumping-fish.active .jf-5 { animation-delay: 1.1s; }
+    .jumping-fish.active .jf-6 { animation-delay: 1.4s; }
+    .jumping-fish.active .jf-7 { animation-delay: 1.7s; }
+    .jumping-fish.active .jf-8 { animation-delay: 2.0s; }
+
+    @keyframes fish-leap {
+      0%   { transform: translateY(0) rotate(30deg); opacity: 0; }
+      12%  { opacity: 0.85; }
+      35%  { transform: translateY(-38px) rotate(-5deg); opacity: 0.9; }
+      50%  { transform: translateY(-44px) rotate(-18deg); opacity: 0.8; }
+      75%  { transform: translateY(-10px) rotate(12deg); opacity: 0.5; }
+      100% { transform: translateY(0) rotate(30deg); opacity: 0; }
+    }
+
+    /* ── Water splash rings ── */
+    .splash-ring {
+      position: absolute;
+      width: 16px;
+      height: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .splash-ring.active {
+      animation: splash 2s ease-out infinite;
+    }
+    .sr-1 { bottom: 38%; right: 22%; }
+    .sr-2 { bottom: 34%; right: 34%; animation-delay: 0.5s !important; }
+    .sr-3 { bottom: 40%; right: 44%; animation-delay: 1s !important; }
+    .sr-4 { bottom: 32%; right: 18%; animation-delay: 1.3s !important; }
+    @keyframes splash {
+      0%   { transform: scale(0.5); opacity: 0; }
+      20%  { opacity: 0.6; }
+      100% { transform: scale(3.5); opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════
+       WORD WAVE — Jesus' word to the boat
+       ═══════════════════════════════════════ */
+    .word-wave {
+      position: absolute;
+      bottom: 40%;
+      left: 18%;
+      right: 20%;
+      height: 20px;
+      z-index: 5;
+      pointer-events: none;
+      transform: scale(var(--s));
+      transform-origin: center;
+    }
+    .word-wave span {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fffadd, #ffd680);
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.45);
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%) scale(0.3);
+      opacity: 0;
+    }
+    .word-wave.active span {
+      animation: word-fly 2.4s ease-in-out infinite;
+    }
+    .word-wave.active span:nth-child(2) { animation-delay: 0.3s; }
+    .word-wave.active span:nth-child(3) { animation-delay: 0.6s; }
+    .word-wave.active span:nth-child(4) { animation-delay: 0.9s; }
+    .word-wave.active span:nth-child(5) { animation-delay: 1.2s; }
+    .word-wave.active span:nth-child(6) { animation-delay: 1.5s; }
+    @keyframes word-fly {
+      0%   { left: 0%;   opacity: 0; transform: translateY(-50%) scale(0.3); }
+      12%  { opacity: 0.85; transform: translateY(-50%) scale(1); }
+      50%  { transform: translateY(calc(-50% - 4px)) scale(1.1); }
+      88%  { opacity: 0.85; transform: translateY(-50%) scale(1); }
+      100% { left: 100%; opacity: 0; transform: translateY(-50%) scale(0.3); }
+    }
+
+    /* ── Water Glow (miracle) ── */
+    .water-glow {
+      position: absolute;
+      bottom: 22%;
+      right: 8%;
+      width: 150px;
+      height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 220, 100, 0.2), transparent 65%);
+      opacity: 0;
+      transition: opacity 1s ease;
+      pointer-events: none;
+      z-index: 1;
+      transform: scale(var(--s));
+      transform-origin: center;
+    }
+    .water-glow.active {
+      opacity: 1;
+      animation: wglow-breathe 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes wglow-breathe {
+      0%   { opacity: 0.5; }
+      100% { opacity: 0.9; }
+    }
+
+    /* ── Celebration ── */
+    .celebration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 6;
+      overflow: hidden;
+    }
+    .celebration span {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      opacity: 0;
+    }
+    .celebration.active span { animation: confetti 3s ease-out infinite; }
+    .celebration span:nth-child(1)  { left: 10%; background: #ffcb6b; animation-delay: 0s; }
+    .celebration span:nth-child(2)  { left: 20%; background: #7ab8e0; animation-delay: 0.25s; }
+    .celebration span:nth-child(3)  { left: 32%; background: #a8d5a2; animation-delay: 0.5s; }
+    .celebration span:nth-child(4)  { left: 44%; background: #d9b3e8; animation-delay: 0.75s; }
+    .celebration span:nth-child(5)  { left: 56%; background: #e87a7a; animation-delay: 1s; }
+    .celebration span:nth-child(6)  { left: 66%; background: #ffcb6b; animation-delay: 1.25s; }
+    .celebration span:nth-child(7)  { left: 76%; background: #7ab8e0; animation-delay: 1.5s; }
+    .celebration span:nth-child(8)  { left: 40%; background: #a8d5a2; animation-delay: 1.75s; }
+    .celebration span:nth-child(9)  { left: 26%; background: #e87a7a; animation-delay: 0.4s; }
+    .celebration span:nth-child(10) { left: 54%; background: #d9b3e8; animation-delay: 0.65s; }
+    @keyframes confetti {
+      0%   { top: -5%; transform: rotate(0deg) scale(1); opacity: 0; }
+      10%  { opacity: 0.9; }
+      100% { top: 105%; transform: rotate(720deg) scale(0.4); opacity: 0; }
+    }
+
+    /* ── Scripture ── */
+    .scripture {
+      position: absolute;
+      bottom: 62%;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      text-align: center;
+      font-size: clamp(0.6rem, 1.2vw, 0.82rem);
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+      line-height: 1.5;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+      max-width: 82%;
+      z-index: 6;
+    }
+    .scripture.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Progress ── */
+    .progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .progress-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(160, 69, 27, 0.3);
+      background: transparent;
+      transition: all 0.35s var(--ease);
+    }
+    .progress-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.15);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    /* ── Controls ── */
+    .controls {
+      background: rgba(160, 69, 27, 0.06);
+      border: 1px solid rgba(160, 69, 27, 0.08);
+      border-radius: var(--radius-md);
+      padding: clamp(8px, 1.5vh, 18px) clamp(12px, 2vw, 20px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 1vh, 12px);
+      flex-shrink: 0;
+    }
+    .controls p {
+      color: #4c2f1c;
+      line-height: 1.45;
+      font-size: clamp(0.78rem, 1.3vw, 0.95rem);
+      min-height: 2.4em;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(18px, 3vw, 32px);
+      font-family: inherit;
+      font-size: clamp(0.82rem, 1.2vw, 1rem);
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: var(--accent);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s, background 0.3s;
+    }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    button:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      background: var(--accent-light);
+    }
+    button:not(:disabled):active { transform: translateY(0); }
+
+    /* ═══════════════════════════════════════
+       SHORT VIEWPORTS
+       ═══════════════════════════════════════ */
+    @media (max-height: 680px) {
+      header p { display: none; }
+      .controls p { min-height: 0; }
+      .cloud { display: none; }
+      .loc-galilee { display: none; }
+    }
+
+    /* ═══════════════════════════════════════
+       MOBILE
+       ═══════════════════════════════════════ */
+    @media (max-width: 720px) {
+      body {
+        height: auto;
+        min-height: 100dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      main {
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        gap: 14px;
+        padding: 16px;
+      }
+      .scene {
+        flex: 0 0 auto;
+        aspect-ratio: 4 / 3;
+        min-height: 260px;
+        max-height: 400px;
+      }
+      .mountains { display: none; }
+      .cloud { display: none; }
+      .loc-galilee { display: none; }
+      .reeds { display: none; }
+      .jesus { left: 4%; }
+      .boat-group { right: 5%; }
+      .scripture { max-width: 92%; font-size: 0.6rem; bottom: 58%; }
+      button { width: 100%; }
+    }
+
+    @media (max-width: 400px) {
+      .scene { aspect-ratio: 1 / 1; min-height: 240px; }
+      header h1 { font-size: 1.1rem; }
+      .jesus { left: 2%; }
+      .boat-group { right: 2%; }
+      .loc-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Chapter 14 – The Great Catch of Fish</h1>
+      <p>When the disciples can't catch anything, Jesus says "Cast your nets once more" — and the nets overflow!</p>
+    </header>
+
+    <section class="scene" aria-hidden="true">
+      <!-- Sky -->
+      <div class="sun"></div>
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+
+      <!-- Mountains -->
+      <div class="mountains">
+        <div class="mtn mtn-1"></div>
+        <div class="mtn mtn-2"></div>
+        <div class="mtn mtn-3"></div>
+      </div>
+
+      <!-- Water -->
+      <div class="water">
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+        <div class="wave wave-4"></div>
+      </div>
+
+      <!-- Shore -->
+      <div class="shore"></div>
+      <div class="shore-texture"></div>
+
+      <!-- Reeds -->
+      <div class="reeds">
+        <div class="reed reed-1"></div>
+        <div class="reed reed-2"></div>
+        <div class="reed reed-3"></div>
+        <div class="reed reed-4"></div>
+        <div class="reed reed-5"></div>
+      </div>
+
+      <!-- Labels -->
+      <div class="loc-label loc-galilee">Sea of Galilee</div>
+      <div class="loc-label loc-shore">Shore</div>
+
+      <!-- Water Glow -->
+      <div class="water-glow" id="waterGlow"></div>
+
+      <!-- Jesus -->
+      <div class="jesus" id="jesusEl">
+        <div class="speak-burst"></div>
+        <div class="halo"></div>
+        <div class="head"></div>
+        <div class="body">
+          <div class="sash"></div>
+        </div>
+      </div>
+
+      <!-- Boat Group -->
+      <div class="boat-group" id="boatGroup">
+        <div class="boat-hull">
+          <div class="fisher fisher-1" id="fisher1">
+            <div class="f-head"></div>
+            <div class="f-body"></div>
+          </div>
+          <div class="fisher fisher-2" id="fisher2">
+            <div class="f-head"></div>
+            <div class="f-body"></div>
+          </div>
+          <div class="mast">
+            <div class="crossbeam"></div>
+          </div>
+          <div class="net" id="net"></div>
+          <div class="net-fish" id="netFish">
+            <span class="nf"></span><span class="nf"></span><span class="nf"></span>
+            <span class="nf"></span><span class="nf"></span><span class="nf"></span>
+            <span class="nf"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Word wave (Jesus → boat) -->
+      <div class="word-wave" id="wordWave">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+
+      <!-- Jumping fish -->
+      <div class="jumping-fish" id="jumpFish">
+        <span class="jf jf-1"></span><span class="jf jf-2"></span>
+        <span class="jf jf-3"></span><span class="jf jf-4"></span>
+        <span class="jf jf-5"></span><span class="jf jf-6"></span>
+        <span class="jf jf-7"></span><span class="jf jf-8"></span>
+      </div>
+
+      <!-- Splash rings -->
+      <div class="splash-ring sr-1" id="sr1"></div>
+      <div class="splash-ring sr-2" id="sr2"></div>
+      <div class="splash-ring sr-3" id="sr3"></div>
+      <div class="splash-ring sr-4" id="sr4"></div>
+
+      <!-- Celebration -->
+      <div class="celebration" id="celebration">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <!-- Scripture -->
+      <div class="scripture" id="scripture">
+        "They caught such a large number of fish<br/>
+        that their nets began to break…<br/>
+        Jesus said to Simon, 'Don't be afraid;<br/>
+        from now on you will fish for people.'"<br/>
+        <span style="opacity:0.6; font-size:0.88em;">— Luke 5:6, 10</span>
+      </div>
+    </section>
+
+    <div class="progress" aria-hidden="true">
+      <span class="progress-dot" data-step="1"></span>
+      <span class="progress-dot" data-step="2"></span>
+      <span class="progress-dot" data-step="3"></span>
+    </div>
+
+    <section class="controls" aria-live="polite">
+      <p id="status"></p>
+      <div class="buttons">
+        <button id="stepBtn">Continue the Story</button>
+        <button id="resetBtn">Reset Scene</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const els = {
+      scene:     $(".scene"),
+      jesusEl:   $("#jesusEl"),
+      fisher1:   $("#fisher1"),
+      fisher2:   $("#fisher2"),
+      boatGroup: $("#boatGroup"),
+      net:       $("#net"),
+      netFish:   $("#netFish"),
+      wordWave:  $("#wordWave"),
+      waterGlow: $("#waterGlow"),
+      jumpFish:  $("#jumpFish"),
+      celebration: $("#celebration"),
+      scripture: $("#scripture"),
+      dots:      $$(".progress-dot"),
+      stepBtn:   $("#stepBtn"),
+      resetBtn:  $("#resetBtn"),
+      status:    $("#status"),
+      splashes:  $$(".splash-ring"),
+    };
+
+    const MAX = 3;
+
+    const MESSAGES = [
+      "Simon and his friends have fished all night and caught nothing. Jesus watches from the shore of Galilee. \uD83C\uDF1E",
+      "Step 1 of 3 \u2014 Jesus calls out: \u201CPut out into deep water, and let down your nets for a catch!\u201D \uD83C\uDFA3",
+      "Step 2 of 3 \u2014 Despite their doubt, the fishermen obey and cast their nets into the deep! \uD83C\uDF0A",
+      "Step 3 of 3 \u2014 The nets fill with so many fish they begin to break! Blessings overflow! \uD83D\uDC1F\uD83C\uDF89",
+    ];
+
+    let step = 0;
+
+    /* ── Scene scaling ── */
+    function scaleScene() {
+      if (!els.scene) return;
+      const h = els.scene.clientHeight;
+      const s = Math.min(1, h / 480);
+      els.scene.style.setProperty("--s", s);
+    }
+
+    /* ── Render ── */
+    function render() {
+      const atPeak = step >= MAX;
+
+      /* Jesus speaking (step 1+) */
+      els.jesusEl.classList.toggle("speaking", step >= 1);
+
+      /* Word wave (step 1+) */
+      els.wordWave.classList.toggle("active", step >= 1);
+
+      /* Fishermen casting (step 2) */
+      els.fisher1.classList.toggle("casting", step === 2);
+      els.fisher2.classList.toggle("casting", step === 2);
+
+      /* Fishermen amazed (step 3) */
+      els.fisher1.classList.toggle("amazed", atPeak);
+      els.fisher2.classList.toggle("amazed", atPeak);
+
+      /* Net cast (step 2+) */
+      els.net.classList.toggle("cast", step === 2);
+
+      /* Net full (step 3) */
+      els.net.classList.toggle("full", atPeak);
+
+      /* Water glow (step 2+) */
+      els.waterGlow.classList.toggle("active", step >= 2);
+
+      /* Net fish (step 3) */
+      els.netFish.classList.toggle("active", atPeak);
+
+      /* Jumping fish (step 3) */
+      els.jumpFish.classList.toggle("active", atPeak);
+
+      /* Splash rings (step 3) */
+      els.splashes.forEach(s => s.classList.toggle("active", atPeak));
+
+      /* Boat rocking (step 3) */
+      els.boatGroup.classList.toggle("rocking", atPeak);
+
+      /* Celebration & scripture */
+      els.celebration.classList.toggle("active", atPeak);
+      els.scripture.classList.toggle("show", atPeak);
+
+      /* Progress dots */
+      els.dots.forEach((d, i) => d.classList.toggle("active", i < step));
+
+      /* Status text */
+      els.status.textContent = MESSAGES[step];
+
+      /* Button */
+      els.stepBtn.disabled = atPeak;
+
+      if (atPeak) chapterComplete();
+    }
+
+    /* ── Events ── */
+    els.stepBtn.addEventListener("click", () => {
+      if (step < MAX) { step++; render(); }
+    });
+
+    els.resetBtn.addEventListener("click", () => {
+      step = 0;
+      chapterTriggered = false;
+
+      els.jesusEl.classList.remove("speaking");
+      els.wordWave.classList.remove("active");
+      els.fisher1.classList.remove("casting", "amazed");
+      els.fisher2.classList.remove("casting", "amazed");
+      els.net.classList.remove("cast", "full");
+      els.waterGlow.classList.remove("active");
+      els.netFish.classList.remove("active");
+      els.jumpFish.classList.remove("active");
+      els.splashes.forEach(s => s.classList.remove("active"));
+      els.boatGroup.classList.remove("rocking");
+      els.celebration.classList.remove("active");
+      els.scripture.classList.remove("show");
+
+      document.getElementById('chapterOverlay').style.opacity = '0';
+      document.getElementById('chapterOverlay').style.pointerEvents = 'none';
+      document.getElementById('chapterCard').style.transform = 'scale(.8)';
+
+      render();
+      els.stepBtn.focus();
+    });
+
+    /* ── Init ── */
+    window.addEventListener("resize", scaleScene);
+    scaleScene();
+    render();
+  </script>
+
+  <!-- ═══ CHAPTER TRANSITION OVERLAY ═══ -->
+  <div id="chapterOverlay" style="
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(10,30,50,.6);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+    font-family:'Nunito',sans-serif;
+  ">
+    <div id="chapterCard" style="
+      background:#f0f8ff; border-radius:24px;
+      padding:clamp(24px,5vw,40px); text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.3);
+      max-width:88vw; width:360px;
+      transform:scale(.8);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+    ">
+      <h2 id="ovTitle" style="font-size:clamp(1.15rem,3.5vw,1.5rem);color:#1a4060;margin:0 0 8px;"></h2>
+      <p id="ovDone" style="color:#2a5a7a;font-size:.9rem;margin:0 0 6px;line-height:1.4;"></p>
+      <p id="ovNext" style="color:#3a6a8a;font-size:.82rem;font-weight:600;margin:0 0 18px;"></p>
+      <button id="ovBtn" style="
+        border:none; border-radius:999px;
+        background:linear-gradient(90deg,#a8e6cf,#55c89b);
+        color:#1b5e3a; font-family:'Nunito',sans-serif;
+        font-size:1rem; font-weight:700;
+        padding:12px 28px; cursor:pointer;
+        box-shadow:0 4px 14px rgba(85,200,155,.3);
+        transition:transform .15s,box-shadow .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'"
+      >Continue →</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════
+    // ★ CHAPTER 14 → CHAPTER 15 CONNECTION
+    // ════════════════════════════════════════════
+    const THIS_CHAPTER   = 14;
+    const CHAPTER_DONE   = "The disciples obeyed Jesus and their nets overflowed with fish \u2014 when we listen to Him, blessings abound! \uD83D\uDC1F";
+    const NEXT_FILE      = "indexjesus15.html";
+    // ════════════════════════════════════════════
+
+    const CHAPTER_TITLES = [
+      "",                                       //  0
+      "Gabriel Visits Mary",                    //  1
+      "Journey to Bethlehem",                   //  2
+      "No Room at the Inn",                     //  3
+      "Jesus Is Born",                          //  4
+      "Angels Tell the Shepherds",              //  5
+      "Shepherds Visit Jesus",                  //  6
+      "The Wise Men Follow the Star",           //  7
+      "Gifts for the King",                     //  8
+      "The Escape to Egypt",                    //  9
+      "First Miracle at Cana",                  // 10
+      "Jesus Cleans God\u2019s House",          // 11
+      "Jesus and Nicodemus",                    // 12
+      "Healing the Official\u2019s Son",        // 13
+      "The Great Catch of Fish",                // 14
+      "Healing at the Pool of Bethesda"         // 15
+    ];
+
+    let chapterTriggered = false;
+
+    function chapterComplete() {
+      if (chapterTriggered) return;
+      chapterTriggered = true;
+
+      const ov   = document.getElementById('chapterOverlay');
+      const card = document.getElementById('chapterCard');
+      const nextChapter = THIS_CHAPTER + 1;
+      const isLast = !NEXT_FILE;
+
+      document.getElementById('ovTitle').textContent = isLast
+        ? '\uD83C\uDF1F The Story Complete!'
+        : `\u2728 Chapter ${THIS_CHAPTER} Complete!`;
+
+      document.getElementById('ovDone').textContent = CHAPTER_DONE;
+
+      document.getElementById('ovNext').textContent = isLast
+        ? 'You journeyed through the whole story!'
+        : `Next: Chapter ${nextChapter} \u2014 ${CHAPTER_TITLES[nextChapter] || ''}`;
+
+      const btn = document.getElementById('ovBtn');
+      btn.textContent = isLast ? '\uD83D\uDD04 Play Again' : 'Continue \u2192';
+      btn.onclick = () => {
+        window.location.href = isLast ? 'indexjesus1.html' : NEXT_FILE;
+      };
+
+      setTimeout(() => {
+        ov.style.opacity = '1';
+        ov.style.pointerEvents = 'auto';
+        card.style.transform = 'scale(1)';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
